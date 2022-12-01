@@ -5,7 +5,7 @@ Progetto di gruppo in cui viene implementato un gioco
 ## Per eseguire da terminale
 
 ```sh
-gcc gioco.cpp -lncurses -o gioco
+gcc main.cpp -lncurses -o main
 ```
 
 ## Con Makefile
