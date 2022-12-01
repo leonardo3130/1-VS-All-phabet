@@ -1,0 +1,10 @@
+SOURCES=main.cpp
+EXECUTABLE=gioca
+
+all: $(EXECUTABLE)
+
+$(EXECUTABLE) : $(SOURCES)
+	gcc -lncurses -o $(EXECUTABLE) $(SOURCES)
+	./$(EXECUTABLE) 
+	rm $(EXECUTABLE) 
+
