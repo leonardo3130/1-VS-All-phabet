@@ -10,4 +10,5 @@ class Character{
   
   public:
     Charater(int x = 0, int y = 0, char look = "/", int hp = 1, int atk = 1, bool gun = false);      //costruttore
+    void move(bool xy, int val = 1);  //bool xy: true->asse x, false->asse y; int val: celle in una mossa
 };
