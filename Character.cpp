@@ -1,7 +1,7 @@
 #include "Character.hpp"
 
 //costruttore
-Character::Charater(int x = 0, int y = 0, char look = '/', int hp = 1, int atk = 1, bool gun = false){
+Character::Character(int x = 0, int y = 0, char look = '/', int hp = 1, int atk = 1, bool gun = false){
     this->x = x;
     this->y = y;
     this->look = look;
@@ -10,10 +10,10 @@ Character::Charater(int x = 0, int y = 0, char look = '/', int hp = 1, int atk =
 
     //questo pezzo va pensato meglio
     this->gun = gun;
-}
+} 
 
 //Considerando che le coordinate in alto a destra del terminale sono x=0, y=0
-Character::move(int new_x, int new_y=0, int mode = 0){
+void Character::move(int new_x, int new_y=0, int mode = 0){
     //se la mode è 0 sposta le coordinate correnti a quelle nuove (default)
     if(mode == 0)
         (this->x) = new_x, (this->y) = new_y;
