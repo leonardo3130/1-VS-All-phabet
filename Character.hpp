@@ -15,3 +15,5 @@ class Character{
     //bool xy: true->asse x, false->asse y; int val: celle in una mossa
     void move(int new_x, int new_y=0, int mode = 0);
 };
+
+

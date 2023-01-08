@@ -2,12 +2,9 @@
 #include <cstring>
 
 //costruttore
-Player::Player(char nick[], char look = 'S', int hp = 10, int def = 2, int atk = 2) {
+Player::Player(char nick[], int def = 2) {
     strcpy(this->nick, nick);
-    this->look = look;
-    this->hp = hp;
     this->def = def;
-    this->atk = atk;
 };
 
 
