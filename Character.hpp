@@ -1,3 +1,5 @@
+#include "Map.hpp"
+
 class Character{
   protected:
     int x;      //coordinata x
@@ -12,8 +14,21 @@ class Character{
     //costruttore
     Character(int x = 0, int y = 0, char look = '/', int hp = 1, int atk = 1, bool gun = false);
 
-    //bool xy: true->asse x, false->asse y; int val: celle in una mossa
+    
     void move(int new_x, int new_y=0, int mode = 0);
 };
 
+bool is_empty(Map mappa, int x, int y){ //dice se la cella è vuota
+  if(mappa.getMapChar(y,x)==" ")
+    return true;
+  else
+    return false;
+}
+
+bool is_inside(Map mappa, int x, int y){ //dice se la cella è dentro alla mappa
+  if(mappa.getWidth()>=x && mappa.getHeight()>=y)
+    return true;
+  else
+    return false;
+}
 
