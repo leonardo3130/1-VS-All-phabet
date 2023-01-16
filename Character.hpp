@@ -13,8 +13,6 @@ class Character{
   public:
     //costruttore
     Character(int x = 0, int y = 0, char look = '/', int hp = 1, int atk = 1, bool gun = false);
-
-    
     void move(int new_x, int new_y=0, int mode = 0);
 };
 

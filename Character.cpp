@@ -1,5 +1,7 @@
+#include <iostream>
 #include "Character.hpp"
 #include "map.hpp"
+using namespace std;
 
 //costruttore
 Character::Character(int x = 0, int y = 0, char look = '/', int hp = 1, int atk = 1, bool gun = false){
@@ -8,12 +10,10 @@ Character::Character(int x = 0, int y = 0, char look = '/', int hp = 1, int atk 
     this->look = look;
     this->hp = hp;
     this->atk = atk;
-
-    //questo pezzo va pensato meglio
     this->gun = gun;
 } 
 
-void Character:SetHp(int hp){
+void Character::SetHp(int hp){
     this->hp = hp;
 }
 
