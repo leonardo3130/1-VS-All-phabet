@@ -1,4 +1,6 @@
 #include "Map.hpp"
+#include "bullet.cpp"
+#include "bullet.hpp"
 
 class Character{
   protected:
@@ -12,7 +14,7 @@ class Character{
 
   public:
     //costruttore
-    Character(int x = 0, int y = 0, char look = '/', int hp = 1, int atk = 1, bool gun = false);
+    Character(int x = 0, int y = 0, char look = 'x', int hp = 1, int atk = 1, bool gun = false);
     void move(int new_x, int new_y=0, int mode = 0);
 };
 

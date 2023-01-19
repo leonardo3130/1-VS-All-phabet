@@ -10,7 +10,5 @@ class Monster : public Character{
 
     public:
         // costruttore
-        Monster(int move_x = 1, int move_y = 0, int speed = 5, int shot_fr = 4);
-
-        
+        Monster(int move_x = 1, int move_y = 0, int speed = 5, int shot_fr = 4) : Character(x, y, '§', hp, atk, gun);  
 };

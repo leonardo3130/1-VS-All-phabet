@@ -2,7 +2,7 @@
 #include <cstring>
 
 //costruttore
-Monster::Monster(int move_x, int move_y, int speed, int shot_fr) {
+Monster::Monster(int move_x, int move_y, int speed, int shot_fr) : Character(x, y, '§', hp, atk, gun) {
     this->move_x = move_x;
     this->move_y = move_y;
     this->speed = speed;

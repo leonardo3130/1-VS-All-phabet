@@ -3,8 +3,7 @@
 #include "map.hpp"
 using namespace std;
 
-//costruttore
-Character::Character(int x = 0, int y = 0, char look = '/', int hp = 1, int atk = 1, bool gun = false){
+Character::Character(int x, int y, char look, int hp, int atk, bool gun){
     this->x = x;
     this->y = y;
     this->look = look;
@@ -48,3 +47,4 @@ void Character::move(int new_x=0, int new_y=0, int mode = 0){
         if(is_empty(m, this->x, this->y + new_y)==true && is_inside(m, this->x, this->y + new_y)==true)
             (this->y)+=new_y;
 }
+

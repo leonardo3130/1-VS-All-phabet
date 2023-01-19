@@ -9,12 +9,12 @@ using namespace std;
 
 class Bullet{
     protected:
-        double speed; //velocità in secondi (ogni quanti secondi il proiettile si muove di una cella)
+        double speed; //velocità: 1 corrisponde al movimento di una cella al secondo, la formula dell'intervallo di movimento è (1 sec) / (speed)
         int x; //posizione di partenza del poriettile
         int y;
         char look;
     public:
-        Bullet(double s = 0.3, int x, int y, char look = '.');
-        Shot(int mode = 1, Map Mappa, Player p);
+        Bullet(double speed = 1, Character personaggio, char look = '.'); 
+        void shot(int mode = 1, Map Mappa, Player p); // !!! il metodo shot richiede "<<flush" quando si stampa la mappa, altrimenti non funziona il conteggio dei secondi pe rla velocità
 }
 
