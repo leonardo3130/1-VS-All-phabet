@@ -8,11 +8,12 @@
 #include "map.hpp"
 using namespace std;
 
-Bullet::Bullet(double speed, Character personaggio, char look){
+Bullet::Bullet(double speed, Character personaggio, char look, int id){
     this->speed = speed; //velocità del proiettile
     this->look = look; 
     this->x = personaggio->x; //posizione di partenza del proiettile
     this->y = personaggio->y;
+    this->id = id; //codice identificativo univoco per ogni istanza
 }
 
 // !!! il metodo shot richiede "<<flush" quando si stampa la mappa, altrimenti non funziona il conteggio dei secondi pe rla velocità
