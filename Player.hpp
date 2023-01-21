@@ -8,10 +8,6 @@ class Player : public Character{
 
     public:
         // costruttore
-        Player(char nick[], int def = 2);
-
-        //mancano metodi getter e setter
-        void setHp(int new_hp);
-        int getHp();
+        Player(char nick[], int def = 2) : Character(x, y, "@", hp, atk, gun);
         
 };

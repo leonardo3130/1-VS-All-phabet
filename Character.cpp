@@ -1,6 +1,9 @@
 #include <iostream>
 #include "Character.hpp"
 #include "map.hpp"
+#include "bullet.cpp"
+#include "bullet.hpp"
+#include "liste.hpp"
 using namespace std;
 
 Character::Character(int x, int y, char look, int hp, int atk, bool gun){
@@ -16,7 +19,7 @@ void Character::SetHp(int hp){
     this->hp = hp;
 }
 
-int Character::getHp(){
+int Character::getHp (){
     return this->hp;
 };
 
@@ -48,3 +51,16 @@ void Character::move(int new_x=0, int new_y=0, int mode = 0){
             (this->y)+=new_y;
 }
 
+/*
+void Character::fire(int dir = 0, int pow = 1){
+    if(this->gun){ 
+        
+        lista_bul = new_bulletp(lista_bul, ) //lista_bul da inizializzare come variabile globale di tipo "pbul"
+
+
+
+
+
+    }
+}
+*/

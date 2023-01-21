@@ -1,10 +1,8 @@
 #include "Player.hpp"
 #include <cstring>
 
-//costruttore
-Player::Player(char nick[], int def = 2) {
+Player::Player(char nick[], int def) : Character(x, y, look, hp, atk, gun) {
     strcpy(this->nick, nick);
     this->def = def;
-    this->look = "@";
 };
 
