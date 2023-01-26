@@ -1,22 +1,21 @@
 #include <iostream>
 #include <ctime>
-#include <cstdio>
-#include "Character.hpp"
-#include "Character.cpp"
-#include "Player.hpp"
-#include "Player.cpp"
-#include "map.hpp"
+
+#include "Bullet.hpp"
+
 using namespace std;
 
-Bullet::Bullet(double speed, Character personaggio, char look, int id){
+Bullet::Bullet(double speed, int x, int y, int id, char look){
     this->speed = speed; //velocità del proiettile
+    this->x = x; //posizione di partenza del proiettile
+    this->y = y;
     this->look = look; 
-    this->x = personaggio->x; //posizione di partenza del proiettile
-    this->y = personaggio->y;
     this->id = id; //codice identificativo univoco per ogni istanza
 }
 
 // !!! il metodo shot richiede "<<flush" quando si stampa la mappa, altrimenti non funziona il conteggio dei secondi pe rla velocità
+
+/*
 Bullet::shot(int mode, Map mappa, Player giocatore){ 
     clock_t time_0 = clock();
     double delay = 1/(this->speed) * CLOCKS_PER_SEC;
@@ -58,3 +57,5 @@ Bullet::shot(int mode, Map mappa, Player giocatore){
         }
     }
 }
+
+*/

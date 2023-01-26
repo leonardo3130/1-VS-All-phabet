@@ -1,5 +1,8 @@
+#include <iostream>
+
 #include "Player.hpp"
-#include <cstring>
+
+using namespace std;
 
 Player::Player(char nick[], int def) : Character(x, y, look, hp, atk, gun) {
     strcpy(this->nick, nick);
