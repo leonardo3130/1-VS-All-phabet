@@ -1,10 +1,7 @@
 #include <iostream>
 #include <ctime>
-#include "Character.hpp"
-#include "Character.cpp"
-#include "Player.hpp"
-#include "Player.cpp"
-#include "map.hpp"
+#include <cstdio>
+
 using namespace std;
 
 class Bullet{
@@ -13,8 +10,50 @@ class Bullet{
         int x; //posizione di partenza del poriettile
         int y;
         char look;
+        
     public:
-        Bullet(double speed = 1, Character personaggio, char look = '.'); 
-        void shot(int mode = 1, Map Mappa, Player p); // !!! il metodo shot richiede "<<flush" quando si stampa la mappa, altrimenti non funziona il conteggio dei secondi pe rla velocità
+        int id; ///codice identificativo univoco per ogni istanza
+        Bullet(double speed = 1, int x = 0, int y = 0,  int id = 0, char look = '.'); 
+        //void shot(int mode = 1, Map mappa, Player p); // !!! il metodo shot richiede "<<flush" quando si stampa la mappa, altrimenti non funziona il conteggio dei secondi pe rla velocità
+};
+
+//codice per lista proiettili
+struct blist{
+  Bullet bul;
+  blist *next;
+};
+typedef blist *pbul;
+
+pbul new_bullet(pbul lista, Bullet b){
+  pbul tmp = new blist;
+  tmp->bul = b;
+  tmp->next = lista;
+  lista = tmp;
+  return lista;
 }
+
+pbul delete_bullet(pbul p, int val_id){
+	if(p == NULL) 
+        return(p);
+	else if(p->bul.id == val_id) 
+        return(p->next);
+	else{
+		pbul p_before, head;
+		bool found = false;
+		head = p;
+		while((p != NULL) && !found){
+			if(p->bul.id == val_id)
+        found = true ;
+			else{
+				p_before = p;
+				p = p->next;
+			}
+		}
+		if(found){
+			p_before->next = p->next;
+		}
+		return(head);
+	}
+}
+
 

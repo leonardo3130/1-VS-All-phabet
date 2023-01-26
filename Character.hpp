@@ -1,6 +1,11 @@
+#include <iostream>
+
 #include "Map.hpp"
-#include "bullet.cpp"
-#include "bullet.hpp"
+#include "Bullet.hpp"
+
+using namespace std;
+
+
 
 class Character{
   protected:
@@ -15,17 +20,14 @@ class Character{
   public:
     Character(int x = 0, int y = 0, char look = 'x', int hp = 1, int atk = 1, bool gun = false); //costruttore
     void move(int new_x, int new_y=0, int mode = 0); //funzione muovi   new_x/new_y = coordinate nuova posizione     mode = direzione (0,1,2,3)
-    //void fire(int dir = 0, int pow = 1); //funzione spara    dir = direzione (0,1,2,3); pow = potenza (determina la velocità del proiettile)
+    void fire(int dir, int b_speed, Map mappa); //funzione spara    dir = direzione (0,1,2,3); b_speed = velocità del proiettile
+    void SetHp(int hp);
+    int getHp();
 };
 
 
 
-bool is_empty(Map mappa, int x, int y){ //dice se la cella è vuota
-  if(mappa.getMapChar(y,x)==" ")
-    return true;
-  else
-    return false;
-}
+
 
 bool is_inside(Map mappa, int x, int y){ //dice se la cella è dentro alla mappa
   if(mappa.getWidth()>=x && mappa.getHeight()>=y)
@@ -33,4 +35,3 @@ bool is_inside(Map mappa, int x, int y){ //dice se la cella è dentro alla mappa
   else
     return false;
 }
-

@@ -1,5 +1,9 @@
+#include <iostream>
+#include <cstring>
+
 #include "Character.hpp"
-#include "Character.cpp"
+
+using namespace std;
 
 class Player : public Character{
     protected:
@@ -11,3 +15,5 @@ class Player : public Character{
         Player(char nick[], int def = 2) : Character(x, y, "@", hp, atk, gun);
         
 };
+
+
