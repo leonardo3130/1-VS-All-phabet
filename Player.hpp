@@ -3,17 +3,18 @@
 
 #include "Character.hpp"
 
-using namespace std;
-
-class Player : public Character{
+class Player{
     protected:
         char nick[20];  //nome del player
-        int def;        //valore difesa
+        char psw[20];   //psw del player
+        int monete;     //numero di monete del giocatore
+        Character pers;
 
     public:
         // costruttore
-        Player(char nick[], int def = 2) : Character(x, y, "@", hp, atk, gun);
+        Player(char* nick, char* psw, int monete, Character pers);
         
 };
 
 
+//fare in modo che si possano salvare diversi player su file di testo organizzati in un archivio

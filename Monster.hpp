@@ -1,7 +1,6 @@
 #include <iostream>
 
 #include "Character.hpp"
-
 #include "monster.hpp"
 
 using namespace std;
@@ -18,12 +17,12 @@ class Monster : public Character{
         Monster(int move_x = 1, int move_y = 0, int speed = 5, int shot_fr = 4, int id) : Character(x, y, '&', hp, atk, gun);  
 };
 
-
 //codice per lista mostri
 struct mlist{
   Monster mon;
   monst_list *next;
 };
+
 typedef mlist* pmon;
 
 pmon new_monster(pblu lista, Monster m){

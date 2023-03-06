@@ -16,7 +16,7 @@ Bullet::Bullet(double speed, int x, int y, int id, char look){
 // !!! il metodo shot richiede "<<flush" quando si stampa la mappa, altrimenti non funziona il conteggio dei secondi pe rla velocità
 
 /*
-Bullet::shot(int mode, Map mappa, Player giocatore){ 
+void Bullet::shot(int mode, Map mappa, Player giocatore){ 
     clock_t time_0 = clock();
     double delay = 1/(this->speed) * CLOCKS_PER_SEC;
 
@@ -56,6 +56,5 @@ Bullet::shot(int mode, Map mappa, Player giocatore){
             giocatore.hp -= 1; //se colpisce il player, questo perde una vita
         }
     }
-}
+}*/
 
-*/

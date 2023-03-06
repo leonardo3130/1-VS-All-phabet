@@ -1,11 +1,13 @@
 #include <iostream>
-
 #include "Player.hpp"
 
-using namespace std;
-
-Player::Player(char nick[], int def) : Character(x, y, look, hp, atk, gun) {
+Player::Player(char* nick, char* psw, int m, Character c){
     strcpy(this->nick, nick);
-    this->def = def;
+    strcpy(this->psw, psw);
+    this->pers = c;
+    this->monete = m; 
 };
+
+
+
 
