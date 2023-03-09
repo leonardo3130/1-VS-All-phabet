@@ -1,7 +1,12 @@
 #include <iostream>
 
 #include "Character.hpp"
+<<<<<<< HEAD
 #include "monster.hpp"
+=======
+
+//#include "Monster.hpp"
+>>>>>>> 98e5406f92e26feb9900f7915123d1e06b5d2604
 
 using namespace std;
 
