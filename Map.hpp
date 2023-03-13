@@ -3,6 +3,7 @@
 
 #define MAX_H 40
 #define MAX_W 80
+#pragma once 
 
 class Map {
         protected:
