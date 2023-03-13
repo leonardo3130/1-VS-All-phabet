@@ -14,20 +14,18 @@ class Bullet{
         int x; //posizione di partenza del poriettile
         int y;
         char look;
-        
+
     public:
         int id; ///codice identificativo univoco per ogni istanza
-        Bullet(double speed = 1, int x = 0, int y = 0,  int id = 0, char look = '.'); 
+        Bullet(double speed = 1, int x = 0, int y = 0,  int id = 0, char look = '.');
         //void shot(int mode, Map mappa, Player p); // !!! il metodo shot richiede "<<flush" quando si stampa la mappa, altrimenti non funziona il conteggio dei secondi pe rla velocità
 };
 
 //codice per lista proiettili
-struct blist{
+typedef struct blist{
   Bullet bul;
   blist *next;
-};
-
-typedef blist *pbul;
+} *pbul;
 
 pbul new_bullet(pbul lista, Bullet b){
   pbul tmp = new blist;
@@ -38,9 +36,9 @@ pbul new_bullet(pbul lista, Bullet b){
 }
 
 pbul delete_bullet(pbul p, int val_id){
-	if(p == NULL) 
+	if(p == NULL)
         return(p);
-	else if(p->bul.id == val_id) 
+	else if(p->bul.id == val_id)
         return(p->next);
 	else{
 		pbul p_before, head;

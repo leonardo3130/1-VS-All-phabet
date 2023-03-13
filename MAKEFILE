@@ -5,6 +5,6 @@ all: $(EXECUTABLE)
 
 $(EXECUTABLE) : $(SOURCES)
 	gcc -lncurses -o $(EXECUTABLE) $(SOURCES)
-	./$(EXECUTABLE) 
-	rm $(EXECUTABLE) 
+	./$(EXECUTABLE)
+	rm $(EXECUTABLE)
 
