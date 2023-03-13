@@ -1,11 +1,10 @@
 #include <iostream>
 #include <ctime>
 #include <cmath>
+
 #include "Map.hpp"
 
 using namespace std;
-
-
 
 Map::Map(int h, int w) {
     srand(time(NULL));
@@ -49,7 +48,7 @@ Map::Map(int h, int w) {
                     x = rand() % (this->width - 5) + 2;
                 }while(this->matrix[y][x] != ' ');
             }
-            else //generazione posizione mura successive 
+            else //generazione posizione mura successive
             {
                 int add_y, add_x;
                 int max = 12; // diminuire per avere ancora più sequenza di mura, ma più brevi e in posizioni random
@@ -95,7 +94,7 @@ Map::Map(int h, int w) {
                 }while(this->matrix[y][x] != ' ');
             }
 
-            //controlli per decidere come orientare: | _ 
+            //controlli per decidere come orientare: | _
             if(orientation) this->matrix[y][x] = '_';
             else this->matrix[y][x] = '|';
 
@@ -107,15 +106,15 @@ Map::Map(int h, int w) {
         walls -= len;
     }
 }
-char Map::getMapChar(int y, int x)
-{
+
+char Map::getMapChar(int y, int x){
     return this->matrix[y][x];
 }
-int Map::getWidth()
-{
+
+int Map::getWidth(){
     return this->width;
 }
-int Map::getHeight()
-{
+
+int Map::getHeight(){
     return this->height;
 }
