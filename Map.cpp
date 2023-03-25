@@ -118,3 +118,56 @@ int Map::getWidth(){
 int Map::getHeight(){
     return this->height;
 }
+
+void Map::readMap(int level, char* nickPlayer){
+    char *filePath = "Archivio/", *str;
+    sprintf(str, "%d", level);
+
+    //genera la path del file da aprire:
+    //Esempio Path nel caso giochi il player:"Andrea" e voglia leggere il livello n:
+    // filePath = "Archivio/Andrea/Leveln.txt"
+    strcat(filePath, nickPlayer);
+    strcat(filePath, "/Level");
+    strcat(filePath, str);
+    strcat(filePath, ".txt");
+
+    // Apri il file in modalità lettura
+    ifstream infile(filePath);
+
+    // legge la matrice
+    for (int i = 0; i < this->height; i++) {
+        for (int j = 0; j < this->width; j++) {
+            infile >> this->matrix[i][j];
+        }
+    }
+
+    // Chiudi il file
+    infile.close();
+}
+
+void Map::writeMap(int level, char *nickPlayer){
+    char *filePath = "Archivio/", *str;
+    sprintf(str, "%d", level);
+
+    //genera la path del file da aprire:
+    //Esempio Path nel caso giochi il player:"Andrea" e voglia salvare il livello n:
+    // filePath = "Archivio/Andrea/Leveln.txt"
+    strcat(filePath, nickPlayer);
+    strcat(filePath, "/Level");
+    strcat(filePath, str);
+    strcat(filePath, ".txt");
+
+    // Apri il file in modalità scrittura
+    ofstream outfile(filePath);
+
+    // Scrivi la matrice in filePath
+    for (int i = 0; i < this->height; i++) {
+        for (int j = 0; j < this->width; j++) {
+            outfile << this->matrix[i][j];
+        }
+        outfile << '\n';
+    }
+
+    // Chiude il file
+    outfile.close();
+}
