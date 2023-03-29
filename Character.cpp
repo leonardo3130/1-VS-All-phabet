@@ -16,7 +16,6 @@ Character::Character(char look){
     this->def = 5;
 }
 
-/*
 Character::Character(int x, int y, int hp, int atk, int def, char look){
     this->x = x;
     this->y = y;
@@ -24,7 +23,7 @@ Character::Character(int x, int y, int hp, int atk, int def, char look){
     this->hp = hp;
     this->atk = atk;
     this->def = def;
-}*/
+}
 
 bool is_inside(Map mappa, int x, int y){ //dice se la cella è dentro alla mappa
   if(mappa.getWidth() >= x && mappa.getHeight() >= y)

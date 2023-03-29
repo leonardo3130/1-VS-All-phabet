@@ -22,12 +22,11 @@ struct Session{
 	ptr_livelli liv;	//livelli affrontati
 };
 
-
-
-
+//funzione per creare un nuovo account
 bool signIn(char *psw, char character, char *filename){
 	bool isCorrect = false;
 
+	//scrivo nel file delle credenziali le informazioni degli utenti
 	ofstream credenziali;
 	credenziali.open(filename);
 	credenziali << psw << endl;
@@ -35,49 +34,43 @@ bool signIn(char *psw, char character, char *filename){
 
 	Character c = Character(character);
 	credenziali << c.getHp() << endl;
-	credenziali << c.getDef() << endl;
 	credenziali << c.getAtk() << endl;
+	credenziali << c.getDef() << endl;
 	credenziali << 100 << endl;		//default money
 
 	credenziali.close();
 	isCorrect = true;
-
 	return isCorrect;
 }
 
-bool login(char *psw, char *filename){
+//funzione per effettuare il login ad un account esistente
+bool login(char *user, char *psw, char *filename){
 	ifstream input_file(filename);
+	int hp = 0, atk = 0, def = 0, money = 0;
+	char ch;
 
 	bool exists;
     if (input_file.is_open()) {
-
 		//leggo la psw
-        char line[256];
+        char line[50];
 		input_file >> line;
-        char var1[50];
-		strcpy(var1, line);
 
-		//se la psw è giusta
-		if(strcmp(var1, psw) == 0)	{
-			input_file >> line;
-			char var2[50];
-			strcpy(var2, line);
+		//se la psw è giusta prendo le informazioni del player
+		if(strcmp(line, psw) == 0)	{
 
-			input_file >> line;
-			char var3[50];
-			strcpy(var3, line);
-
-			input_file >> line;
-			char var4[50];
-			strcpy(var4, line);
-
-			input_file >> line;
-			char var5[50];
-			strcpy(var5, line);
-
+			input_file >> ch;
+			input_file >> hp;
+			input_file >> atk;
+			input_file >> def;
+			input_file >> money;
 			exists = true;
-		}
 
+			Character c = Character(100, 100, ch, hp, atk, def);
+			Player p = Player(user, psw, money, c);
+		}else {
+			cout << "Password errata.\n";
+			exists = false;
+		}
 
     } else {
         // Il file non esiste
@@ -92,15 +85,15 @@ int main(){
 	bool correct_input = false;
 	char scelta = ' ';
 
-	char username[20] = "Tizio";
-	char filename[31] = "Archivio/";
+	char username[20] = "Tizio";	//nome default
+
 	char psw[20];
 	char character;
 
-	cout << "In qualsiasi momento permi E/e per uscire.\n";
-	cout << "Benvenuto nel gioco premi \"L/l\" per loggarti o \"C/c\" per creare un account: ";
+	cout << "Benvenuto nel gioco premi: \n  -\"L/l\" per loggarti \n  -\"C/c\" per creare un account \n  -\"E/e\" per uscire \nScelta: ";
+	cin >> scelta;
 	do{
-		cin >> scelta;
+		char filename[31] = "Archivio/";
 		if(scelta ==  'L' || scelta == 'l'){
 			//login
 			cout << "Username: ";
@@ -108,18 +101,20 @@ int main(){
 			strcat(filename, username);
 			strcat(filename, "/credentials.txt");
 
-			cout << "Password: ";
+			cout << filename <<" Password: ";
 			cin >> psw;
 
-			correct_input = login(psw, filename);
+			correct_input = login(username, psw, filename);
 		}else if(scelta == 'C' || scelta == 'c'){
 			//crea account
 			cout << "Username: ";
 			cin >> username;
+			char mkdir[50] = "mkdir Archivio/";
+			system(strcat(mkdir, username));
 			strcat(filename, username);
 			strcat(filename, "/credentials.txt");
 
-			cout << "Password: ";
+			cout << filename <<" Password: ";
 			cin >> psw;
 
 			cout << "Carattere da usare in game: ";
@@ -131,11 +126,17 @@ int main(){
 			//termina partita
 			exit(0);
 		}else {
-			cout << "Carattere errato. Premi \"L/l\" per loggarti o \"C/c\" per creare un account: ";
+			bool ctrl = false;
+			while(scelta != 'E' && scelta != 'e' &&	 scelta != 'L' && scelta != 'l' && scelta != 'C' && scelta != 'c'){
+				cout << "Carattere errato, ";
+				cout << "premi: \n  -\"L/l\" per loggarti \n  -\"C/c\" per creare un account \n  -\"E/e\" per uscire \nScelta: ";
+				cin >> scelta;
+			}
 		}
 
 	}while(!correct_input);
-
+	cout << "--Inizio partita (da fare)\n" ;
+	//INIZIALIZZAZIONE LIVELLI +
 	/*
 	initscr();			        // Start curses mode
 	printw("Hello World !!!");	// Print Hello World
