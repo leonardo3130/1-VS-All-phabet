@@ -15,5 +15,7 @@ class Map {
                 char getMapChar(int y, int x);
                 int getWidth();
                 int getHeight();
+		void readMap(int level, char* nickPlayer);
+		void writeMap(int level, char* nickPlayer);
 };
 
