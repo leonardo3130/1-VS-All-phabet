@@ -30,14 +30,19 @@ Map::Map(int h, int w) {
 
     //costruzione casuale mura interne alla mappa
     int walls = (this->width + this->height); //numero di muri
-    int len = (walls / 9); //aumentare il denominatore per ottenere più sequenze di muri ma più brevi
-
+    int len = (walls / 13); //aumentare il denominatore per ottenere più sequenze di muri ma più brevi
+    int orientation = rand() % 2;
+    
     while(walls - len > 0)
-    {
-        int y, x, prev_y, prev_x, orientation;
+    {	
+	int add[2] = {1,-1}; 
+        int y, x, prev_y, prev_x;
         int tmp = len;
-        orientation = rand() % 2;
-        while(tmp > 0)
+        if(orientation)
+            orientation = 0;
+        else orientation = 1;
+
+	while(tmp > 0)
         {
             //generazione posizione primo muro
             if(tmp == len)
@@ -57,8 +62,8 @@ Map::Map(int h, int w) {
                 {
                     if(count < max)
                     {
-                        add_y = rand() % 3 - 1; // -1 o 0 o 1
-                        add_x = rand() % 3 - 1; // -1 o 0 o 1
+			add_y = add[rand() % 2]; // -1 o 1
+                        add_x = add[rand() % 2]; // -1 o 1
 
                         //controlli per decidere le prossime cordinate
                         if(orientation)
@@ -104,6 +109,17 @@ Map::Map(int h, int w) {
             tmp--;
         }
         walls -= len;
+    }
+
+    for(int i = 1 ; i < this->height - 1 ; i++)
+    {
+        for(int j = 1 ; j < this->width - 1 ; j++)
+        {
+             if(this->matrix[i][j] != ' ' && this->matrix[i + 1][j] == ' ' && this->matrix[i - 1][j] == ' ' && this->matrix[i][j - 1] == ' ' && this->matrix[i][j + 1] == ' ' &&
+                             this->matrix[i + 1][j + 1] && this->matrix[i - 1][j - 1] == ' ' && this->matrix[i + 1][j - 1] == ' ' && this->matrix[i - 1][j + 1] == ' ')
+                this->matrix[i][j] = ' ';                                                                                                                                                                
+        }                                                                                                                                                                                                
+                                                                                                                                                                                                         
     }
 }
 
