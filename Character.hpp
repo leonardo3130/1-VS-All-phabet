@@ -16,7 +16,11 @@ class Character{
     Character();
     Character(char look); //costruttore
     Character(int x, int y, int hp, int atk, int def, char look); //costruttore
-    void move(Map mappa, int new_x, int new_y=0, int mode = 0); //funzione muovi   new_x/new_y = coordinate nuova posizione     mode = direzione (0,1,2,3)
+    void moveright(Map mappa);
+    void moveleft(Map mappa);
+    void moveup(Map mappa);
+    void movedown(Map mappa);
+    void move_to(Map mappa, int new_x, int new_y=0) //new_x/new_y = coordinate nuova posizione 
     void fire(int dir, int b_speed, Map mappa); //funzione spara dir = direzione (0,1,2,3); b_speed = velocità del proiettile
     void SetHp(int hp);
     int getHp();
