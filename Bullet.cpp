@@ -1,60 +1,58 @@
 #include <iostream>
-#include <ctime>
+#include <ncurses.h>
 
 #include "Bullet.hpp"
 
 using namespace std;
 
-Bullet::Bullet(double speed, int x, int y, int id, char look){
+Bullet::Bullet(double speed, int x, int y, int dir, int id, char look){
     this->speed = speed; //velocità del proiettile
     this->x = x; //posizione di partenza del proiettile
     this->y = y;
+    if(dir>=0 && dir<=3){ this->dir = dir; } else{ this->dir = 0; }
     this->look = look; 
     this->id = id; //codice identificativo univoco per ogni istanza
 }
 
-// !!! il metodo shot richiede "<<flush" quando si stampa la mappa, altrimenti non funziona il conteggio dei secondi pe rla velocità
+void Bullet::shot(Map mappa, Player giocatore){ 
 
-/*
-void Bullet::shot(int mode, Map mappa, Player giocatore){ 
-    clock_t time_0 = clock();
-    double delay = 1/(this->speed) * CLOCKS_PER_SEC;
+    int bul_delay = 100 / this->speed; //100 millisecondi / velocità : più è alta la velocità, minore è il delay di movimento del proiettile
 
-    if(mode == 1){
+    if(this->dir == 0){
         while(is_empty(this->x + 1, this->y) == true){ 
-            while(clock() - time_0 < delay)
-                this->x += 1; //proiettile sparato a destra
+            napms(bul_delay);
+            this->x += 1
         }
         if(mappa.getMapChar(this->x + 1, this->y) == giocatore->look){
             giocatore.hp -= 1; //se colpisce il player, questo perde una vita
         }
     }
-    else if(mode == 2){
+    else if(this->dir == 2){
         while(is_empty(this->x - 1, this->y) == true){
-            while(clock() - time_0 < delay)
-                this->x -= 1; //proiettile sparato a sinistra
+            napms(bul_delay);
+            this->x -= 1; //proiettile sparato a sinistra
         }
         if(mappa.getMapChar(this->x - 1, this->y) == giocatore->look){
             giocatore.hp -= 1; //se colpisce il player, questo perde una vita
         }
     }
-    else if(mode == 3){
-        while(is_empty(this->x, this->y - 1) == true){
-            while(clock() - time_0 < delay)
-                this->y -= 1; //proiettile sparato in alto
-        }
-        if(mappa.getMapChar(this->x, this->y - 1) == giocatore->look){
-            giocatore.hp -= 1; //se colpisce il player, questo perde una vita
-        }
-    }
-    else if(mode == 4){
+    else if(this->dir == 3){
         while(is_empty(this->x, this->y + 1) == true){
-            while(clock() - time_0 < delay)
-                this->y += 1; //proiettile sparato in basso
+            napms(bul_delay);
+            this->y += 1; //proiettile sparato in alto
         }
         if(mappa.getMapChar(this->x, this->y + 1) == giocatore->look){
             giocatore.hp -= 1; //se colpisce il player, questo perde una vita
         }
     }
-}*/
+    else if(this->dir == 1){
+        while(is_empty(this->x, this->y - 1) == true){
+            napms(bul_delay);
+            this->y -= 1; //proiettile sparato in basso
+        }
+        if(mappa.getMapChar(this->x, this->y - 1) == giocatore->look){
+            giocatore.hp -= 1; //se colpisce il player, questo perde una vita
+        }
+    }
+}
 
