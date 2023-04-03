@@ -55,33 +55,31 @@ int Character::getAtk() {
     return this->atk;
 }
 
+void Character::moveright(Map mappa){
+    if(isempty(mappa, (this->x)+1, this->y)==true && is_inside(mappa, this->x+1, this->y)==true)
+            (this->x) += 1;
+}
+void Character::moveleft(Map mappa){
+    if(isempty(mappa, (this->x)-1, this->y)==true && is_inside(mappa, (this->x)-1, this->y)==true)
+        (this->x) += 1;
 
-//Considerando che le coordinate in alto a destra del terminale sono x=0, y=0
-void Character::move(Map mappa, int new_x, int new_y, int mode){
-    //se la mode è 0 e la cella è vuota e nella mappa, sposta le coordinate correnti a quelle nuove (default)
-    if(mode == 0)
-        if(isempty(mappa, new_x, new_y)==true && is_inside(mappa, new_x, new_y)==true)
-            (this->x) = new_x, (this->y) = new_y;
+}
+void Character::moveup(Map mappa){
+    if(isempty(mappa, this->x, (this->y)-1)==true && is_inside(mappa, this->x, (this->y)-1)==true)
+        (this->x) += 1;
 
-    //se la mode è 1 e la cella è vuota e nella mappa,muove verso destra di tot "new_x" posizioni (va avanti)
-    else if(mode == 1)
-        if(isempty(mappa, this->x + new_x, this->y)==true && is_inside(mappa, this->x + new_x, this->y)==true)
-            (this->x)+=new_x;
+}
+void Character::movedown(Map mappa){
+    if(isempty(mappa, this->x, (this->y)+1)==true && is_inside(mappa, this->x, (this->y)+1)==true)
+        (this->x) += 1;
 
-    //se la mode è 2 e la cella è vuota e nella mappa,muove verso sinistra di tot "new_x" posizioni (torna indietro)
-    else if(mode == 2)
-        if(isempty(mappa, this->x - new_x, this->y)==true && is_inside(mappa, this->x - new_x, this->y)==true)
-            (this->x)-=new_x;
+}
 
-    //se la mode è 3 e la cella è vuota e nella mappa,muove verso sopra di tot "new_x" posizioni
-    else if(mode == 3)
-        if(isempty(mappa, this->x, this->y - new_y)==true && is_inside(mappa, this->x, this->y - new_y)==true)
-            (this->y)-=new_y;
-
-    //se la mode è 4 e la cella è vuota e nella mappa,muove verso il basso di tot "new_x" posizioni
-    else if(mode == 4)
-        if(isempty(mappa, this->x, this->y + new_y)==true && is_inside(mappa, this->x, this->y + new_y)==true)
-            (this->y)+=new_y;
+void Character::move_to(Map mappa, int mode){
+    if(isempty(new_x, new_y)==true){
+        this->x = new_x;
+        this->y = new_y;
+    }
 }
 
 int global_blt_id = 0; //da inizializzare nel main
