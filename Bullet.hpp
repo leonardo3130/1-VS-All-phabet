@@ -10,14 +10,15 @@ using namespace std;
 
 class Bullet{
     protected:
-        double speed; //velocità: 1 corrisponde al movimento di una cella al secondo, la formula dell'intervallo di movimento è (1 sec) / (speed)
-        int x; //posizione di partenza del poriettile
-        int y;
+        double speed;   //velocità: 1 corrisponde al movimento di una cella al secondo, la formula dell'intervallo di movimento è (1 sec) / (speed)
+        int x;          //posizione di partenza del poriettile
+        int y;          //
+        int dir;        //direzioen proiettile (corriponde alla mode del personaggio da cui viene sparato)
         char look;
 
     public:
         int id; ///codice identificativo univoco per ogni istanza
-        Bullet(double speed = 1, int x = 0, int y = 0,  int id = 0, char look = '.');
+        Bullet(double speed = 1, int x = 0, int y = 0, int dir = 0,  int id = 0, char look = '.');
         //void shot(int mode, Map mappa, Player p); // !!! il metodo shot richiede "<<flush" quando si stampa la mappa, altrimenti non funziona il conteggio dei secondi pe rla velocità
 };
 
