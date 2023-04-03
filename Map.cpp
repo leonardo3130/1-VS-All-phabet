@@ -1,10 +1,11 @@
-#include <iostream>
 #include <ctime>
 #include <cmath>
-
+#include <cstring>
 #include "Map.hpp"
 
 using namespace std;
+
+
 
 Map::Map(int h, int w) {
     srand(time(NULL));
@@ -18,42 +19,50 @@ Map::Map(int h, int w) {
     //caratteri per i bordi della mappa
     for(int i = 0 ; i < this->height ; i++)
     {
-        for(int j = 0 ; j < this->width ; j++)
+        for(int j = 0 ; j < this->width - 1; j++)
         {
-            if((i == 0 && j == 0) || (i == 0 && j == this->width - 1) || (i == this->height - 1 && j == 0) || (i == this->height - 1 && j == this->width - 1))
-                    this->matrix[i][j] = '.'; //angoli della mappa
-            else if(i == 0 || i == this->height - 1) this->matrix[i][j] = '_'; //bordi sopra e sotto
-            else if(j == 0 || j == this->width - 1) this->matrix[i][j] = '|'; //bordi laterali
+            if((i == 0 && j == 0) || (i == 0 && j == this->width - 2) || (i == this->height - 1 && j == 0) || (i == this->height - 1 && j == this->width - 2)) {
+                    this->matrix[i][j] = '/'; //angoli della mappa
+                    this->matrix[i][j + 1] = '/'; //angoli della mappa
+            }
+            else if(i == 0 || i == this->height - 1) this->matrix[i][j] = '/'; //bordi sopra e sotto
+            else if(j == this->width - 2) {
+                this->matrix[i][j] = '/'; //bordi laterali
+                this->matrix[i][j + 1] = '/';
+            }
+            else if(j == 1) {
+                this->matrix[i][j] = '/'; //bordi laterali
+                this->matrix[i][j - 1] = '/';
+            }
             else this->matrix[i][j] = ' '; //spazi interni;
         }
     }
 
     //costruzione casuale mura interne alla mappa
     int walls = (this->width + this->height); //numero di muri
-    int len = (walls / 13); //aumentare il denominatore per ottenere più sequenze di muri ma più brevi
+    int len = (walls / 8); //aumentare il denominatore per ottenere più sequenze di muri ma più brevi
     int orientation = rand() % 2;
-    
-    while(walls - len > 0)
-    {	
-	int add[2] = {1,-1}; 
+
+    while(walls - len > len)
+    {
+        int add[2] = {1,-1};
         int y, x, prev_y, prev_x;
         int tmp = len;
         if(orientation)
             orientation = 0;
         else orientation = 1;
-
-	while(tmp > 0)
+        while(tmp > 0)
         {
             //generazione posizione primo muro
             if(tmp == len)
             {
                 do
                 {
-                    y = rand() % (this->height - 5) + 2;
-                    x = rand() % (this->width - 5) + 2;
+                    y = rand() % (this->height - 8) + 4;
+                    x = rand() % (this->width - 8) + 4;
                 }while(this->matrix[y][x] != ' ');
             }
-            else //generazione posizione mura successive
+            else //generazione posizione mura successive 
             {
                 int add_y, add_x;
                 int max = 12; // diminuire per avere ancora più sequenza di mura, ma più brevi e in posizioni random
@@ -62,7 +71,7 @@ Map::Map(int h, int w) {
                 {
                     if(count < max)
                     {
-			add_y = add[rand() % 2]; // -1 o 1
+                        add_y = add[rand() % 2]; // -1 o 1
                         add_x = add[rand() % 2]; // -1 o 1
 
                         //controlli per decidere le prossime cordinate
@@ -78,30 +87,31 @@ Map::Map(int h, int w) {
                         }
 
                         //controlli per evitare di uscire dalla mappa o di andare sui bordi
-                        if(y <= 0 || y >= this->height - 1)
+                        if(y <= 5 || y >= this->height - 6)
                         {
-                            y = rand() % (this->height - 5) + 2;
-                            x = rand() % (this->width - 5) + 2;
+                            y = rand() % (this->height - 8) + 4;
+                            x = rand() % (this->width - 8) + 4;
                         }
-                        else if(x <= 0 || x >= this->width - 1)
+                        else if(x <= 5 || x >= this->width - 6)
                         {
-                            y = rand() % (this->height - 5) + 2;
-                            x = rand() % (this->width - 5) + 2;
+                            y = rand() % (this->height - 8) + 4;
+                            x = rand() % (this->width - 8) + 4;
                         }
                         count++;
                     }
                     else
                     {
-                        y = rand() % (this->height - 5) + 2;
-                        x = rand() % (this->width - 5) + 2;
+                        y = rand() % (this->height - 8) + 4;
+                        x = rand() % (this->width - 8) + 4;
                     }
-
                 }while(this->matrix[y][x] != ' ');
             }
 
-            //controlli per decidere come orientare: | _
-            if(orientation) this->matrix[y][x] = '_';
-            else this->matrix[y][x] = '|';
+            //controlli per decidere come orientare: | _ 
+            //if(orientation) this->matrix[y][x] = '_';
+            //else 
+            this->matrix[y][x] = '/';
+            this->matrix[y][x + 1] = '/';
 
             prev_y = y;
             prev_x = x;
@@ -110,18 +120,21 @@ Map::Map(int h, int w) {
         }
         walls -= len;
     }
-
     for(int i = 1 ; i < this->height - 1 ; i++)
-    {
-        for(int j = 1 ; j < this->width - 1 ; j++)
-        {
-             if(this->matrix[i][j] != ' ' && this->matrix[i + 1][j] == ' ' && this->matrix[i - 1][j] == ' ' && this->matrix[i][j - 1] == ' ' && this->matrix[i][j + 1] == ' ' &&
-                             this->matrix[i + 1][j + 1] && this->matrix[i - 1][j - 1] == ' ' && this->matrix[i + 1][j - 1] == ' ' && this->matrix[i - 1][j + 1] == ' ')
-                this->matrix[i][j] = ' ';                                                                                                                                                                
-        }                                                                                                                                                                                                
-                                                                                                                                                                                                         
-    }
-}
+    {                                                                                                                                                                                                                                                            
+        for(int j = 2 ; j < this->width - 2; j++)                                                                                                                                                                                                                
+        {                                                                                                                                                                                                                                                        
+                if(this->matrix[i][j] == '/' && this->matrix[i][j+1] == '/' && this->matrix[i-1][j-2] == ' ' && this->matrix[i-1][j-1] == ' ' && this->matrix[i-1][j] == ' '                                                                                     
+                                && this->matrix[i-1][j+1] == ' ' && this->matrix[i-1][j+2] == ' ' && this->matrix[i-1][j+3] == ' ' && this->matrix[i][j-2] == ' ' && this->matrix[i][j-1] == ' '                                                                 
+                                && this->matrix[i][j+2] == ' ' && this->matrix[i][j+3] == ' ' && this->matrix[i+1][j-2] == ' ' && this->matrix[i+1][j-1] == ' ' && this->matrix[i+1][j] == ' '                                                                   
+                                && this->matrix[i+1][j+1] == ' ' && this->matrix[i+1][j+2] == ' ' && this->matrix[i+1][j+3] == ' ')                                                                                                                              
+                {                                                                                                                                                                                                                                                
+                    this->matrix[i][j] = ' ';                                                                                                                                                                                                                    
+                    this->matrix[i][j+1] = ' ';                                                                                                                                                                                                                  
+                }                                                                                                                                                                                                                                                
+        }                                                                                                                                                                                                                                                        
+    }                                                                                                                                                                                                                                                            
+} 
 
 char Map::getMapChar(int y, int x){
     return this->matrix[y][x];
