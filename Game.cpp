@@ -5,10 +5,9 @@
 #include "Game.hpp"
 #include <curses.h>
 
-Game::Game() {}
+Game::Game() {};
 
-void Game::run() {
-	Map map(40,80);
+void Game::run(Map& map) {
 	Character protagonist(3, 3, 10, 5, 5, 0, '1');
 	WINDOW *game_win;
 
@@ -24,19 +23,21 @@ void Game::run() {
 	
 	keypad(stdscr, TRUE);
 	game_win = create_new_win(map, 40, 80, starty, startx);
+	for(int i = 0 ; i < map.getHeight() ; i++)
+	{    
+		for(int j = 0 ; j < map.getWidth() ; j++)
+		{
+			mvwprintw(game_win, i, j, "%c",map.getMapChar(i, j));
+			wrefresh(game_win);
+		}
+	}
 	//game loop
 	bool stop = false;
-	while(!stop) 
+	while(true) 
 	{
+		int prev_x = protagonist.getX();
+		int prev_y = protagonist.getY();
 		char ch = getch();
-		for(int i = 0 ; i < map.getHeight() ; i++)
-		{    
-			for(int j = 0 ; j < map.getWidth() ; j++)
-			{
-				mvwprintw(game_win, i, j, "%c",map.getMapChar(i, j));
-				wrefresh(game_win);
-			}
-		}
 		switch(ch)
 		{
 		    case KEY_UP:
@@ -52,12 +53,12 @@ void Game::run() {
 				protagonist.moveright(map);
 				break;
 		    default:
-				stop = true;
 				break;
-			
 		}
+		mvwprintw(game_win, protagonist.getY(), protagonist.getX(), "%c",protagonist.getLook());
+		mvwprintw(game_win, prev_y, prev_x, " ");
 		wrefresh(game_win);
-		napms(100);
+		//napms(100);
 	}
 	getch();                                                                                                                                                       
     endwin();

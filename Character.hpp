@@ -28,6 +28,9 @@ class Character{
     int getHp();
     int getDef();
     int getAtk();
+    int getX();
+    int getY();
+    char getLook();
 };
 
 
