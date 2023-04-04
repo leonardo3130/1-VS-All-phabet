@@ -1,10 +1,10 @@
-SOURCES=main.cpp Character.cpp Player.cpp Map.cpp
+SOURCES=main.cpp Character.cpp Player.cpp Map.cpp Game.cpp
 EXECUTABLE=gioca
 
 all: $(EXECUTABLE)
 
 $(EXECUTABLE) : $(SOURCES)
-	g++ -lncurses -o $(EXECUTABLE) $(SOURCES) -w
+	g++ -o $(EXECUTABLE) $(SOURCES) -lncurses -w
 	./$(EXECUTABLE)
 	rm $(EXECUTABLE)
 

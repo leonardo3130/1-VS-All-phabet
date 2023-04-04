@@ -2,7 +2,7 @@
 #include <cstring>
 
 #include "Character.hpp"
-
+#pragma once
 class Player{
     protected:
         char nick[20];  //nome del player

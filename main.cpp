@@ -6,6 +6,7 @@
 
 #include "Map.hpp"
 #include "Player.hpp"
+#include "Game.hpp"
 
 using namespace std;
 
@@ -65,7 +66,7 @@ bool login(char *user, char *psw, char *filename){
 			input_file >> money;
 			exists = true;
 
-			Character c = Character(100, 100, ch, hp, atk, def);
+			Character c = Character(100, 100, ch, hp, atk, 0, def);
 			Player p = Player(user, psw, money, c);
 		}else {
 			cout << "Password errata.\n";
@@ -145,7 +146,8 @@ int main(){
 	endwin();			        // End curses mode
 
 	*/
-
+	Game game = Game();
+	game.run();
 	return 0;
 
 }

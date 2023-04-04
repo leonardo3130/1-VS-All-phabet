@@ -140,10 +140,13 @@ char Map::getMapChar(int y, int x){
     return this->matrix[y][x];
 }
 
+void Map::getMapChar(int y, int x, char c){
+    this->matrix[y][x] = c;
+}
+
 int Map::getWidth(){
     return this->width;
 }
-
 int Map::getHeight(){
     return this->height;
 }
