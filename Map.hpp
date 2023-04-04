@@ -13,6 +13,7 @@ class Map {
         public:
                 Map(int h, int w);
                 char getMapChar(int y, int x);
+                void getMapChar(int y, int x, char c);
                 int getWidth();
                 int getHeight();
 		void readMap(int level, char* nickPlayer);

@@ -16,7 +16,7 @@ Character::Character(char look){
     this->def = 5;
 };
 
-Character::Character(int x, int y, int hp, int atk, int def, char look){
+Character::Character(int x, int y, int hp, int atk, int def, int mode, char look){
     this->x = x;
     this->y = y;
     this->mode = mode;
@@ -56,7 +56,7 @@ int Character::getAtk() {
     return this->atk;
 }
 
-void Character::moveright(Map mappa){
+void Character::moveright(Map& mappa){
     if(isempty(mappa, (this->x)+1, this->y)==true && is_inside(mappa, this->x+1, this->y)==true){
         this->x += 1;
         this->mode = 0;
@@ -64,26 +64,26 @@ void Character::moveright(Map mappa){
             
 
 }
-void Character::moveleft(Map mappa){
+void Character::moveleft(Map& mappa){
     if(isempty(mappa, (this->x)-1, this->y)==true && is_inside(mappa, (this->x)-1, this->y)==true){
         this->x += 1;
         this->mode = 2;
     }
 }
-void Character::moveup(Map mappa){
+void Character::moveup(Map& mappa){
     if(isempty(mappa, this->x, (this->y)-1)==true && is_inside(mappa, this->x, (this->y)-1)==true){
         (this->x) += 1;
         this->mode = 3;
     }
 }
-void Character::movedown(Map mappa){
+void Character::movedown(Map& mappa){
     if(isempty(mappa, this->x, (this->y)+1)==true && is_inside(mappa, this->x, (this->y)+1)==true){
         this->x += 1;
         this->mode = 1;
     }
 }
 
-void Character::move_to(Map mappa, int new_x, int new_y){
+void Character::move_to(Map& mappa, int new_x, int new_y){
     if(isempty(mappa, new_x, new_y)==true){
         this->x = new_x;
         this->y = new_y;
