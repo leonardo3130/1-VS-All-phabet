@@ -6,14 +6,15 @@ using namespace std;
 
 class Monster : public Character{
     protected:
-        int move_x; //di quando si muove in automatico a dx/sx
-        int move_y; //  "                         "    su/giu
-        int speed;  // ogni quanti referesh della mappa si muove
+        int speed;  // velocità
         int shot_fr; //ogni quanto spara
 
     public:
-        int id; //codice identificativo univoco per ogni istanza
+        int id; //codice univoco per ogni istanza
         Monster(int move_x = 1, int move_y = 0, int speed = 5, int shot_fr = 4, int id) : Character(x, y, '&', hp, atk, gun);
+        void fight(Map mappa, Player p)
+        void move_rand(Map mappa, Player p);       //quando incontra un muro, il mostro sceglie una direzione random
+        void move(bool dir, Map mappa, Player p);    //il mostro si muove in verticale o in orizzontale
 };
 
 //codice per lista mostri
