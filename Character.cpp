@@ -91,6 +91,11 @@ void Character::move_to(Map& mappa, int new_x, int new_y){
     }
 }
 
+int Character::getX() { return this->x; }
+int Character::getY() { return this->y; }
+
+char Character::getLook() { return this->look; }
+
 int global_blt_id = 0; //da inizializzare nel main
 
 /*void Character::fire(int b_speed, Map mappa){

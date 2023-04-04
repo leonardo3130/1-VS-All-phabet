@@ -12,6 +12,6 @@ class Game {
 		WINDOW *create_new_win(Map map, int h, int w, int y, int x); 
 	public:
 		Game();
-		void run();
+		void run(Map& map);
 		//bool isOver();
 };
