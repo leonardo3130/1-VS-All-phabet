@@ -21,6 +21,17 @@ void Monster::fight(Map mappa, Player pl){
     pl.pers.hp -= 1*(this->def)/(pl.pers.def);
 }
 
+void fire_loop(Map mappa){
+
+    int m_bullet_speed = 1; //da cambiare in base al livello
+
+    while(this->hp>0){
+        fire(m_bullet_speed, mappa);
+        napms(100 * this->shot_fr);
+    }
+
+}
+
 void Monster::move_rand(Map mappa, Player pl){
     srand(time(NULL));
     int m_mode = rand()%4;
@@ -29,7 +40,8 @@ void Monster::move_rand(Map mappa, Player pl){
         if(m_mode == 0){
             while(mappa.isempty(this->x + 1, this->y)==true){
                 moveright(mappa);
-                napms(100/this->speed);
+                napms(100/this->speed); //cambiare parametro per variare la velocità
+                
             }
             char c = mappa.getMapChar(this->x + 1, this->y);
             if(int(c)==1)
