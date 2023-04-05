@@ -7,22 +7,22 @@
 
 Game::Game() {};
 
-void Game::run(Map& map) {
-	Character protagonist(3, 3, 10, 5, 5, 0, '1');
+void Game::run() {
+
+	Character protagonist(3,3,10,10,10,0,'1');
+	Map map(40,80);
+
+	initscr(); cbreak(); noecho();keypad(stdscr, TRUE);
+	nodelay(stdscr, TRUE);
 	WINDOW *game_win;
 
-	initscr();
-         
-    int starty = (LINES - 40) / 2;
+	int starty = (LINES - 40) / 2;
     int startx = (COLS - 80) / 2;
-	
-	cbreak();
-	noecho();
-	nonl();
 
-	
-	keypad(stdscr, TRUE);
-	game_win = create_new_win(map, 40, 80, starty, startx);
+	game_win = newwin(42, 82, starty, startx);
+	refresh();
+	curs_set(0);
+	refresh();
 	for(int i = 0 ; i < map.getHeight() ; i++)
 	{    
 		for(int j = 0 ; j < map.getWidth() ; j++)
@@ -31,47 +31,66 @@ void Game::run(Map& map) {
 			wrefresh(game_win);
 		}
 	}
+
+	//wborder(game_win, 'o', 'o', 'o','o','o','o','o','o');
+	//wrefresh(game_win);
 	//game loop
 	bool stop = false;
-	while(true) 
+	double time = 0.0;
+	int prev_x, prev_y; 
+	while(true) //condizione che andrà in base ad hp e altro
 	{
-		int prev_x = protagonist.getX();
-		int prev_y = protagonist.getY();
-		char ch = getch();
-		switch(ch)
-		{
-		    case KEY_UP:
-				protagonist.moveup(map);
-				break;
-		    case KEY_DOWN:
-				protagonist.movedown(map);
-				break;
-		    case KEY_LEFT:
-				protagonist.moveleft(map);
-				break;
-		    case KEY_RIGHT: 
-				protagonist.moveright(map);
-				break;
-		    default:
-				break;
+		while(time < 0.05) {
+			time += 0.001;
 		}
-		mvwprintw(game_win, protagonist.getY(), protagonist.getX(), "%c",protagonist.getLook());
-		mvwprintw(game_win, prev_y, prev_x, " ");
-		wrefresh(game_win);
-		//napms(100);
-	}
-	getch();                                                                                                                                                       
+		time = 0.0;
+		prev_x = protagonist.getX();
+		prev_y = protagonist.getY();
+		int ch = getch();
+		handleInput(ch, map, protagonist);
+		update(map, protagonist, prev_y, prev_x);
+		draw(game_win, map, protagonist, prev_x, prev_y);
+		//shooting
+		//mostri
+	}        
+	getch();                                                                                                                                            
     endwin();
 }
 
-WINDOW* Game::create_new_win(Map map, int h, int w, int y, int x)
-{	WINDOW *local_win;
+void Game::handleInput(int c, Map& map, Character& protagonist) {
+	if(c == ERR) {
+		//no tasti premuti dall'utente
+		;
+	}
+	else {
+		switch(c)
+		{
+			case KEY_UP:
+				protagonist.moveup(map);
+				break;
+			case KEY_DOWN:
+				protagonist.movedown(map);
+				break;
+			case KEY_LEFT:
+				protagonist.moveleft(map);
+				break;
+			case KEY_RIGHT: 
+				protagonist.moveright(map);
+				break;
+			default:
+				break;
+		}
+	}
+}
 
-	local_win = newwin(h, w, y, x);
-	//box(local_win, 0 , 0);		/* 0, 0 gives default characters 
-	//				 * for the vertical and horizontal
-	//				 * lines			*/
-	
-	return local_win;
-} //newwin
+void Game::update(Map& map, Character& protagonist, int prev_x, int prev_y) {
+	map.setMapChar(prev_y, prev_x, ' ');
+	map.setMapChar(protagonist.getY(), protagonist.getX(), protagonist.getLook());
+}
 
+void Game::draw(WINDOW* win, Map& map, Character& protagonist, int prev_x, int prev_y) {
+	mvwprintw(win, prev_y, prev_x, " ");
+	wrefresh(win);
+	mvwprintw(win, protagonist.getY(), protagonist.getX(), "%c",protagonist.getLook());
+	wrefresh(win);
+}

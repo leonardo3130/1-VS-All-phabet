@@ -146,9 +146,7 @@ int main(){
 	endwin();			        // End curses mode
 
 	*/
-	Map map(40, 80);
 	Game game = Game();
-	game.run(map);
+	game.run();
 	return 0;
-
 }

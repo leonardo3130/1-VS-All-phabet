@@ -9,9 +9,12 @@ using namespace std;
 
 class Game {
 	private:
-		WINDOW *create_new_win(Map map, int h, int w, int y, int x); 
+		//WINDOW *create_new_win(int h, int w, int y, int x); 
+		void handleInput(int c, Map& map, Character& protagonist);
+		void draw(WINDOW* win, Map& map, Character& protagonist, int prev_x, int prev_y);
+		void update(Map& map, Character& protagonist, int prev_x, int prev_y);
 	public:
 		Game();
-		void run(Map& map);
+		void run();
 		//bool isOver();
 };

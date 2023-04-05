@@ -140,7 +140,7 @@ char Map::getMapChar(int y, int x){
     return this->matrix[y][x];
 }
 
-void Map::getMapChar(int y, int x, char c){
+void Map::setMapChar(int y, int x, char c){
     this->matrix[y][x] = c;
 }
 
