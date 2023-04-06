@@ -26,20 +26,6 @@ Character::Character(int x, int y, float hp, int atk, int def, int mode, char lo
     this->def = def;
 };
 
-bool is_inside(Map mappa, int x, int y){ //dice se la cella è dentro alla mappa
-  if(mappa.getWidth() >= x && mappa.getHeight() >= y)
-    return true;
-  else
-    return false;
-}
-
-bool isempty(Map m, int x, int y){ //dice se la cella è vuota
-  if(m.getMapChar(y,x)==' ')
-    return true;
-  else
-    return false;
-}
-
 void Character::SetHp(int hp){
     this->hp = hp;
 }

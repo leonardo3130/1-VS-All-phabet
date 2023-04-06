@@ -203,3 +203,21 @@ void Map::writeMap(int level, char *nickPlayer){
     // Chiude il file
     outfile.close();
 }
+
+
+
+
+
+bool Map::is_inside(int x, int y){
+  if(this->getWidth() >= x && this->getHeight() >= y)
+    return true;
+  else
+    return false;
+}
+
+bool Map::isempty(int x, int y){
+  if(this->getMapChar(y,x)==' ')
+    return true;
+  else
+    return false;
+}

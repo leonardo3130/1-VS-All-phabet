@@ -1,32 +1,31 @@
 #include <iostream>
 #include "Character.hpp"
-
+#include "Player.hpp"
 
 using namespace std;
 
 class Monster : public Character{
     protected:
-        int speed;  // velocità
+        int speed;  // velocita'
         int shot_fr; //ogni quanto spara
 
     public:
         int id; //codice univoco per ogni istanza
-        Monster(int move_x = 1, int move_y = 0, int speed = 5, int shot_fr = 4, int id) : Character(x, y, '&', hp, atk, gun);
-        void fight(Map mappa, Player p);
-        void fire_loop(Map mappa);
-        void move_rand(Map mappa, Player p);       //quando incontra un muro, il mostro sceglie una direzione random
-        void move(bool dir, Map mappa, Player p);    //il mostro si muove in verticale o in orizzontale
+        Monster(int speed = 5, int shot_fr = 4, int id = 0);   //   :Character(x, y, mode, hp, atk, def, look);
+        void fight(Map mappa, Player p);                //interazione tra mostro e player
+        void fire_loop(Map mappa, int livello);         //continua a sparare finche' non muore
+        void move(Map mappa, Player pl);                //si muove a caso
 };
 
 //codice per lista mostri
 struct mlist{
   Monster mon;
-  monst_list *next;
+  mlist *next;
 };
 
 typedef mlist* pmon;
 
-pmon new_monster(pblu lista, Monster m){
+pmon new_monster(pmon lista, Monster m){
   pmon tmp = new mlist;
   tmp->mon = m;
   tmp->next = lista;
