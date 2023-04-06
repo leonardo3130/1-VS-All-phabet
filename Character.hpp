@@ -23,7 +23,7 @@ class Character{
     void moveup(Map mappa);     //muove su
     void movedown(Map mappa);   //muove giu
     void move_to(Map mappa, int new_x, int new_y); //new_x/new_y = coordinate nuova posizione 
-    void fire(int b_speed, Map mappa);   //funzione spara  b_speed = velocità del proiettile
+    void fire(int b_speed, Map mappa, Player p, int *global_id, pbul *ls_proiettili);   //funzione spara  b_speed = velocita' del proiettile
     void SetHp(int hp);
     int getHp();
     int getDef();
