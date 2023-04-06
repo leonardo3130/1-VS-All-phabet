@@ -1,9 +1,10 @@
 #include <iostream>
+#include <ctime>
+#include <curses.h>
 #include "Map.hpp"
 #include "Character.hpp"
 #include "Player.hpp"
 #include "Game.hpp"
-#include <curses.h>
 
 Game::Game() {};
 
@@ -32,23 +33,31 @@ void Game::run() {
 		}
 	}
 
-	//wborder(game_win, 'o', 'o', 'o','o','o','o','o','o');
-	//wrefresh(game_win);
 	//game loop
 	bool stop = false;
-	double time = 0.0;
+	//double time = 0.0;
+	time_t previous_time = time(nullptr);
+	time_t lag = time_t(0.0);
+	time_t current, elapsed;
 	int prev_x, prev_y; 
+	int const MS = 100;
 	while(true) //condizione che andrà in base ad hp e altro
 	{
-		while(time < 0.05) {
-			time += 0.001;
-		}
-		time = 0.0;
+		current = time(nullptr);
+		elapsed = current - previous_time;
+		previous_time = current;
+		lag += elapsed;
+
 		prev_x = protagonist.getX();
 		prev_y = protagonist.getY();
+
 		int ch = getch();
 		handleInput(ch, map, protagonist);
-		update(map, protagonist, prev_y, prev_x);
+		while(lag >= MS)
+		{
+			update(map, protagonist, prev_y, prev_x);
+			lag -= MS;
+		}
 		draw(game_win, map, protagonist, prev_x, prev_y);
 		//shooting
 		//mostri
@@ -58,10 +67,7 @@ void Game::run() {
 }
 
 void Game::handleInput(int c, Map& map, Character& protagonist) {
-	if(c == ERR) {
-		//no tasti premuti dall'utente
-		;
-	}
+	if(c == ERR) {;/*no tasti premuti dall'utente*/}
 	else {
 		switch(c)
 		{
