@@ -1,9 +1,8 @@
 #include <iostream>
 #include <ctime>
-#include <cstdio>
 
-#include <Map.hpp>
-#include <player.hpp>
+#include "Map.hpp"
+#include "Player.hpp"
 
 
 using namespace std;
@@ -19,14 +18,16 @@ class Bullet{
     public:
         int id; ///codice identificativo univoco per ogni istanza
         Bullet(double speed = 1, int x = 0, int y = 0, int dir = 0,  int id = 0, char look = '.');
-        //void shot(int mode, Map mappa, Player p); // !!! il metodo shot richiede "<<flush" quando si stampa la mappa, altrimenti non funziona il conteggio dei secondi pe rla velocità
+        void shot(Map mappa, Player p); 
 };
 
 //codice per lista proiettili
-typedef struct blist{
+struct blist{
   Bullet bul;
   blist *next;
-} *pbul;
+};
+
+typedef blist *pbul;
 
 pbul new_bullet(pbul lista, Bullet b){
   pbul tmp = new blist;
