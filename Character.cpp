@@ -26,21 +26,7 @@ Character::Character(int x, int y, float hp, int atk, int def, int mode, char lo
     this->def = def;
 };
 
-void Character::SetHp(int hp){
-    this->hp = hp;
-}
 
-int Character::getHp (){
-    return this->hp;
-};
-
-int Character::getDef() {
-    return this->def;
-}
-
-int Character::getAtk() {
-    return this->atk;
-}
 
 void Character::moveright(Map mappa){
     if(isempty(mappa, (this->x)+1, this->y)==true && is_inside(mappa, this->x+1, this->y)==true){
@@ -77,18 +63,41 @@ void Character::move_to(Map mappa, int new_x, int new_y){
     }
 }
 
-int Character::getX() { return this->x; }
-int Character::getY() { return this->y; }
+int global_blt_id = 0;               //da inizializzare nel main
+pbul lista_proiettili = NULL;        //  "   "
 
-char Character::getLook() { return this->look; }
+void Character::fire(int b_speed, Map mappa, Player p, int *global_id, pbul *ls_proiettili){
+    global_id += 1; //ogni proiettile ha un id diverso, viene incrementato quando si chiama fire
+    Bullet il_proiettile = Bullet(speed, this->x, this->y, this->mode, global_id, '*');
+    ls_proiettili = new_bullet(ls_proiettili, il_proiettile);
+    
+    il_proiettile.shot(mappa, p);
+}
 
-int global_blt_id = 0; //da inizializzare nel main
+void Character::SetHp(int hp){
+    this->hp = hp;
+}
 
-/*void Character::fire(int b_speed, Map mappa){
-    global_blt_id += 1; //ogni proiettile ha un id diverso: ogni volta che si chiama la funzione fire, viene incrementato
+int Character::getHp (){
+    return this->hp;
+};
 
-    int p_id = global_blt_id;
-    Bullet()
+int Character::getDef(){
+    return this->def;
+}
 
+int Character::getAtk(){
+    return this->atk;
+}
 
-}*/
+int Character::getX(){ 
+    return this->x; 
+}
+
+int Character::getY(){ 
+    return this->y; 
+}
+
+char Character::getLook(){ 
+    return this->look; 
+}
