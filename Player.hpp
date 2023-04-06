@@ -8,9 +8,9 @@ class Player{
         char nick[20];  //nome del player
         char psw[20];   //psw del player
         int monete;     //numero di monete del giocatore
-        Character pers;
 
     public:
+        Character pers;
         // costruttore
         Player(char* nick, char* psw, int monete, Character pers);
         
