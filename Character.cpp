@@ -1,7 +1,6 @@
 #include <iostream>
 #include "Character.hpp"
 
-
 using namespace std;
 
 Character::Character(){} //costruttore di default
@@ -33,8 +32,6 @@ void Character::moveright(Map mappa){
         this->x += 1;
         this->mode = 0;
     }
-            
-
 }
 void Character::moveleft(Map mappa){
     if(isempty(mappa, (this->x)-1, this->y)==true && is_inside(mappa, (this->x)-1, this->y)==true){
