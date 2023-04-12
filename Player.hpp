@@ -3,18 +3,13 @@
 
 #include "Character.hpp"
 #pragma once
-class Player{
+
+class Player: public Character{
     protected:
         char nick[20];  //nome del player
         char psw[20];   //psw del player
         int monete;     //numero di monete del giocatore
 
     public:
-        Character pers;
-        // costruttore
         Player(char* nick, char* psw, int monete, Character pers);
-        
 };
-
-
-//fare in modo che si possano salvare diversi player su file di testo organizzati in un archivio
