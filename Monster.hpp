@@ -56,3 +56,16 @@ pmon delete_monster(pmon p, int val_id){
 		return(head);
 	}
 }
+
+pmon search_monster_by_xy(pmon lista_mostri, int x, int y){
+        pmon tmp = lista_mostri;
+        bool found = false;
+        while(!found && tmp != NULL){
+                if(tmp->mon.x == x && tmp->mon.y == y){
+                        found = true;
+                }
+                else
+                        tmp = tmp->next;
+        }
+        return tmp;
+}
