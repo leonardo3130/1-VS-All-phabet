@@ -5,6 +5,7 @@
 #include <fstream>
 #include <unistd.h>
 
+#include "Character.hpp"
 #include "Map.hpp"
 #include "Player.hpp"
 #include "Game.hpp"

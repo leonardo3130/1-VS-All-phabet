@@ -1,10 +1,8 @@
-#include <iostream>
+
 #include <ncurses.h>
 #include <cmath>
 
-#include "Monster.hpp"
-
-using namespace std;
+//#include "Monster.hpp"
 
 //costruttore
 Monster::Monster(int speed, int shot_fr, int id):Character(x, y, mode, hp, atk, def, look) {

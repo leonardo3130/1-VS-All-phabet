@@ -1,9 +1,6 @@
-#include <iostream>
 #include <ncurses.h>
 
-#include "Bullet.hpp"
-
-using namespace std;
+//#include "Bullet.hpp"
 
 Bullet::Bullet(double speed, int x, int y, int dir, int id, char look){
     this->speed = speed; //velocita' del proiettile

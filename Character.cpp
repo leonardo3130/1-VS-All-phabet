@@ -1,7 +1,4 @@
-#include <iostream>
-#include "Character.hpp"
-
-using namespace std;
+//#include "Character.hpp"
 
 Character::Character(){} //costruttore di default
 
@@ -24,8 +21,6 @@ Character::Character(int x, int y, float hp, int atk, int def, int mode, char lo
     this->atk = atk;
     this->def = def;
 };
-
-
 
 void Character::moveright(Map mappa){
     if(isempty(mappa, (this->x)+1, this->y)==true && is_inside(mappa, this->x+1, this->y)==true){
