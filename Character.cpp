@@ -1,4 +1,4 @@
-//#include "Character.hpp"
+#include "Character.hpp"
 
 Character::Character(){} //costruttore di default
 
@@ -23,32 +23,32 @@ Character::Character(int x, int y, float hp, int atk, int def, int mode, char lo
 };
 
 void Character::moveright(Map mappa){
-    if(isempty(mappa, (this->x)+1, this->y)==true && is_inside(mappa, this->x+1, this->y)==true){
+    if(mappa.isempty((this->x)+1, this->y)==true && mappa.is_inside(this->x+1, this->y)==true){
         this->x += 1;
         this->mode = 0;
     }
 }
 void Character::moveleft(Map mappa){
-    if(isempty(mappa, (this->x)-1, this->y)==true && is_inside(mappa, (this->x)-1, this->y)==true){
+    if(mappa.isempty((this->x)-1, this->y)==true && mappa.is_inside((this->x)-1, this->y)==true){
         this->x -= 1;
         this->mode = 2;
     }
 }
 void Character::moveup(Map mappa){
-    if(isempty(mappa, this->x, (this->y)-1)==true && is_inside(mappa, this->x, (this->y)-1)==true){
+    if(mappa.isempty(this->x, (this->y)-1)==true && mappa.is_inside(this->x, (this->y)-1)==true){
         this->y -= 1;
         this->mode = 3;
     }
 }
 void Character::movedown(Map mappa){
-    if(isempty(mappa, this->x, (this->y)+1)==true && is_inside(mappa, this->x, (this->y)+1)==true){
+    if(mappa.isempty(this->x, (this->y)+1)==true && mappa.is_inside(this->x, (this->y)+1)==true){
         this->y += 1;
         this->mode = 1;
     }
 }
 
 void Character::move_to(Map mappa, int new_x, int new_y){
-    if(isempty(mappa, new_x, new_y)==true){
+    if(mappa.isempty(new_x, new_y)==true){
         this->x = new_x;
         this->y = new_y;
         this->mode = 0;
@@ -58,12 +58,12 @@ void Character::move_to(Map mappa, int new_x, int new_y){
 int global_blt_id = 0;               //da inizializzare nel main
 pbul lista_proiettili = NULL;        //  "   "
 
-void Character::fire(int b_speed, Map mappa, Player p, int *global_id, pbul *ls_proiettili){
+void Character::fire(double b_speed, Map mappa, int *global_id, pbul ls_proiettili){
     global_id += 1; //ogni proiettile ha un id diverso, viene incrementato quando si chiama fire
-    Bullet il_proiettile = Bullet(speed, this->x, this->y, this->mode, global_id, '*');
+    Bullet il_proiettile = Bullet(b_speed, this->x, this->y, this->mode, global_id, '*');
     ls_proiettili = new_bullet(ls_proiettili, il_proiettile);
     
-    il_proiettile.shot(mappa, p);
+    il_proiettile.shot(mappa);
 }
 
 void Character::SetHp(int hp){
@@ -92,4 +92,39 @@ int Character::getY(){
 
 char Character::getLook(){ 
     return this->look; 
+}
+
+
+//si controlla se nelle coordinate vicine è presente un proiettile, in tal caso si controlla se questo ha la direzione che va contro il personaggio, in tal caso il proiettile vien eliminato e il personaggio perde vita
+void Character::bullet_check(Map m, pbul lista_proiettili){
+  while(this->hp>0){
+    if( int(m.getMapChar(this->x-1, this->y)) == 42){
+      pbul proiettile = search_bullet_by_xy(lista_proiettili, this->x-1, this->y);
+      if(proiettile->bul.dir == 0){
+        lista_proiettili = delete_bullet(lista_proiettili, proiettile->bul.id);
+        this->hp -= 1/this->def;
+      }
+    }
+    else if(int(m.getMapChar(this->x+1, this->y)) == 42){
+      pbul proiettile = search_bullet_by_xy(lista_proiettili, this->x, this->y+1);
+      if(proiettile->bul.dir == 2){
+        lista_proiettili = delete_bullet(lista_proiettili, proiettile->bul.id);
+        this->hp -= 1/this->def;
+      }
+    }
+    else if(int(m.getMapChar(this->x, this->y-1)) == 42){
+      pbul proiettile = search_bullet_by_xy(lista_proiettili, this->x, this->y-1);
+      if(proiettile->bul.dir == 1){
+        lista_proiettili = delete_bullet(lista_proiettili, proiettile->bul.id);
+        this->hp -= 1/this->def;
+      }    
+    }
+    else if(int(m.getMapChar(this->x, this->y+1)) == 42){
+      pbul proiettile = search_bullet_by_xy(lista_proiettili, this->x, this->y+1);
+      if(proiettile->bul.dir == 3){
+        lista_proiettili = delete_bullet(lista_proiettili, proiettile->bul.id);        
+        this->hp -= 1/this->def;
+      }
+    }
+  }
 }
