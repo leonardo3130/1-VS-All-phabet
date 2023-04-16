@@ -10,7 +10,6 @@
 #include "Player.hpp"
 #include "Game.hpp"
 
-
 #define NUM_COLORS 8
 using namespace std;
 

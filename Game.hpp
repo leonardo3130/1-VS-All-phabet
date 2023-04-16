@@ -1,9 +1,9 @@
+#pragma once
 #include <iostream>
 #include "Map.hpp"
 #include "Character.hpp"
 #include "Player.hpp"
 #include <ncurses.h>
-#pragma once
 
 using namespace std;
 

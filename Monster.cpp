@@ -1,6 +1,7 @@
 #include <ncurses.h>
 #include <cmath>
 #include "Monster.hpp"
+#include "Player.hpp"
 
 //costruttore
 Monster::Monster(int speed, int shot_fr, int id):Character(x, y, mode, hp, atk, def, look) {

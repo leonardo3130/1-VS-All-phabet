@@ -1,9 +1,9 @@
+#pragma once 
 #include <cmath>
 #include <ctime>
 #include <fstream>
 #define MAX_H 40
 #define MAX_W 80
-#pragma once 
 
 class Map {
         protected:
