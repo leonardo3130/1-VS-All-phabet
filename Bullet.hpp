@@ -1,5 +1,7 @@
+#pragma once
 #include "Map.hpp"
 #include <ncurses.h>
+
 
 class Bullet{
     protected:
@@ -24,46 +26,6 @@ struct blist{
 
 typedef blist *pbul;
 
-pbul new_bullet(pbul lista, Bullet b){
-  pbul tmp = new blist;
-  tmp->bul = b;
-  tmp->next = lista;
-  lista = tmp;
-  return lista;
-}
-
-pbul delete_bullet(pbul p, int val_id){
-	if(p == NULL)
-        return(p);
-	else if(p->bul.id == val_id)
-        return(p->next);
-	else{
-		pbul p_before, head;
-		bool found = false;
-		head = p;
-		while((p != NULL) && !found){
-			if(p->bul.id == val_id)
-        found = true ;
-			else{
-				p_before = p;
-				p = p->next;
-			}
-		}
-		if(found){
-			p_before->next = p->next;
-		}
-		return(head);
-	}
-}
-pbul search_bullet_by_xy(pbul lista_proiettili, int x, int y){
-        pbul tmp = lista_proiettili;
-        bool found = false;
-        while(!found && tmp != NULL){
-                if(tmp->bul.x == x && tmp->bul.y == y){
-                        found = true;
-                }
-                else
-                        tmp = tmp->next;
-        }
-        return tmp;
-}
+pbul new_bullet(pbul lista, Bullet b);
+pbul delete_bullet(pbul p, int val_id);
+pbul search_bullet_by_xy(pbul lista_proiettili, int x, int y);

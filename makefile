@@ -1,4 +1,4 @@
-SOURCES=main.cpp Character.cpp Player.cpp Map.cpp Game.cpp
+SOURCES=main.cpp Character.cpp Player.cpp Map.cpp Game.cpp Bullet.cpp Monster.cpp
 EXECUTABLE=gioca
 
 all: $(EXECUTABLE)
