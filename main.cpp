@@ -96,10 +96,11 @@ int main(){
 	Game game = Game();
 	game.init_message();
 	clear();
-
+	
 	//vedo se il giocatore desidera effetuare il login (0), registrarsi (1) o uscire (2)
-	int choice = game.choice_menu();
+	int choice = 1;//game.choice_menu();
 	clear();
+	
 
 	char username[20], password[20], filename[50], mkdir[50];
 	strcpy(mkdir, "mkdir Archivio/");
