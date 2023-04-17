@@ -1,9 +1,6 @@
 #include <iostream>
 #include <ctime>
 #include <curses.h>
-#include "Map.hpp"
-#include "Character.hpp"
-#include "Player.hpp"
 #include "Game.hpp"
 #include <unistd.h>
 
@@ -13,8 +10,17 @@ Game::Game() {};
 
 void Game::run() {
 
+    char* nick = "leo";
+    char* psw = "leo";
+
+
 	Character protagonist(3,3,10,10,10,0,'1');
+    
+    Monster mostro(5, 4, 0);
+
+    Player giocatore(nick, psw, 2);
 	Map map(40,80);
+    
 
 	//initscr(); cbreak(); noecho();
     keypad(stdscr, TRUE);
@@ -41,7 +47,7 @@ void Game::run() {
 	time_t previous_time = time(nullptr);
 	time_t lag = time_t(0.0);
 	time_t current, elapsed;
-	int prev_x, prev_y;
+	int prev_x, prev_y, prev_x_mostro, prev_y_mostro;
 	int const MS = 100;
 	while(true) //condizione che andrà in base ad hp e altro
     {
@@ -53,14 +59,19 @@ void Game::run() {
 		prev_x = protagonist.getX();
 		prev_y = protagonist.getY();
 
+		prev_x_mostro = mostro.getX(); //
+		prev_y_mostro = mostro.getY(); //
+        
+
 		int ch = getch();
-		handleInput(ch, map, protagonist);
+		handleInput(ch, map, protagonist, mostro, giocatore);
 		while(lag >= MS)
 		{
-			update(map, protagonist, prev_y, prev_x);
+			update(map, protagonist, prev_y, prev_x, mostro, prev_y_mostro, prev_x_mostro);
+
 			lag -= MS;
 		}
-		draw(game_win, map, protagonist, prev_x, prev_y);
+		draw(game_win, map, protagonist, prev_x, prev_y, mostro, prev_y_mostro, prev_x_mostro);
 		//shooting
 		//mostri
 	}
@@ -68,7 +79,7 @@ void Game::run() {
     endwin();
 }
 
-void Game::handleInput(int c, Map& map, Character& protagonist) {
+void Game::handleInput(int c, Map& map, Character& protagonist, Monster& mostro, Player& giocatore) {
 	if(c == ERR) {;/*no tasti premuti dall'utente*/}
 	else {
 		switch(c)
@@ -85,24 +96,33 @@ void Game::handleInput(int c, Map& map, Character& protagonist) {
 			case KEY_RIGHT:
 				protagonist.moveright(map);
 				break;
+            case KEY_BACKSPACE:
+                mostro.moveright(map);
+                break;
             case KEY_F(1):
-                //sparo
+
+                break;
 			default:
 				break;
 		}
 	}
 }
 
-void Game::update(Map& map, Character& protagonist, int prev_x, int prev_y) {
+void Game::update(Map& map, Character& protagonist, int prev_x, int prev_y, Monster& mostro, int prev_x_mostro, int prev_y_mostro) {
 	map.setMapChar(prev_y, prev_x, ' ');
+    map.setMapChar(prev_y_mostro, prev_x_mostro, ' ');
+
 	map.setMapChar(protagonist.getY(), protagonist.getX(), protagonist.getLook());
+    map.setMapChar(mostro.getY(), mostro.getX(), mostro.getLook());
 }
 
-void Game::draw(WINDOW* win, Map& map, Character& protagonist, int prev_x, int prev_y) {
+void Game::draw(WINDOW* win, Map& map, Character& protagonist, int prev_x, int prev_y, Monster& mostro, int prev_x_mostro, int prev_y_mostro) {
 	mvwprintw(win, prev_y, prev_x, " ");
+    mvwprintw(win, prev_y_mostro, prev_x_mostro, " ");
 	wrefresh(win);
 	mvwprintw(win, protagonist.getY(), protagonist.getX(), "%c",protagonist.getLook());
-	wrefresh(win);
+	mvwprintw(win, mostro.getY(), mostro.getX(), "%c", mostro.getLook());
+    wrefresh(win);
 }
 
 void Game::timed_print(char *text, int text_len, int micro_seconds_delay, int l, int c){
