@@ -85,6 +85,8 @@ void Game::handleInput(int c, Map& map, Character& protagonist) {
 			case KEY_RIGHT:
 				protagonist.moveright(map);
 				break;
+            case KEY_F(1):
+                //sparo
 			default:
 				break;
 		}
