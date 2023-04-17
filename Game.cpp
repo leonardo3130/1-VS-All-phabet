@@ -9,6 +9,7 @@
 Game::Game() {};
 
 void Game::run() {
+    srand(time(NULL));
 
     char* nick = "leo";
     char* psw = "leo";
@@ -55,9 +56,10 @@ void Game::run() {
 	time_t lag = time_t(0.0);
 	time_t current, elapsed;
 	int prev_x, prev_y, prev_x_mostro, prev_y_mostro;
-	int const MS = 100;
+	int const MS = 33;
 
     int monster_prob, monster_mode;
+    int c = 0;
 
 	while(true) //condizione che andrà in base ad hp e altro
     {
@@ -76,22 +78,24 @@ void Game::run() {
 		int ch = getch();
 		handleInput(ch, map, protagonist, mostro, giocatore);
 
-        
-        srand(time(NULL));
         monster_prob = rand()%5;
         if(monster_prob == 1);
-            monster_mode= rand()%4; 
-        mostro.move(map, giocatore, monster_mode);
-        napms(50);
+            monster_mode = rand()%4;      
+        if(c == 4000) {
+            mostro.move(map, giocatore, monster_mode);
+            c = 0;
+        }
 
 		while(lag >= MS)
 		{
-			update(map, protagonist, prev_y, prev_x, mostro, prev_y_mostro, prev_x_mostro);
-			lag -= MS;
+			update(map, protagonist, prev_y, prev_x);
+            monsterUpdate(map, mostro, prev_y_mostro, prev_x_mostro);
+            lag -= MS;
 		}
-		draw(game_win, map, protagonist, prev_x, prev_y, mostro, prev_y_mostro, prev_x_mostro);
+        draw(game_win, map, protagonist, prev_x, prev_y, mostro, prev_y_mostro, prev_x_mostro);
 		//shooting
 		//mostri
+        c++;
 	}
 	getch();
     endwin();
@@ -123,14 +127,15 @@ void Game::handleInput(int c, Map& map, Character& protagonist, Monster& mostro,
 	}
 }
 
-void Game::update(Map& map, Character& protagonist, int prev_x, int prev_y, Monster& mostro, int prev_x_mostro, int prev_y_mostro) {
+void Game::update(Map& map, Character& protagonist, int prev_x, int prev_y) {
 	map.setMapChar(prev_y, prev_x, ' ');
-    map.setMapChar(prev_y_mostro, prev_x_mostro, ' ');
-
 	map.setMapChar(protagonist.getY(), protagonist.getX(), protagonist.getLook());
-    map.setMapChar(mostro.getY(), mostro.getX(), mostro.getLook());
 }
 
+void Game::monsterUpdate(Map &map, Monster& mostro, int prev_x_mostro, int prev_y_mostro){
+    map.setMapChar(prev_y_mostro, prev_x_mostro, ' ');
+    map.setMapChar(mostro.getY(), mostro.getX(), mostro.getLook());
+}
 void Game::draw(WINDOW* win, Map& map, Character& protagonist, int prev_x, int prev_y, Monster& mostro, int prev_x_mostro, int prev_y_mostro) {
 	mvwprintw(win, prev_y, prev_x, " ");
     mvwprintw(win, prev_y_mostro, prev_x_mostro, " ");

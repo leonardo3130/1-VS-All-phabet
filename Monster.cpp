@@ -2,6 +2,7 @@
 #include <cmath>
 #include "Monster.hpp"
 #include "Player.hpp"
+#include <unistd.h>
 
 //costruttore
 Monster::Monster(int speed, int shot_fr, int id):Character(x, y, mode, hp, atk, def, look) {
@@ -33,34 +34,34 @@ void Monster::move(Map& mappa, Player& p, int& mode){
 //m_mode determina la direzione di spostamento: come per l'attributo mode di Character 0=right  1=down  2=left  3=up
     this->mode = mode;
     if(this->mode == 0){
-        if(mappa.isempty(this->x + 1, this->y)==true){
+        if(mappa.isempty(this->y, this->x + 1)==true){
             this->moveright(mappa);
         }
-        if(int(mappa.getMapChar(this->x + 1, this->y)) == 1){ //verifica se il carattere incontrato e' il player
+        if(int(mappa.getMapChar(this->y, this->x+1)) == 1){ //verifica se il carattere incontrato e' il player
             fight(mappa, p);
         }
     }
     else if(this->mode == 1){
-        if(mappa.isempty(this->x, this->y + 1)==true){
-            movedown(mappa);
+        if(mappa.isempty(this->y + 1, this->x)==true){
+            this->movedown(mappa);
         }
-        if(int(mappa.getMapChar(this->x, this->y + 1)) == 1){ //verifica se il carattere incontrato e' il player
+        if(int(mappa.getMapChar(this->y + 1, this->x)) == 1){ //verifica se il carattere incontrato e' il player
             fight(mappa, p);
         }
     }
     else if(this->mode == 2){
-        if(mappa.isempty(this->x - 1, this->y)==true){
-            moveleft(mappa);
+        if(mappa.isempty(this->y, this->x - 1)==true){
+            this->moveleft(mappa);
         }
-        if(int(mappa.getMapChar(this->x - 1, this->y)) == 1){ //verifica se il carattere incontrato e' il player
+        if(int(mappa.getMapChar(this->y, this->x - 1)) == 1){ //verifica se il carattere incontrato e' il player
             fight(mappa, p);
         }
     }
     else if(this->mode == 3){
-        if(mappa.isempty(this->x, this->y - 1)==true){
-            moveup(mappa);
+        if(mappa.isempty(this->y - 1, this->x)==true){
+            this->moveup(mappa);
         }
-        if(int(mappa.getMapChar(this->x, this->y - 1)) == 1){ //verifica se il carattere incontrato e' il player
+        if(int(mappa.getMapChar(this->y - 1, this->x)) == 1){ //verifica se il carattere incontrato e' il player
             fight(mappa, p);
         }
     }
