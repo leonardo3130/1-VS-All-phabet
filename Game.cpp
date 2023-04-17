@@ -28,10 +28,8 @@ void Game::run() {
 	refresh();
 	curs_set(0);
 	refresh();
-	for(int i = 0 ; i < map.getHeight() ; i++)
-	{
-		for(int j = 0 ; j < map.getWidth() ; j++)
-		{
+	for(int i = 0 ; i < map.getHeight() ; i++){
+		for(int j = 0 ; j < map.getWidth() ; j++){
 			mvwprintw(game_win, i, j, "%c",map.getMapChar(i, j));
 			wrefresh(game_win);
 		}
@@ -46,7 +44,7 @@ void Game::run() {
 	int prev_x, prev_y;
 	int const MS = 100;
 	while(true) //condizione che andrà in base ad hp e altro
-	{
+    {
 		current = time(nullptr);
 		elapsed = current - previous_time;
 		previous_time = current;
@@ -186,7 +184,7 @@ int Game::choice_menu() {
     keypad(menu, true);
 
     while (choice != 10){
-        for(int i=0; i< sizeof(choices); i++){
+        for(int i=0; i< 3; i++){
             if(i == highlights)
                 wattron(menu, A_REVERSE);
             mvwprintw(menu, i+1, 1, choices[i].c_str());
