@@ -175,7 +175,7 @@ void Game::getCredentials(char* username, char* password) {
 //menu per scegliere se effettuare login, sign in o uscire dal gioco
 int Game::choice_menu() {
     int choice = 0;
-    string choices[3]={"Login", "Sign up", "Exit"};
+    string choices[3]={"Login", "Sign in", "Exit"};
     int highlights = 0;
 
     WINDOW *menu = newwin(6, 12 , LINES/2 -1, COLS/2 -2);
