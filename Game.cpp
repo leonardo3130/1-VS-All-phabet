@@ -17,6 +17,13 @@ void Game::run() {
 	Character protagonist(3,3,10,10,10,0,'1');
     
     Monster mostro(5, 4, 0);
+    mostro.x = 3;
+    mostro.y = 4;
+    mostro.hp = 10;
+    mostro.atk = 10;
+    mostro.def = 10;
+    mostro.mode = 0;
+    mostro.look = 'x';
 
     Player giocatore(nick, psw, 2);
 	Map map(40,80);
