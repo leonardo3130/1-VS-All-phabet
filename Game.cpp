@@ -72,10 +72,11 @@ void Game::run() {
 
 		int ch = getch();
 		handleInput(ch, map, protagonist, mostro, giocatore);
+        mostro.move(map, giocatore);
+        napms(50);
 		while(lag >= MS)
 		{
 			update(map, protagonist, prev_y, prev_x, mostro, prev_y_mostro, prev_x_mostro);
-
 			lag -= MS;
 		}
 		draw(game_win, map, protagonist, prev_x, prev_y, mostro, prev_y_mostro, prev_x_mostro);
@@ -103,9 +104,6 @@ void Game::handleInput(int c, Map& map, Character& protagonist, Monster& mostro,
 			case KEY_RIGHT:
 				protagonist.moveright(map);
 				break;
-            case KEY_BACKSPACE:
-                mostro.moveright(map);
-                break;
             case KEY_F(1):
 
                 break;
