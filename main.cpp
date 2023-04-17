@@ -98,7 +98,7 @@ int main(){
 	clear();
 	
 	//vedo se il giocatore desidera effetuare il login (0), registrarsi (1) o uscire (2)
-	int choice = 1;//game.choice_menu();
+	int choice = 0;//game.choice_menu();
 	clear();
 	
 
