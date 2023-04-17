@@ -2,6 +2,7 @@
 #include <iostream>
 #include "Character.hpp"
 #include "Player.hpp"
+#include <unistd.h>
 
 
 class Monster : public Character{
