@@ -22,5 +22,6 @@ class Game {
 		void getCredentials(char* username, char* password);
 		int choice_menu();
 		void game_exit();
+		void muovi_mostro(Map& mappa, Monster& m, Player& p);
 		//bool isOver();
 };
