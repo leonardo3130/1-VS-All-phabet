@@ -29,39 +29,38 @@ void Monster::fire_loop(Map mappa, int livello, int *global_id, pbul lista_p){
 
 }
 
-void Monster::move(Map& mappa, Player& p){
-    srand(time(NULL));
-    this->mode= rand()%4; //m_mode determina la direzione di spostamento: come per l'attributo mode di Character 0=right  1=down  2=left  3=up
-
+void Monster::move(Map& mappa, Player& p, int& mode){
+//m_mode determina la direzione di spostamento: come per l'attributo mode di Character 0=right  1=down  2=left  3=up
+    this->mode = mode;
     if(this->mode == 0){
         if(mappa.isempty(this->x + 1, this->y)==true){
             this->moveright(mappa);
         }
         if(int(mappa.getMapChar(this->x + 1, this->y)) == 1){ //verifica se il carattere incontrato e' il player
-            this->fight(mappa, p);
-        }
-    }
-    else if(this->mode == 0){
-        if(mappa.isempty(this->x + 1, this->y)==true){
-            moveright(mappa);
-        }
-        if(int(mappa.getMapChar(this->x + 1, this->y)) == 1){ //verifica se il carattere incontrato e' il player
             fight(mappa, p);
         }
     }
-    else if(this->mode == 0){
-        if(mappa.isempty(this->x + 1, this->y)==true){
-            moveright(mappa);
+    else if(this->mode == 1){
+        if(mappa.isempty(this->x, this->y + 1)==true){
+            movedown(mappa);
         }
-        if(int(mappa.getMapChar(this->x + 1, this->y)) == 1){ //verifica se il carattere incontrato e' il player
+        if(int(mappa.getMapChar(this->x, this->y + 1)) == 1){ //verifica se il carattere incontrato e' il player
             fight(mappa, p);
         }
     }
-    else if(this->mode == 0){
-        if(mappa.isempty(this->x + 1, this->y)==true){
-            moveright(mappa);
+    else if(this->mode == 2){
+        if(mappa.isempty(this->x - 1, this->y)==true){
+            moveleft(mappa);
         }
-        if(int(mappa.getMapChar(this->x + 1, this->y)) == 1){ //verifica se il carattere incontrato e' il player
+        if(int(mappa.getMapChar(this->x - 1, this->y)) == 1){ //verifica se il carattere incontrato e' il player
+            fight(mappa, p);
+        }
+    }
+    else if(this->mode == 3){
+        if(mappa.isempty(this->x, this->y - 1)==true){
+            moveup(mappa);
+        }
+        if(int(mappa.getMapChar(this->x, this->y - 1)) == 1){ //verifica se il carattere incontrato e' il player
             fight(mappa, p);
         }
     }

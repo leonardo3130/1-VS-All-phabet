@@ -56,6 +56,9 @@ void Game::run() {
 	time_t current, elapsed;
 	int prev_x, prev_y, prev_x_mostro, prev_y_mostro;
 	int const MS = 100;
+
+    int monster_prob, monster_mode;
+
 	while(true) //condizione che andrà in base ad hp e altro
     {
 		current = time(nullptr);
@@ -72,8 +75,15 @@ void Game::run() {
 
 		int ch = getch();
 		handleInput(ch, map, protagonist, mostro, giocatore);
-        mostro.move(map, giocatore);
+
+        
+        srand(time(NULL));
+        monster_prob = rand()%5;
+        if(monster_prob == 1);
+            monster_mode= rand()%4; 
+        mostro.move(map, giocatore, monster_mode);
         napms(50);
+
 		while(lag >= MS)
 		{
 			update(map, protagonist, prev_y, prev_x, mostro, prev_y_mostro, prev_x_mostro);
