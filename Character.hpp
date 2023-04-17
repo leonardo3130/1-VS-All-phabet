@@ -5,12 +5,13 @@
 
 class Character{
   protected:
-    int x;      //coordinata x
-    int y;      //coordinata y
+
     int mode;   //direzione del personaggio, corrisponde all'ultima funzione di movimento invocata su di esso (right 0, down 1, left 2, up 3)
     char look;  //lettera usata per identificare il personaggio
 
   public:
+    int x;      //coordinata x
+    int y;      //coordinata y
     float hp;     //healt points
     int atk;      //attacco (contatto)
     int def;      //difesa

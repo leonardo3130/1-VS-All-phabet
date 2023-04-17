@@ -13,17 +13,17 @@ Monster::Monster(int speed, int shot_fr, int id):Character(x, y, mode, hp, atk, 
 
 //contatto con player: i mostri perdono hp in base all' atk del player e al prorpio def, e viceversa
 void Monster::fight(Map mappa, Player pl){ 
-    this->hp -= 1*(pl.pers.atk)/(this->def);
-    pl.pers.hp -= 1*(this->def)/(pl.pers.def);
+    this->hp -= 1*(pl.atk)/(this->def);
+    pl.hp -= 1*(this->def)/(pl.def);
 }
 
 
-void Monster::fire_loop(Map mappa, int livello){
+void Monster::fire_loop(Map mappa, int livello, int *global_id, pbul lista_p){
 
     int m_bullet_speed = 1 * (livello / 3); //liv 3 vel = 1, liv 6 vel = 2 ..... 
 
     while(this->hp>0){
-        this->fire(m_bullet_speed, mappa);
+        this->fire(m_bullet_speed, mappa, global_id, lista_p);
         napms(100 * this->shot_fr);
     }
 
@@ -95,4 +95,49 @@ void Monster::move(Map mappa, Player pl){
             }while(this->mode == 3);
         }
     }
+}
+
+pmon new_monster(pmon lista, Monster m){
+  pmon tmp = new mlist;
+  tmp->mon = m;
+  tmp->next = lista;
+  lista = tmp;
+  return lista;
+}
+
+pmon delete_monster(pmon p, int val_id){
+	if (p == NULL)
+        return(p);
+	else if (p->mon.id == val_id)
+        return(p->next);
+	else{
+		pmon p_before, head;
+		bool found = false;
+		head = p;
+		while((p != NULL) && !found){
+			if(p->mon.id == val_id)
+        found = true;
+			else{
+				p_before = p;
+				p = p->next;
+			}
+		}
+		if(found){
+			p_before->next = p->next;
+		}
+		return(head);
+	}
+}
+
+pmon search_monster_by_xy(pmon lista_mostri, int x, int y){
+        pmon tmp = lista_mostri;
+        bool found = false;
+        while(!found && tmp != NULL){
+                if(tmp->mon.x == x && tmp->mon.y == y){
+                        found = true;
+                }
+                else
+                        tmp = tmp->next;
+        }
+        return tmp;
 }
