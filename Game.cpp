@@ -16,7 +16,8 @@ void Game::run() {
 	Character protagonist(3,3,10,10,10,0,'1');
 	Map map(40,80);
 
-	//initscr(); cbreak(); noecho();keypad(stdscr, TRUE);
+	//initscr(); cbreak(); noecho();
+    keypad(stdscr, TRUE);
 	nodelay(stdscr, TRUE);
 	WINDOW *game_win;
 
