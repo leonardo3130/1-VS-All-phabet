@@ -16,7 +16,7 @@ void Game::run() {
 
 
 	Character protagonist(3,3,10,10,10,0,'1');
-    
+
     Monster mostro(5, 4, 0);
     mostro.x = 3;
     mostro.y = 4;
@@ -30,20 +30,34 @@ void Game::run() {
 	Map map(40,80);
 
     Bullet proiettile = Bullet(2, 5, 5, 0, 0, '*');
-    
+
 
 	//initscr(); cbreak(); noecho();
     keypad(stdscr, TRUE);
 	nodelay(stdscr, TRUE);
-	WINDOW *game_win;
+	WINDOW *game_win, *commands, *player_stats;
 
-	int starty = (LINES - 40) / 2;
-    int startx = (COLS - 80) / 2;
+	int starty = (LINES - 42) / 2;
+    int startx = (COLS - 82) / 2;
 
 	game_win = newwin(42, 82, starty, startx);
+
+    /*
+    commands = newwin(18, 30, starty+84, startx+100);
+    player_stats = newwin(20, 30, starty+84, startx+100);
+    */
+
 	refresh();
 	curs_set(0);
 	refresh();
+
+    /*
+    box(commands, 0, 0);
+    box(player_stats, 0, 0);
+    refresh();
+    wrefresh(commands);
+    wrefresh(player_stats);
+    */
 	for(int i = 0 ; i < map.getHeight() ; i++){
 		for(int j = 0 ; j < map.getWidth() ; j++){
 			mvwprintw(game_win, i, j, "%c",map.getMapChar(i, j));
@@ -80,14 +94,14 @@ void Game::run() {
 
         prev_x_bul = proiettile.x;
         prev_y_bul = proiettile.y;
-        
+
 
 		int ch = getch();
 		handleInput(ch, map, protagonist, mostro, giocatore, proiettile);
 
         monster_prob = rand()%5;
         if(monster_prob == 1);
-            monster_mode = rand()%4;      
+            monster_mode = rand()%4;
         if(c == 900000) {
             mostro.move(map, giocatore, monster_mode);
         }
@@ -105,8 +119,8 @@ void Game::run() {
 		}
         if(prev_y != protagonist.getY() || prev_x != protagonist.getX())
             draw(game_win, map, protagonist, prev_x, prev_y);
-        
-        
+
+
 		//shooting
 		//mostri
         if(c == 900000) {
@@ -142,8 +156,9 @@ void Game::handleInput(int c, Map& map, Character& protagonist, Monster& mostro,
 				protagonist.moveright(map);
 				break;
             case KEY_BACKSPACE:
-                
                 break;
+            case 'q':
+                game_exit();
 			default:
 				break;
 		}
@@ -296,7 +311,8 @@ int Game::choice_menu() {
 void Game::game_exit(){
     char text[11];
     strcpy(text, "Goodbye...");
-    timed_print(text, 11, 50000, LINES/3, COLS/2 - 5);
+    clear();
+    timed_print(text, 11, 100000, LINES/3, COLS/2 - 5);
 
     /*
         code for the backup
