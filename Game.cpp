@@ -57,11 +57,13 @@ void Game::run() {
 	time_t previous_time = time(nullptr);
 	time_t lag = time_t(0.0);
 	time_t current, elapsed;
-	int prev_x, prev_y, prev_x_mostro, prev_y_mostro;
+
+	int prev_x, prev_y, prev_x_mostro, prev_y_mostro, prev_x_bul, prev_y_bul;
+
 	int const MS = 50;
 
     int monster_prob, monster_mode;
-    int c = 0;
+    int c = 0, b = 0;
 
 	while(true) //condizione che andrà in base ad hp e altro
     {
@@ -75,18 +77,21 @@ void Game::run() {
 
 		prev_x_mostro = mostro.x; //
 		prev_y_mostro = mostro.y; //
+
+        prev_x_bul = proiettile.x;
+        prev_y_bul = proiettile.y;
         
 
 		int ch = getch();
-		handleInput(ch, map, protagonist, mostro, giocatore);
+		handleInput(ch, map, protagonist, mostro, giocatore, proiettile);
 
         monster_prob = rand()%5;
         if(monster_prob == 1);
             monster_mode = rand()%4;      
-        if(c == 10000) {
+        if(c == 900000) {
             mostro.move(map, giocatore, monster_mode);
         }
-        if(c==20000){
+        if(b==20000){
             proiettile.move_bul(map, 0);
         }
 
@@ -94,24 +99,32 @@ void Game::run() {
 		{
             if(prev_y != protagonist.getY() || prev_x != protagonist.getX())
 			    update(map, protagonist, prev_y, prev_x);
-            monsterUpdate(map, mostro, prev_y_mostro, prev_x_mostro);
+                monsterUpdate(map, mostro, prev_y_mostro, prev_x_mostro);
+                bulletUpdate(map, proiettile, prev_y_bul, prev_x_bul);
             lag -= MS;
 		}
         if(prev_y != protagonist.getY() || prev_x != protagonist.getX())
             draw(game_win, map, protagonist, prev_x, prev_y);
+        
+        
 		//shooting
 		//mostri
-        if(c == 10000) {
+        if(c == 900000) {
             drawMonster(game_win, map, mostro, prev_x_mostro, prev_y_mostro);
             c = 0;
         }
+        if(b==20000){
+            drawBullet(game_win, map, proiettile, prev_x_bul, prev_y_bul);
+            b=0;
+        }
+        b++;
         c++;
 	}
 	getch();
     endwin();
 }
 
-void Game::handleInput(int c, Map& map, Character& protagonist, Monster& mostro, Player& giocatore) {
+void Game::handleInput(int c, Map& map, Character& protagonist, Monster& mostro, Player& giocatore, Bullet& proiettile) {
 	if(c == ERR) {;/*no tasti premuti dall'utente*/}
 	else {
 		switch(c)
@@ -128,8 +141,8 @@ void Game::handleInput(int c, Map& map, Character& protagonist, Monster& mostro,
 			case KEY_RIGHT:
 				protagonist.moveright(map);
 				break;
-            case KEY_F(1):
-
+            case KEY_BACKSPACE:
+                
                 break;
 			default:
 				break;
@@ -146,6 +159,10 @@ void Game::monsterUpdate(Map &map, Monster& mostro, int prev_x_mostro, int prev_
     map.setMapChar(prev_y_mostro, prev_x_mostro, ' ');
     map.setMapChar(mostro.getY(), mostro.getX(), mostro.getLook());
 }
+void Game::bulletUpdate(Map &map, Bullet& proiettile, int prev_x_bul, int prev_y_bul){
+    map.setMapChar(prev_y_bul, prev_x_bul, ' ');
+    map.setMapChar(proiettile.y, proiettile.x, '*');
+}
 void Game::draw(WINDOW* win, Map& map, Character& protagonist, int prev_x, int prev_y) {
         mvwprintw(win, prev_y, prev_x, " ");
 	    wrefresh(win);
@@ -157,6 +174,12 @@ void Game::drawMonster(WINDOW* win, Map& map, Monster& mostro, int prev_x_mostro
     mvwprintw(win, prev_y_mostro, prev_x_mostro, " ");
 	wrefresh(win);
 	mvwprintw(win, mostro.getY(), mostro.getX(), "%c", mostro.getLook());
+    wrefresh(win);
+}
+void Game::drawBullet(WINDOW* win, Map& map, Bullet& proiettile, int prev_x_bul, int prev_y_bul) {
+    mvwprintw(win, prev_y_bul, prev_x_bul, " ");
+	wrefresh(win);
+	mvwprintw(win, proiettile.y, proiettile.x, "%c", '*');
     wrefresh(win);
 }
 

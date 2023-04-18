@@ -15,6 +15,7 @@ class Bullet{
         int dir;        //direzioen proiettile (corriponde alla mode del personaggio da cui viene sparato)
         int id; ///codice identificativo univoco per ogni istanza
         Bullet(double speed = 1, int x = 0, int y = 0, int dir = 0,  int id = 0, char look = '.');
+        void delete_bullet();
         void move_bul(Map& mappa, int dir); 
 };
 
@@ -27,5 +28,5 @@ struct blist{
 typedef blist *pbul;
 
 pbul new_bullet(pbul lista, Bullet b);
-pbul delete_bullet(pbul p, int val_id);
+pbul remove_bullet(pbul p, int val_id);
 pbul search_bullet_by_xy(pbul lista_proiettili, int x, int y);
