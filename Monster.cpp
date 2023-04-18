@@ -70,7 +70,6 @@ void Monster::move(Map& mappa, Player& p, int& mode){
             fight(mappa, p);
         }
     }
-        
 }
 
 pmon new_monster(pmon lista, Monster m){
