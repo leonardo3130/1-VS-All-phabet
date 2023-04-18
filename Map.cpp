@@ -5,11 +5,7 @@
 
 using namespace std;
 
-
-
 Map::Map(int h, int w) {
-    srand(time(NULL));
-
     //controlli errori di input
     if(abs(h) > MAX_H) this->height = MAX_H;
     else this->height = abs(h);
@@ -62,7 +58,7 @@ Map::Map(int h, int w) {
                     x = rand() % (this->width - 8) + 4;
                 }while(this->matrix[y][x] != ' ');
             }
-            else //generazione posizione mura successive 
+            else //generazione posizione mura successive
             {
                 int add_y, add_x;
                 int max = 12; // diminuire per avere ancora più sequenza di mura, ma più brevi e in posizioni random
@@ -107,9 +103,9 @@ Map::Map(int h, int w) {
                 }while(this->matrix[y][x] != ' ');
             }
 
-            //controlli per decidere come orientare: | _ 
+            //controlli per decidere come orientare: | _
             //if(orientation) this->matrix[y][x] = '_';
-            //else 
+            //else
             this->matrix[y][x] = '/';
             this->matrix[y][x + 1] = '/';
 
@@ -121,20 +117,20 @@ Map::Map(int h, int w) {
         walls -= len;
     }
     for(int i = 1 ; i < this->height - 1 ; i++)
-    {                                                                                                                                                                                                                                                            
-        for(int j = 2 ; j < this->width - 2; j++)                                                                                                                                                                                                                
-        {                                                                                                                                                                                                                                                        
-                if(this->matrix[i][j] == '/' && this->matrix[i][j+1] == '/' && this->matrix[i-1][j-2] == ' ' && this->matrix[i-1][j-1] == ' ' && this->matrix[i-1][j] == ' '                                                                                     
-                                && this->matrix[i-1][j+1] == ' ' && this->matrix[i-1][j+2] == ' ' && this->matrix[i-1][j+3] == ' ' && this->matrix[i][j-2] == ' ' && this->matrix[i][j-1] == ' '                                                                 
-                                && this->matrix[i][j+2] == ' ' && this->matrix[i][j+3] == ' ' && this->matrix[i+1][j-2] == ' ' && this->matrix[i+1][j-1] == ' ' && this->matrix[i+1][j] == ' '                                                                   
-                                && this->matrix[i+1][j+1] == ' ' && this->matrix[i+1][j+2] == ' ' && this->matrix[i+1][j+3] == ' ')                                                                                                                              
-                {                                                                                                                                                                                                                                                
-                    this->matrix[i][j] = ' ';                                                                                                                                                                                                                    
-                    this->matrix[i][j+1] = ' ';                                                                                                                                                                                                                  
-                }                                                                                                                                                                                                                                                
-        }                                                                                                                                                                                                                                                        
-    }                                                                                                                                                                                                                                                            
-} 
+    {
+        for(int j = 2 ; j < this->width - 2; j++)
+        {
+                if(this->matrix[i][j] == '/' && this->matrix[i][j+1] == '/' && this->matrix[i-1][j-2] == ' ' && this->matrix[i-1][j-1] == ' ' && this->matrix[i-1][j] == ' '
+                                && this->matrix[i-1][j+1] == ' ' && this->matrix[i-1][j+2] == ' ' && this->matrix[i-1][j+3] == ' ' && this->matrix[i][j-2] == ' ' && this->matrix[i][j-1] == ' '
+                                && this->matrix[i][j+2] == ' ' && this->matrix[i][j+3] == ' ' && this->matrix[i+1][j-2] == ' ' && this->matrix[i+1][j-1] == ' ' && this->matrix[i+1][j] == ' '
+                                && this->matrix[i+1][j+1] == ' ' && this->matrix[i+1][j+2] == ' ' && this->matrix[i+1][j+3] == ' ')
+                {
+                    this->matrix[i][j] = ' ';
+                    this->matrix[i][j+1] = ' ';
+                }
+        }
+    }
+}
 
 char Map::getMapChar(int y, int x){
     return this->matrix[y][x];
@@ -152,7 +148,8 @@ int Map::getHeight(){
 }
 
 void Map::readMap(int level, char* nickPlayer){
-    char *filePath = "Archivio/", *str;
+    char filePath[50] , *str;
+    strcpy(filePath, "Archivio/");
     sprintf(str, "%d", level);
 
     //genera la path del file da aprire:
@@ -178,7 +175,8 @@ void Map::readMap(int level, char* nickPlayer){
 }
 
 void Map::writeMap(int level, char *nickPlayer){
-    char *filePath = "Archivio/", *str;
+    char filePath[50] , *str;
+    strcpy(filePath, "Archivio/");
     sprintf(str, "%d", level);
 
     //genera la path del file da aprire:
@@ -203,9 +201,6 @@ void Map::writeMap(int level, char *nickPlayer){
     // Chiude il file
     outfile.close();
 }
-
-
-
 
 
 bool Map::is_inside(int x, int y){
