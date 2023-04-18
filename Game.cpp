@@ -56,7 +56,7 @@ void Game::run() {
 	time_t lag = time_t(0.0);
 	time_t current, elapsed;
 	int prev_x, prev_y, prev_x_mostro, prev_y_mostro;
-	int const MS = 33;
+	int const MS = 50;
 
     int monster_prob, monster_mode;
     int c = 0;
@@ -81,9 +81,8 @@ void Game::run() {
         monster_prob = rand()%5;
         if(monster_prob == 1);
             monster_mode = rand()%4;      
-        if(c == 4000) {
+        if(c == 6000) {
             mostro.move(map, giocatore, monster_mode);
-            c = 0;
         }
 
 		while(lag >= MS)
@@ -92,9 +91,13 @@ void Game::run() {
             monsterUpdate(map, mostro, prev_y_mostro, prev_x_mostro);
             lag -= MS;
 		}
-        draw(game_win, map, protagonist, prev_x, prev_y, mostro, prev_y_mostro, prev_x_mostro);
+        draw(game_win, map, protagonist, prev_x, prev_y);
 		//shooting
 		//mostri
+        if(c == 6000) {
+            drawMonster(game_win, map, mostro, prev_y_mostro, prev_x_mostro);
+            c = 0;
+        }
         c++;
 	}
 	getch();
@@ -136,11 +139,16 @@ void Game::monsterUpdate(Map &map, Monster& mostro, int prev_x_mostro, int prev_
     map.setMapChar(prev_y_mostro, prev_x_mostro, ' ');
     map.setMapChar(mostro.getY(), mostro.getX(), mostro.getLook());
 }
-void Game::draw(WINDOW* win, Map& map, Character& protagonist, int prev_x, int prev_y, Monster& mostro, int prev_x_mostro, int prev_y_mostro) {
+void Game::draw(WINDOW* win, Map& map, Character& protagonist, int prev_x, int prev_y) {
 	mvwprintw(win, prev_y, prev_x, " ");
-    mvwprintw(win, prev_y_mostro, prev_x_mostro, " ");
 	wrefresh(win);
 	mvwprintw(win, protagonist.getY(), protagonist.getX(), "%c",protagonist.getLook());
+    wrefresh(win);
+}
+
+void Game::drawMonster(WINDOW* win, Map& map, Monster& mostro, int prev_x_mostro, int prev_y_mostro) {
+    mvwprintw(win, prev_y_mostro, prev_x_mostro, " ");
+	wrefresh(win);
 	mvwprintw(win, mostro.getY(), mostro.getX(), "%c", mostro.getLook());
     wrefresh(win);
 }
