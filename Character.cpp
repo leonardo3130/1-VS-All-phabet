@@ -99,28 +99,28 @@ void Character::bullet_check(Map m, pbul lista_proiettili){
     if( int(m.getMapChar(this->x-1, this->y)) == 42){
       pbul proiettile = search_bullet_by_xy(lista_proiettili, this->x-1, this->y);
       if(proiettile->bul.dir == 0){
-        lista_proiettili = delete_bullet(lista_proiettili, proiettile->bul.id);
+        lista_proiettili = remove_bullet(lista_proiettili, proiettile->bul.id);
         this->hp -= 1/this->def;
       }
     }
     else if(int(m.getMapChar(this->x+1, this->y)) == 42){
       pbul proiettile = search_bullet_by_xy(lista_proiettili, this->x, this->y+1);
       if(proiettile->bul.dir == 2){
-        lista_proiettili = delete_bullet(lista_proiettili, proiettile->bul.id);
+        lista_proiettili = remove_bullet(lista_proiettili, proiettile->bul.id);
         this->hp -= 1/this->def;
       }
     }
     else if(int(m.getMapChar(this->x, this->y-1)) == 42){
       pbul proiettile = search_bullet_by_xy(lista_proiettili, this->x, this->y-1);
       if(proiettile->bul.dir == 1){
-        lista_proiettili = delete_bullet(lista_proiettili, proiettile->bul.id);
+        lista_proiettili = remove_bullet(lista_proiettili, proiettile->bul.id);
         this->hp -= 1/this->def;
       }    
     }
     else if(int(m.getMapChar(this->x, this->y+1)) == 42){
       pbul proiettile = search_bullet_by_xy(lista_proiettili, this->x, this->y+1);
       if(proiettile->bul.dir == 3){
-        lista_proiettili = delete_bullet(lista_proiettili, proiettile->bul.id);        
+        lista_proiettili = remove_bullet(lista_proiettili, proiettile->bul.id);        
         this->hp -= 1/this->def;
       }
     }

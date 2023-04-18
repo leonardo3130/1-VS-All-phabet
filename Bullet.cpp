@@ -10,29 +10,25 @@ Bullet::Bullet(double speed, int x, int y, int dir, int id, char look){
     this->id = id; //codice identificativo univoco per ogni istanza
 }
 
+
+
 void Bullet::move_bul(Map& mappa, int dir){
 //m_mode determina la direzione di spostamento: come per l'attributo mode di Character 0=right  1=down  2=left  3=up
     this->dir = dir;
-    if(this->dir == 0){
-        if(mappa.isempty(this->x + 1, this->y)==true){
-            this->x+=1;
-        }
-
+    if(this->dir == 0  &&  mappa.isempty(this->x + 1, this->y)==true){
+        this->x+=1;
     }
-    else if(this->dir == 1){
-        if(mappa.isempty(this->x, this->y + 1)==true){
-            this->y+=1;
-        }
+    else if(this->dir == 1  &&  mappa.isempty(this->x, this->y + 1)==true){
+        this->y+=1;
     }
-    else if(this->dir == 2){
-        if(mappa.isempty(this->x - 1, this->y)==true){
-            this->x-=1;
-        }
+    else if(this->dir == 2  &&  mappa.isempty(this->x - 1, this->y)==true){
+        this->x-=1;
     }    
-    else if(this->dir == 3){
-        if(mappa.isempty(this->x, this->y - 1)==true){
-            this->y-=1;
-        }
+    else if(this->dir == 3  &&  mappa.isempty(this->x, this->y - 1)==true){
+        this->y-=1;
+    }
+    else{
+        this->~Bullet();  //viene chiamato il distruttore sull'oggetto (il distruttore c'è di default, non è da dichiarare)
     }
 }
 /*
@@ -73,7 +69,7 @@ pbul new_bullet(pbul lista, Bullet b){
   return lista;
 }
 
-pbul delete_bullet(pbul p, int val_id){
+pbul remove_bullet(pbul p, int val_id){
 	if(p == NULL)
         return(p);
 	else if(p->bul.id == val_id)
