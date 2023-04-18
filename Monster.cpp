@@ -5,6 +5,11 @@
 #include <unistd.h>
 
 //costruttore
+//Monster::Monster(int x, int y, float hp, int atk, int def, int mode, char look, int speed = 5, int shot_fr = 4, int id = 0):Character(x, y, mode, hp, atk, def, look) {
+//    this->speed = speed;
+//    this->shot_fr = shot_fr;
+//    this->id = id;
+//};
 Monster::Monster(int speed, int shot_fr, int id):Character(x, y, mode, hp, atk, def, look) {
     this->speed = speed;
     this->shot_fr = shot_fr;
@@ -34,7 +39,7 @@ void Monster::move(Map& mappa, Player& p, int& mode){
 //m_mode determina la direzione di spostamento: come per l'attributo mode di Character 0=right  1=down  2=left  3=up
     this->mode = mode;
     if(this->mode == 0){
-        if(mappa.isempty(this->y, this->x + 1)==true){
+        if(mappa.isempty(this->x + 1, this->y)==true){
             this->moveright(mappa);
         }
         if(int(mappa.getMapChar(this->y, this->x+1)) == 1){ //verifica se il carattere incontrato e' il player
@@ -42,7 +47,7 @@ void Monster::move(Map& mappa, Player& p, int& mode){
         }
     }
     else if(this->mode == 1){
-        if(mappa.isempty(this->y + 1, this->x)==true){
+        if(mappa.isempty(this->x, this->y + 1)==true){
             this->movedown(mappa);
         }
         if(int(mappa.getMapChar(this->y + 1, this->x)) == 1){ //verifica se il carattere incontrato e' il player
@@ -50,7 +55,7 @@ void Monster::move(Map& mappa, Player& p, int& mode){
         }
     }
     else if(this->mode == 2){
-        if(mappa.isempty(this->y, this->x - 1)==true){
+        if(mappa.isempty(this->x - 1, this->y)==true){
             this->moveleft(mappa);
         }
         if(int(mappa.getMapChar(this->y, this->x - 1)) == 1){ //verifica se il carattere incontrato e' il player
@@ -58,7 +63,7 @@ void Monster::move(Map& mappa, Player& p, int& mode){
         }
     }
     else if(this->mode == 3){
-        if(mappa.isempty(this->y - 1, this->x)==true){
+        if(mappa.isempty(this->x, this->y - 1)==true){
             this->moveup(mappa);
         }
         if(int(mappa.getMapChar(this->y - 1, this->x)) == 1){ //verifica se il carattere incontrato e' il player

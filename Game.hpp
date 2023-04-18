@@ -12,7 +12,8 @@ class Game {
 	private:
 		//WINDOW *create_new_win(int h, int w, int y, int x);
 		void handleInput(int c, Map& map, Character& protagonist, Monster& mostro, Player& giocatore);
-		void draw(WINDOW* win, Map& map, Character& protagonist, int prev_x, int prev_y, Monster& mostro, int prev_x_mostro, int prev_y_mostro);
+		void draw(WINDOW* win, Map& map, Character& protagonist, int prev_x, int prev_y);
+		void drawMonster(WINDOW* win, Map& map, Monster& mostro, int prev_x_mostro, int prev_y_mostro);
 		void update(Map& map, Character& protagonist, int prev_x, int prev_y) ;
 		void monsterUpdate(Map &map, Monster& mostro, int prev_x_mostro, int prev_y_mostro);
 	public:
