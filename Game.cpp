@@ -28,6 +28,8 @@ void Game::run() {
 
     Player giocatore(nick, psw, 2);
 	Map map(40,80);
+
+    Bullet proiettile = Bullet(2, 5, 5, 0, 0, '*');
     
 
 	//initscr(); cbreak(); noecho();
@@ -83,6 +85,9 @@ void Game::run() {
             monster_mode = rand()%4;      
         if(c == 10000) {
             mostro.move(map, giocatore, monster_mode);
+        }
+        if(c==20000){
+            proiettile.move_bul(map, 0);
         }
 
 		while(lag >= MS)

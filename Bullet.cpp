@@ -1,17 +1,41 @@
 #include <ncurses.h>
 #include "Bullet.hpp"
 
-Bullet::Bullet(double speed, int x, int y, int dir, int *id, char look){
+Bullet::Bullet(double speed, int x, int y, int dir, int id, char look){
     this->speed = speed; //velocita' del proiettile
     this->x = x; //posizione di partenza del proiettile
     this->y = y;
     if(dir>=0 && dir<=3){ this->dir = dir; } else{ this->dir = 0; }
     this->look = look; 
-    this->id = *id; //codice identificativo univoco per ogni istanza
+    this->id = id; //codice identificativo univoco per ogni istanza
 }
 
-void Bullet::shot(Map mappa){ 
+void Bullet::move_bul(Map& mappa, int dir){
+//m_mode determina la direzione di spostamento: come per l'attributo mode di Character 0=right  1=down  2=left  3=up
+    this->dir = dir;
+    if(this->dir == 0){
+        if(mappa.isempty(this->x + 1, this->y)==true){
+            this->x+=1;
+        }
 
+    }
+    else if(this->dir == 1){
+        if(mappa.isempty(this->x, this->y + 1)==true){
+            this->y+=1;
+        }
+    }
+    else if(this->dir == 2){
+        if(mappa.isempty(this->x - 1, this->y)==true){
+            this->x-=1;
+        }
+    }    
+    else if(this->dir == 3){
+        if(mappa.isempty(this->x, this->y - 1)==true){
+            this->y-=1;
+        }
+    }
+}
+/*
     int bul_delay = 100 / this->speed; //100 millisecondi / velocità : più è alta la velocità, minore è il delay di movimento del proiettile
 
     if(this->dir == 0){
@@ -38,7 +62,7 @@ void Bullet::shot(Map mappa){
             this->y -= 1; //proiettile sparato in basso
         }
     }
-}
+}*/
 
 //codice lista proiettile
 pbul new_bullet(pbul lista, Bullet b){
