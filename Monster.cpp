@@ -24,7 +24,7 @@ void Monster::fight(Map mappa, Player pl){
 }
 
 
-void Monster::fire_loop(Map mappa, int livello, int *global_id, pbul lista_p){
+void Monster::fire_loop(Map mappa, int livello, int global_id, pbul lista_p){
 
     int m_bullet_speed = 1 * (livello / 3); //liv 3 vel = 1, liv 6 vel = 2 ..... 
 
@@ -45,6 +45,7 @@ void Monster::move(Map& mappa, Player& p, int& mode){
         if(int(mappa.getMapChar(this->y, this->x+1)) == 1){ //verifica se il carattere incontrato e' il player
             fight(mappa, p);
         }
+
     }
     else if(this->mode == 1){
         if(mappa.isempty(this->x, this->y + 1)==true){

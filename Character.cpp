@@ -59,12 +59,9 @@ void Character::move_to(Map mappa, int new_x, int new_y){
 int global_blt_id = 0;               //da inizializzare nel main
 pbul lista_proiettili = NULL;        //  "   "
 
-void Character::fire(double b_speed, Map mappa, int *global_id, pbul ls_proiettili){
-    global_id += 1; //ogni proiettile ha un id diverso, viene incrementato quando si chiama fire
-    Bullet il_proiettile = Bullet(b_speed, this->x, this->y, this->mode, global_id, '*');
-    ls_proiettili = new_bullet(ls_proiettili, il_proiettile);
-    
-    il_proiettile.shot(mappa);
+void Character::fire(double b_speed, Map& mappa, int global_id, pbul ls_proiettili){
+    Bullet nuovo_proiettile = Bullet(b_speed, this->x, this->y, this->mode, global_id, '*');
+    ls_proiettili = new_bullet(ls_proiettili, nuovo_proiettile);
 }
 
 void Character::SetHp(int hp){
