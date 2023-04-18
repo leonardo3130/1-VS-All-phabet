@@ -87,11 +87,13 @@ void Game::run() {
 
 		while(lag >= MS)
 		{
-			update(map, protagonist, prev_y, prev_x);
+            if(prev_y != protagonist.getY() || prev_x != protagonist.getX())
+			    update(map, protagonist, prev_y, prev_x);
             monsterUpdate(map, mostro, prev_y_mostro, prev_x_mostro);
             lag -= MS;
 		}
-        draw(game_win, map, protagonist, prev_x, prev_y);
+        if(prev_y != protagonist.getY() || prev_x != protagonist.getX())
+            draw(game_win, map, protagonist, prev_x, prev_y);
 		//shooting
 		//mostri
         if(c == 10000) {
@@ -131,8 +133,8 @@ void Game::handleInput(int c, Map& map, Character& protagonist, Monster& mostro,
 }
 
 void Game::update(Map& map, Character& protagonist, int prev_x, int prev_y) {
-	map.setMapChar(prev_y, prev_x, ' ');
-	map.setMapChar(protagonist.getY(), protagonist.getX(), protagonist.getLook());
+        map.setMapChar(prev_y, prev_x, ' ');
+        map.setMapChar(protagonist.getY(), protagonist.getX(), protagonist.getLook());
 }
 
 void Game::monsterUpdate(Map &map, Monster& mostro, int prev_x_mostro, int prev_y_mostro){
@@ -140,10 +142,10 @@ void Game::monsterUpdate(Map &map, Monster& mostro, int prev_x_mostro, int prev_
     map.setMapChar(mostro.getY(), mostro.getX(), mostro.getLook());
 }
 void Game::draw(WINDOW* win, Map& map, Character& protagonist, int prev_x, int prev_y) {
-	mvwprintw(win, prev_y, prev_x, " ");
-	wrefresh(win);
-	mvwprintw(win, protagonist.getY(), protagonist.getX(), "%c",protagonist.getLook());
-    wrefresh(win);
+        mvwprintw(win, prev_y, prev_x, " ");
+	    wrefresh(win);
+	    mvwprintw(win, protagonist.getY(), protagonist.getX(), "%c",protagonist.getLook());
+        wrefresh(win);
 }
 
 void Game::drawMonster(WINDOW* win, Map& map, Monster& mostro, int prev_x_mostro, int prev_y_mostro) {
