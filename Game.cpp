@@ -71,8 +71,8 @@ void Game::run() {
 		prev_x = protagonist.getX();
 		prev_y = protagonist.getY();
 
-		prev_x_mostro = mostro.getX(); //
-		prev_y_mostro = mostro.getY(); //
+		prev_x_mostro = mostro.x; //
+		prev_y_mostro = mostro.y; //
         
 
 		int ch = getch();
@@ -81,7 +81,7 @@ void Game::run() {
         monster_prob = rand()%5;
         if(monster_prob == 1);
             monster_mode = rand()%4;      
-        if(c == 6000) {
+        if(c == 10000) {
             mostro.move(map, giocatore, monster_mode);
         }
 
@@ -94,8 +94,8 @@ void Game::run() {
         draw(game_win, map, protagonist, prev_x, prev_y);
 		//shooting
 		//mostri
-        if(c == 6000) {
-            drawMonster(game_win, map, mostro, prev_y_mostro, prev_x_mostro);
+        if(c == 10000) {
+            drawMonster(game_win, map, mostro, prev_x_mostro, prev_y_mostro);
             c = 0;
         }
         c++;
