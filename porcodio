@@ -1,5 +1,0 @@
-class Diocane{
-    public:
-        int porco;
-        Diocane(int porco);
-};
