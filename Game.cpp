@@ -78,7 +78,7 @@ void Game::run() {
 
 	int prev_x, prev_y, prev_x_mostro, prev_y_mostro, prev_x_bul, prev_y_bul;
 
-    pbul tmp1, tmp2;
+    pbul tmp1 = NULL, tmp2 = NULL;
 
 
 	int const MS = 50;
@@ -100,7 +100,7 @@ void Game::run() {
 		prev_y_mostro = mostro.y; //
 
         tmp1 = lista_proiettili;
-        while(tmp1->next != NULL){
+        while(tmp1 != NULL){
             tmp1->prev_x = tmp1->bul.x;
             tmp1->prev_y = tmp1->bul.y;
             tmp1 = tmp1->next;
@@ -122,8 +122,9 @@ void Game::run() {
         if(b==30000){
             tmp2 = lista_proiettili;
 
-            while(tmp2->next != NULL){
+            while(tmp2 != NULL){
                 tmp2->bul.move_bul(map,0);
+                tmp2 = tmp2->next;
             }
         }
 
@@ -194,7 +195,7 @@ void Game::monsterUpdate(Map &map, Monster& mostro, int prev_x_mostro, int prev_
 }
 void Game::bulletUpdate(Map &map, pbul bul_list){
     pbul tmp3 = bul_list;
-    while(tmp3->next != NULL){
+    while(tmp3 != NULL){
         map.setMapChar(tmp3->prev_y, tmp3->prev_x, ' ');
         map.setMapChar(tmp3->bul.y, tmp3->bul.x, '*');
         tmp3 = tmp3->next;
@@ -215,11 +216,12 @@ void Game::drawMonster(WINDOW* win, Map& map, Monster& mostro, int prev_x_mostro
 }
 void Game::drawBullet(WINDOW* win, Map& map, pbul bul_list) {
     pbul tmp3 = bul_list;
-    while(tmp3->next != NULL){
+    while(tmp3 != NULL){
         mvwprintw(win, tmp3->prev_y, tmp3->prev_x, " ");
 	    wrefresh(win);
 	    mvwprintw(win, tmp3->bul.y, tmp3->bul.x, "%c", '*');
         wrefresh(win);
+        tmp3 = tmp3->next;
     }
 }
 
