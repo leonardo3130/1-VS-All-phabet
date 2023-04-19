@@ -15,13 +15,15 @@ class Bullet{
         int dir;        //direzioen proiettile (corriponde alla mode del personaggio da cui viene sparato)
         int id; ///codice identificativo univoco per ogni istanza
         Bullet(double speed = 1, int x = 0, int y = 0, int dir = 0,  int id = 0, char look = '.');
-        void delete_bullet();
+        //void delete_bullet();
         void move_bul(Map& mappa, int dir); 
 };
 
 //codice per lista proiettili
 struct blist{
   Bullet bul;
+  int prev_x;
+  int prev_y;
   blist *next;
 };
 

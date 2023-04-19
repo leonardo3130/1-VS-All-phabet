@@ -29,7 +29,11 @@ void Game::run() {
     Player giocatore(nick, psw, 2);
 	Map map(40,80);
 
-    Bullet proiettile = Bullet(2, 5, 5, 0, 0, '*');
+
+    pbul lista_proiettili = NULL;
+    Bullet proiettile(1, 5, 5, 0, 0, '*');
+
+    lista_proiettili = new_bullet(lista_proiettili, proiettile);
 
 
 	//initscr(); cbreak(); noecho();
@@ -74,6 +78,9 @@ void Game::run() {
 
 	int prev_x, prev_y, prev_x_mostro, prev_y_mostro, prev_x_bul, prev_y_bul;
 
+    pbul tmp1, tmp2;
+
+
 	int const MS = 50;
 
     int monster_prob, monster_mode;
@@ -92,12 +99,17 @@ void Game::run() {
 		prev_x_mostro = mostro.x; //
 		prev_y_mostro = mostro.y; //
 
-        prev_x_bul = proiettile.x;
-        prev_y_bul = proiettile.y;
+        tmp1 = lista_proiettili;
+        while(tmp1->next != NULL){
+            tmp1->prev_x = tmp1->bul.x;
+            tmp1->prev_y = tmp1->bul.y;
+            tmp1 = tmp1->next;
+        }
+        
 
 
 		int ch = getch();
-		handleInput(ch, map, protagonist, mostro, giocatore, proiettile);
+		handleInput(ch, map, protagonist, mostro, giocatore, lista_proiettili);
 
         monster_prob = rand()%5;
         if(monster_prob == 1);
@@ -105,8 +117,14 @@ void Game::run() {
         if(c == 900000) {
             mostro.move(map, giocatore, monster_mode);
         }
-        if(b==20000){
-            proiettile.move_bul(map, 0);
+
+        
+        if(b==30000){
+            tmp2 = lista_proiettili;
+
+            while(tmp2->next != NULL){
+                tmp2->bul.move_bul(map,0);
+            }
         }
 
 		while(lag >= MS)
@@ -114,7 +132,7 @@ void Game::run() {
             if(prev_y != protagonist.getY() || prev_x != protagonist.getX())
 			    update(map, protagonist, prev_y, prev_x);
                 monsterUpdate(map, mostro, prev_y_mostro, prev_x_mostro);
-                bulletUpdate(map, proiettile, prev_y_bul, prev_x_bul);
+                bulletUpdate(map, lista_proiettili);
             lag -= MS;
 		}
         if(prev_y != protagonist.getY() || prev_x != protagonist.getX())
@@ -127,8 +145,8 @@ void Game::run() {
             drawMonster(game_win, map, mostro, prev_x_mostro, prev_y_mostro);
             c = 0;
         }
-        if(b==20000){
-            drawBullet(game_win, map, proiettile, prev_x_bul, prev_y_bul);
+        if(b==30000){
+            drawBullet(game_win, map, lista_proiettili);
             b=0;
         }
         b++;
@@ -138,7 +156,7 @@ void Game::run() {
     endwin();
 }
 
-void Game::handleInput(int c, Map& map, Character& protagonist, Monster& mostro, Player& giocatore, Bullet& proiettile) {
+void Game::handleInput(int c, Map& map, Character& protagonist, Monster& mostro, Player& giocatore, pbul bullet_list) {
 	if(c == ERR) {;/*no tasti premuti dall'utente*/}
 	else {
 		switch(c)
@@ -174,9 +192,13 @@ void Game::monsterUpdate(Map &map, Monster& mostro, int prev_x_mostro, int prev_
     map.setMapChar(prev_y_mostro, prev_x_mostro, ' ');
     map.setMapChar(mostro.getY(), mostro.getX(), mostro.getLook());
 }
-void Game::bulletUpdate(Map &map, Bullet& proiettile, int prev_x_bul, int prev_y_bul){
-    map.setMapChar(prev_y_bul, prev_x_bul, ' ');
-    map.setMapChar(proiettile.y, proiettile.x, '*');
+void Game::bulletUpdate(Map &map, pbul bul_list){
+    pbul tmp3 = bul_list;
+    while(tmp3->next != NULL){
+        map.setMapChar(tmp3->prev_y, tmp3->prev_x, ' ');
+        map.setMapChar(tmp3->bul.y, tmp3->bul.x, '*');
+        tmp3 = tmp3->next;
+    }
 }
 void Game::draw(WINDOW* win, Map& map, Character& protagonist, int prev_x, int prev_y) {
         mvwprintw(win, prev_y, prev_x, " ");
@@ -191,11 +213,14 @@ void Game::drawMonster(WINDOW* win, Map& map, Monster& mostro, int prev_x_mostro
 	mvwprintw(win, mostro.getY(), mostro.getX(), "%c", mostro.getLook());
     wrefresh(win);
 }
-void Game::drawBullet(WINDOW* win, Map& map, Bullet& proiettile, int prev_x_bul, int prev_y_bul) {
-    mvwprintw(win, prev_y_bul, prev_x_bul, " ");
-	wrefresh(win);
-	mvwprintw(win, proiettile.y, proiettile.x, "%c", '*');
-    wrefresh(win);
+void Game::drawBullet(WINDOW* win, Map& map, pbul bul_list) {
+    pbul tmp3 = bul_list;
+    while(tmp3->next != NULL){
+        mvwprintw(win, tmp3->prev_y, tmp3->prev_x, " ");
+	    wrefresh(win);
+	    mvwprintw(win, tmp3->bul.y, tmp3->bul.x, "%c", '*');
+        wrefresh(win);
+    }
 }
 
 void Game::timed_print(char *text, int text_len, int micro_seconds_delay, int l, int c){
