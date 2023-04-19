@@ -31,9 +31,9 @@ void Game::run() {
 
 
     pbul lista_proiettili = NULL;
-    Bullet proiettile(1, 5, 5, 0, 0, '*');
+    //Bullet proiettile(1, 5, 5, 0, '*');
 
-    lista_proiettili = new_bullet(lista_proiettili, proiettile);
+    //lista_proiettili = new_bullet(lista_proiettili, proiettile);
 
 
 	//initscr(); cbreak(); noecho();
@@ -116,14 +116,16 @@ void Game::run() {
             monster_mode = rand()%4;
         if(c == 900000) {
             mostro.move(map, giocatore, monster_mode);
+            lista_proiettili = mostro.fire(lista_proiettili);
         }
-
+        
+        
         
         if(b==30000){
             tmp2 = lista_proiettili;
 
             while(tmp2 != NULL){
-                tmp2->bul.move_bul(map,0);
+                tmp2->bul.move_bul(map);
                 tmp2 = tmp2->next;
             }
         }
@@ -175,6 +177,7 @@ void Game::handleInput(int c, Map& map, Character& protagonist, Monster& mostro,
 				protagonist.moveright(map);
 				break;
             case KEY_BACKSPACE:
+                bullet_list = protagonist.fire(bullet_list);
                 break;
             case 'q':
                 game_exit();

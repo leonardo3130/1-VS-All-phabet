@@ -59,9 +59,10 @@ void Character::move_to(Map mappa, int new_x, int new_y){
 int global_blt_id = 0;               //da inizializzare nel main
 pbul lista_proiettili = NULL;        //  "   "
 
-void Character::fire(double b_speed, Map& mappa, int global_id, pbul ls_proiettili){
-    Bullet nuovo_proiettile = Bullet(b_speed, this->x, this->y, this->mode, global_id, '*');
+pbul Character::fire(pbul ls_proiettili){
+    Bullet nuovo_proiettile = Bullet(this->x, this->y, this->mode, '*');
     ls_proiettili = new_bullet(ls_proiettili, nuovo_proiettile);
+    return ls_proiettili;
 }
 
 void Character::SetHp(int hp){
@@ -99,28 +100,28 @@ void Character::bullet_check(Map m, pbul lista_proiettili){
     if( int(m.getMapChar(this->x-1, this->y)) == 42){
       pbul proiettile = search_bullet_by_xy(lista_proiettili, this->x-1, this->y);
       if(proiettile->bul.dir == 0){
-        lista_proiettili = remove_bullet(lista_proiettili, proiettile->bul.id);
+        lista_proiettili = remove_bullet(lista_proiettili, proiettile->bul.x, proiettile->bul.y, proiettile->bul.dir);
         this->hp -= 1/this->def;
       }
     }
     else if(int(m.getMapChar(this->x+1, this->y)) == 42){
       pbul proiettile = search_bullet_by_xy(lista_proiettili, this->x, this->y+1);
       if(proiettile->bul.dir == 2){
-        lista_proiettili = remove_bullet(lista_proiettili, proiettile->bul.id);
+        lista_proiettili = remove_bullet(lista_proiettili, proiettile->bul.x, proiettile->bul.y, proiettile->bul.dir);
         this->hp -= 1/this->def;
       }
     }
     else if(int(m.getMapChar(this->x, this->y-1)) == 42){
       pbul proiettile = search_bullet_by_xy(lista_proiettili, this->x, this->y-1);
       if(proiettile->bul.dir == 1){
-        lista_proiettili = remove_bullet(lista_proiettili, proiettile->bul.id);
+        lista_proiettili = remove_bullet(lista_proiettili, proiettile->bul.x, proiettile->bul.y, proiettile->bul.dir);
         this->hp -= 1/this->def;
       }    
     }
     else if(int(m.getMapChar(this->x, this->y+1)) == 42){
       pbul proiettile = search_bullet_by_xy(lista_proiettili, this->x, this->y+1);
       if(proiettile->bul.dir == 3){
-        lista_proiettili = remove_bullet(lista_proiettili, proiettile->bul.id);        
+        lista_proiettili = remove_bullet(lista_proiettili, proiettile->bul.x, proiettile->bul.y, proiettile->bul.dir);        
         this->hp -= 1/this->def;
       }
     }

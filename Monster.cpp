@@ -23,7 +23,7 @@ void Monster::fight(Map mappa, Player pl){
     pl.hp -= 1*(this->def)/(pl.def);
 }
 
-
+/*
 void Monster::fire_loop(Map mappa, int livello, int global_id, pbul lista_p){
 
     int m_bullet_speed = 1 * (livello / 3); //liv 3 vel = 1, liv 6 vel = 2 ..... 
@@ -33,7 +33,7 @@ void Monster::fire_loop(Map mappa, int livello, int global_id, pbul lista_p){
         napms(100 * this->shot_fr);
     }
 
-}
+}*/
 
 void Monster::move(Map& mappa, Player& p, int& mode){
 //m_mode determina la direzione di spostamento: come per l'attributo mode di Character 0=right  1=down  2=left  3=up

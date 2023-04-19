@@ -15,7 +15,7 @@ class Monster : public Character{
         int shot_fr; //ogni quanto spara
         Monster(int speed = 5, int shot_fr = 4, int id = 0);//:Character(x, y, mode, hp, atk, def, look);
         void fight(Map mappa, Player p);                //interazione tra mostro e player
-        void fire_loop(Map mappa, int livello, int global_id, pbul lista_p);         //continua a sparare finche' non muore
+        //void fire_loop(Map mappa, int livello, int global_id, pbul lista_p);         //continua a sparare finche' non muore
         void move(Map& mappa, Player& p, int& mode);                //si muove a caso
 };
 

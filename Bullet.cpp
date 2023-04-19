@@ -1,20 +1,17 @@
 #include <ncurses.h>
 #include "Bullet.hpp"
 
-Bullet::Bullet(double speed, int x, int y, int dir, int id, char look){
-    this->speed = speed; //velocita' del proiettile
+Bullet::Bullet(int x, int y, int dir, char look){
     this->x = x; //posizione di partenza del proiettile
     this->y = y;
     if(dir>=0 && dir<=3){ this->dir = dir; } else{ this->dir = 0; }
     this->look = look; 
-    this->id = id; //codice identificativo univoco per ogni istanza
-}
+    }
 
 
 
-void Bullet::move_bul(Map& mappa, int dir){
+void Bullet::move_bul(Map& mappa){
 //m_mode determina la direzione di spostamento: come per l'attributo mode di Character 0=right  1=down  2=left  3=up
-    this->dir = dir;
     if(this->dir == 0  &&  mappa.isempty(this->x + 1, this->y)==true){
         this->x+=1;
     }
@@ -69,17 +66,17 @@ pbul new_bullet(pbul lista, Bullet b){
   return lista;
 }
 
-pbul remove_bullet(pbul p, int val_id){
+pbul remove_bullet(pbul p, int x, int y, int dir){
 	if(p == NULL)
         return(p);
-	else if(p->bul.id == val_id)
+	else if(p->bul.x == x && p->bul.y == y && p->bul.dir == dir)
         return(p->next);
 	else{
 		pbul p_before, head;
 		bool found = false;
 		head = p;
 		while((p != NULL) && !found){
-			if(p->bul.id == val_id)
+			if(p->bul.x == x && p->bul.y == y && p->bul.dir == dir)
         found = true ;
 			else{
 				p_before = p;
