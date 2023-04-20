@@ -78,7 +78,7 @@ void Game::run() {
 
 	int prev_x, prev_y, prev_x_mostro, prev_y_mostro, prev_x_bul, prev_y_bul;
 
-    pbul tmp1 = NULL, tmp2 = NULL;
+    pbul tmp1 = NULL, tmp2 = NULL, tmp_erino = NULL;
 
 
 	int const MS = 50;
@@ -123,11 +123,31 @@ void Game::run() {
         
         if(b==30000){
             tmp2 = lista_proiettili;
-
+            tmp_erino = lista_proiettili;
+            
+            pbul lista_nera = NULL; //priettili da eliminare;
             while(tmp2 != NULL){
-                tmp2->bul.move_bul(map);
+                bool collision = 0;
+                collision = tmp2->bul.move_bul(map); //collision per riciclare i controlli che vengono eseguiti in move_bul
+                if(collision == 1){
+                    lista_nera = new_bullet(lista_nera, tmp2->bul);
+                }
                 tmp2 = tmp2->next;
             }
+            
+            while(lista_nera != NULL){
+                while(tmp_erino != NULL){
+                    if( lista_nera->bul.x == tmp_erino->bul.x &&
+                        lista_nera->bul.y == tmp_erino->bul.y &&
+                        lista_nera->bul.dir == tmp_erino->bul.dir   ){
+                            lista_proiettili = remove_bullet(lista_proiettili, tmp_erino->bul.x, tmp_erino->bul.y, tmp_erino->bul.dir);
+                    }
+                    tmp_erino = tmp_erino->next;
+                }
+                lista_nera = lista_nera->next;
+            }
+            delete lista_nera;
+
         }
 
 		while(lag >= MS)
