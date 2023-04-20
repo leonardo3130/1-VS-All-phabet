@@ -17,23 +17,7 @@ void Game::run() {
 
 	Character protagonist(3,3,10,10,10,0,'1');
 
-    Monster mostro(5, 4, 0);
-    mostro.x = 3;
-    mostro.y = 4;
-    mostro.hp = 10;
-    mostro.atk = 10;
-    mostro.def = 10;
-    mostro.mode = 0;
-    mostro.look = 'x';
-
-    Monster mostro2(5,4,0);
-    mostro.x = 20;
-    mostro.y = 7;
-    mostro.hp = 10;
-    mostro.atk = 10;
-    mostro.def = 10;
-    mostro.mode = 0;
-    mostro.look = 'y';
+    int numero_mostri = 6;
 
     Player giocatore(nick, psw, 2);
 	Map map(40,80);
@@ -44,8 +28,17 @@ void Game::run() {
 
     //Bullet proiettile(1, 5, 5, 0, '*');
 
-    lista_mostri = new_monster(lista_mostri, mostro);
-    //lista_mostri = new_monster(lista_mostri, mostro2);
+    for(int i=0; i<numero_mostri; i++){
+        Monster mostro(5,4, i);
+        mostro.x = rand()%(map.getWidth()-2);
+        mostro.y = rand()%(map.getHeight()-1);
+        mostro.hp = 10;
+        mostro.atk = 10;
+        mostro.def = 10;
+        mostro.mode = rand()%4;
+        mostro.look = 'y';
+        lista_mostri = new_monster(lista_mostri, mostro);   
+    }
 
     //lista_proiettili = new_bullet(lista_proiettili, proiettile);
 
@@ -91,7 +84,7 @@ void Game::run() {
 	time_t lag = time_t(0.0);
 	time_t current, elapsed;
 
-	int prev_x, prev_y, monster_prob, monster_mode, c=0, b=0;
+	int prev_x, prev_y, c=0, b=0;
 
     pbul tmp1 = NULL, tmp2 = NULL, tmp_erino = NULL;
 
@@ -127,17 +120,20 @@ void Game::run() {
         // Input ///////////////////////////////////////////////////////////
 		int ch = getch();
 		handleInput(ch, map, protagonist, lista_mostri, giocatore, lista_proiettili);
-
+        int monster_mode = 0;
 
 
         // Mostri ///////////////////////////////////////////////////////////
-        monster_prob = rand()%5;
-        if(monster_prob == 1);
-            monster_mode = rand()%4;
+
 
         if(c == 900000) {
             tmp_m2 = lista_mostri;
             while(tmp_m2 != NULL){
+                int monster_prob = rand()%5;
+                int monster_mode;
+                if(monster_prob == 1)
+                    monster_mode = rand()%4;
+
                 tmp_m2->mon.move(map, giocatore, monster_mode);
                 lista_proiettili = tmp_m2->mon.fire(lista_proiettili);
                 tmp_m2 = tmp_m2->next;
