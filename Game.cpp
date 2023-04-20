@@ -26,12 +26,26 @@ void Game::run() {
     mostro.mode = 0;
     mostro.look = 'x';
 
+    Monster mostro2(5,4,0);
+    mostro.x = 20;
+    mostro.y = 7;
+    mostro.hp = 10;
+    mostro.atk = 10;
+    mostro.def = 10;
+    mostro.mode = 0;
+    mostro.look = 'y';
+
     Player giocatore(nick, psw, 2);
 	Map map(40,80);
 
 
     pbul lista_proiettili = NULL;
+    pmon lista_mostri = NULL;
+
     //Bullet proiettile(1, 5, 5, 0, '*');
+
+    lista_mostri = new_monster(lista_mostri, mostro);
+    //lista_mostri = new_monster(lista_mostri, mostro2);
 
     //lista_proiettili = new_bullet(lista_proiettili, proiettile);
 
@@ -77,9 +91,11 @@ void Game::run() {
 	time_t lag = time_t(0.0);
 	time_t current, elapsed;
 
-	int prev_x, prev_y, prev_x_mostro, prev_y_mostro, monster_prob, monster_mode, prev_x_bul, prev_y_bul, c=0, b=0;
+	int prev_x, prev_y, monster_prob, monster_mode, c=0, b=0;
 
     pbul tmp1 = NULL, tmp2 = NULL, tmp_erino = NULL;
+
+    pmon tmp_m1 = NULL, tmp_m2 = NULL, tmp_m3 = NULL;
 
 	int const MS = 50;
 
@@ -90,11 +106,16 @@ void Game::run() {
 		previous_time = current;
 		lag += elapsed;
 
-		prev_x = protagonist.getX();
+
+        prev_x = protagonist.getX();
 		prev_y = protagonist.getY();
 
-		prev_x_mostro = mostro.x; //
-		prev_y_mostro = mostro.y; //
+        tmp_m1 = lista_mostri;
+        while(tmp_m1 != NULL){
+            tmp_m1->prev_x = tmp_m1->mon.x;
+            tmp_m1->prev_y = tmp_m1->mon.y;
+            tmp_m1 = tmp_m1->next;
+        }
 
         tmp1 = lista_proiettili;
         while(tmp1 != NULL){
@@ -105,8 +126,8 @@ void Game::run() {
         
         // Input ///////////////////////////////////////////////////////////
 		int ch = getch();
-		handleInput(ch, map, protagonist, mostro, giocatore, lista_proiettili);
-        
+		handleInput(ch, map, protagonist, lista_mostri, giocatore, lista_proiettili);
+
 
 
         // Mostri ///////////////////////////////////////////////////////////
@@ -115,8 +136,12 @@ void Game::run() {
             monster_mode = rand()%4;
 
         if(c == 900000) {
-            mostro.move(map, giocatore, monster_mode);
-            lista_proiettili = mostro.fire(lista_proiettili);
+            tmp_m2 = lista_mostri;
+            while(tmp_m2 != NULL){
+                tmp_m2->mon.move(map, giocatore, monster_mode);
+                lista_proiettili = tmp_m2->mon.fire(lista_proiettili);
+                tmp_m2 = tmp_m2->next;
+            }
         }
         
         
@@ -157,17 +182,18 @@ void Game::run() {
 		{
             if(prev_y != protagonist.getY() || prev_x != protagonist.getX())
 			    update(map, protagonist, prev_y, prev_x);
-                monsterUpdate(map, mostro, prev_y_mostro, prev_x_mostro);
+                monsterUpdate(map, lista_mostri);
                 bulletUpdate(map, lista_proiettili);
             lag -= MS;
 		}
 
 
         // Draw  //////////////////////////////////////////////////////////
-        if(prev_y != protagonist.getY() || prev_x != protagonist.getX())
+        if(prev_y != protagonist.getY() || prev_x != protagonist.getX()){
             draw(game_win, map, protagonist, prev_x, prev_y);
+        }
         if(c == 900000) {
-            drawMonster(game_win, map, mostro, prev_x_mostro, prev_y_mostro);
+            drawMonster(game_win, map, lista_mostri);
             c = 0;
         }
         if(b==30000){
@@ -183,7 +209,7 @@ void Game::run() {
     endwin();
 }
 
-void Game::handleInput(int c, Map& map, Character& protagonist, Monster& mostro, Player& giocatore, pbul bullet_list) {
+void Game::handleInput(int c, Map& map, Character& protagonist, pmon lista_mostri, Player& giocatore, pbul bullet_list) {
 	if(c == ERR) {;/*no tasti premuti dall'utente*/}
 	else {
 		switch(c)
@@ -216,9 +242,13 @@ void Game::update(Map& map, Character& protagonist, int prev_x, int prev_y) {
         map.setMapChar(protagonist.getY(), protagonist.getX(), protagonist.getLook());
 }
 
-void Game::monsterUpdate(Map &map, Monster& mostro, int prev_x_mostro, int prev_y_mostro){
-    map.setMapChar(prev_y_mostro, prev_x_mostro, ' ');
-    map.setMapChar(mostro.getY(), mostro.getX(), mostro.getLook());
+void Game::monsterUpdate(Map &map, pmon monster_list){
+    pmon tmp = monster_list;
+    while (tmp != NULL){
+        map.setMapChar(tmp->prev_y, tmp->prev_x, ' ');
+        map.setMapChar(tmp->mon.getY(), tmp->mon.getX(), tmp->mon.getLook());
+        tmp = tmp->next;
+    }
 }
 void Game::bulletUpdate(Map &map, pbul bul_list){
     pbul tmp3 = bul_list;
@@ -237,11 +267,15 @@ void Game::draw(WINDOW* win, Map& map, Character& protagonist, int prev_x, int p
 
 }
 
-void Game::drawMonster(WINDOW* win, Map& map, Monster& mostro, int prev_x_mostro, int prev_y_mostro) {
-    mvwprintw(win, prev_y_mostro, prev_x_mostro, " ");
-	wrefresh(win);
-	mvwprintw(win, mostro.getY(), mostro.getX(), "%c", mostro.getLook());
-    wrefresh(win);
+void Game::drawMonster(WINDOW* win, Map& map, pmon monster_list) {
+    pmon tmp = monster_list;
+    while (tmp != NULL){
+        mvwprintw(win, tmp->prev_y, tmp->prev_x, " ");
+        wrefresh(win);
+        mvwprintw(win, tmp->mon.getY(), tmp->mon.getX(), "%c", tmp->mon.getLook());
+        wrefresh(win);
+        tmp = tmp->next;
+    }
 }
 void Game::drawBullet(WINDOW* win, Map& map, pbul bul_list) {
     pbul tmp3 = bul_list;
