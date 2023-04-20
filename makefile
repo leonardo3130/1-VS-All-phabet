@@ -1,6 +1,6 @@
+COMPILER=g++
 SOURCES=main.cpp Character.cpp Player.cpp Map.cpp Game.cpp Bullet.cpp Monster.cpp
 EXECUTABLE=gioca
-COMPILER=g++
 FLAGS=-lncurses -w
 
 all: $(EXECUTABLE)
@@ -10,3 +10,5 @@ $(EXECUTABLE) : $(SOURCES)
 	./$(EXECUTABLE)
 	rm $(EXECUTABLE)
 
+clear:
+	rm $(EXECUTABLE)
