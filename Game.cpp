@@ -106,7 +106,7 @@ void Game::run() {
             tmp1 = tmp1->next;
         }
         
-
+        map.setMapChar(12,12, 'D');
 
 		int ch = getch();
 		handleInput(ch, map, protagonist, mostro, giocatore, lista_proiettili);
@@ -141,6 +141,9 @@ void Game::run() {
                         lista_nera->bul.y == tmp_erino->bul.y &&
                         lista_nera->bul.dir == tmp_erino->bul.dir   ){
                             lista_proiettili = remove_bullet(lista_proiettili, tmp_erino->bul.x, tmp_erino->bul.y, tmp_erino->bul.dir);
+                            map.setMapChar(tmp_erino->bul.y, tmp_erino->bul.x, ' ');
+                            mvwprintw(game_win, tmp_erino->bul.y, tmp_erino->bul.x, " ");
+	                        wrefresh(game_win);
                     }
                     tmp_erino = tmp_erino->next;
                 }
@@ -229,6 +232,8 @@ void Game::draw(WINDOW* win, Map& map, Character& protagonist, int prev_x, int p
 	    wrefresh(win);
 	    mvwprintw(win, protagonist.getY(), protagonist.getX(), "%c",protagonist.getLook());
         wrefresh(win);
+
+
 }
 
 void Game::drawMonster(WINDOW* win, Map& map, Monster& mostro, int prev_x_mostro, int prev_y_mostro) {
