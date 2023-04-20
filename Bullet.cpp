@@ -10,7 +10,8 @@ Bullet::Bullet(int x, int y, int dir, char look){
 
 
 
-void Bullet::move_bul(Map& mappa){
+bool Bullet::move_bul(Map& mappa){
+    bool collision = 0;
 //m_mode determina la direzione di spostamento: come per l'attributo mode di Character 0=right  1=down  2=left  3=up
     if(this->dir == 0  &&  mappa.isempty(this->x + 1, this->y)==true){
         this->x+=1;
@@ -25,8 +26,10 @@ void Bullet::move_bul(Map& mappa){
         this->y-=1;
     }
     else{
-        this->~Bullet();  //viene chiamato il distruttore sull'oggetto (il distruttore c'è di default, non è da dichiarare)
+        collision = 1;
+        //this->~Bullet();  //viene chiamato il distruttore sull'oggetto (il distruttore c'è di default, non è da dichiarare)
     }
+    return(collision);
 }
 /*
     int bul_delay = 100 / this->speed; //100 millisecondi / velocità : più è alta la velocità, minore è il delay di movimento del proiettile
