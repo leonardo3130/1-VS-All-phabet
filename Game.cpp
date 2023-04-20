@@ -69,22 +69,19 @@ void Game::run() {
 		}
 	}
 
-	//game loop
+	// game loop
+
 	bool stop = false;
 	//double time = 0.0;
 	time_t previous_time = time(nullptr);
 	time_t lag = time_t(0.0);
 	time_t current, elapsed;
 
-	int prev_x, prev_y, prev_x_mostro, prev_y_mostro, prev_x_bul, prev_y_bul;
+	int prev_x, prev_y, prev_x_mostro, prev_y_mostro, monster_prob, monster_mode, prev_x_bul, prev_y_bul, c=0, b=0;
 
     pbul tmp1 = NULL, tmp2 = NULL, tmp_erino = NULL;
 
-
 	int const MS = 50;
-
-    int monster_prob, monster_mode;
-    int c = 0, b = 0;
 
 	while(true) //condizione che andrà in base ad hp e altro
     {
@@ -106,21 +103,24 @@ void Game::run() {
             tmp1 = tmp1->next;
         }
         
-        map.setMapChar(12,12, 'D');
-
+        // Input ///////////////////////////////////////////////////////////
 		int ch = getch();
 		handleInput(ch, map, protagonist, mostro, giocatore, lista_proiettili);
+        
 
+
+        // Mostri ///////////////////////////////////////////////////////////
         monster_prob = rand()%5;
         if(monster_prob == 1);
             monster_mode = rand()%4;
+
         if(c == 900000) {
             mostro.move(map, giocatore, monster_mode);
             lista_proiettili = mostro.fire(lista_proiettili);
         }
         
         
-        
+        // Proiettili ////////////////////////////////////////////////////
         if(b==30000){
             tmp2 = lista_proiettili;
             tmp_erino = lista_proiettili;
@@ -134,7 +134,6 @@ void Game::run() {
                 }
                 tmp2 = tmp2->next;
             }
-            
             while(lista_nera != NULL){
                 while(tmp_erino != NULL){
                     if( lista_nera->bul.x == tmp_erino->bul.x &&
@@ -150,9 +149,10 @@ void Game::run() {
                 lista_nera = lista_nera->next;
             }
             delete lista_nera;
-
         }
 
+
+        // Update  /////////////////////////////////////////////////////////
 		while(lag >= MS)
 		{
             if(prev_y != protagonist.getY() || prev_x != protagonist.getX())
@@ -161,12 +161,11 @@ void Game::run() {
                 bulletUpdate(map, lista_proiettili);
             lag -= MS;
 		}
+
+
+        // Draw  //////////////////////////////////////////////////////////
         if(prev_y != protagonist.getY() || prev_x != protagonist.getX())
             draw(game_win, map, protagonist, prev_x, prev_y);
-
-
-		//shooting
-		//mostri
         if(c == 900000) {
             drawMonster(game_win, map, mostro, prev_x_mostro, prev_y_mostro);
             c = 0;
@@ -177,6 +176,8 @@ void Game::run() {
         }
         b++;
         c++;
+
+
 	}
 	getch();
     endwin();
