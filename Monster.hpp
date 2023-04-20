@@ -22,6 +22,8 @@ class Monster : public Character{
 //codice per lista mostri
 struct mlist{
   Monster mon;
+  int prev_x;
+  int prev_y;
   mlist *next;
 };
 
