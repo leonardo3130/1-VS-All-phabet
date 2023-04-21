@@ -136,7 +136,7 @@ void Game::run() {
                     monster_mode = rand()%4;
 
                 tmp_m2->mon.move(map, giocatore, monster_mode);
-                lista_proiettili = tmp_m2->mon.fire(lista_proiettili);
+                lista_proiettili = tmp_m2->mon.fire(lista_proiettili, map);
 
                 
                 tmp_m2 = tmp_m2->next;
@@ -239,7 +239,7 @@ pbul Game::handleInput(int c, Map& map, Character& protagonist, pmon lista_mostr
 
 				break;
             case ' ':
-                bullet_list = protagonist.fire(bullet_list);
+                bullet_list = protagonist.fire(bullet_list, map);
                 break;
             case 'q':
                 game_exit();
