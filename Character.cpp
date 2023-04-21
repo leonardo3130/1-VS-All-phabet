@@ -59,18 +59,18 @@ void Character::move_to(Map mappa, int new_x, int new_y){
 int global_blt_id = 0;               //da inizializzare nel main
 pbul lista_proiettili = NULL;        //  "   "
 
-pbul Character::fire(pbul ls_proiettili){
+pbul Character::fire(pbul ls_proiettili, Map& map){
   Bullet nuovo_proiettile;
-  if (this->mode == 0){
+  if (this->mode == 0 && map.isempty(this-> x + 1, this->y)){
     nuovo_proiettile = Bullet(this->x + 1, this->y, this->mode, '*');
   }
-  else if (this->mode == 1){
+  else if (this->mode == 1  && map.isempty(this-> x, this->y + 1)){
     nuovo_proiettile = Bullet(this->x, this->y + 1, this->mode, '*');
   }
-  else if (this->mode == 2){
+  else if (this->mode == 2  && map.isempty(this-> x - 1, this->y)){
     nuovo_proiettile = Bullet(this->x - 1, this->y, this->mode, '*');
   }
-  else{
+  else if (this->mode == 3  && map.isempty(this-> x, this->y-1)){
     nuovo_proiettile = Bullet(this->x , this->y - 1, this->mode, '*');
   }
 
