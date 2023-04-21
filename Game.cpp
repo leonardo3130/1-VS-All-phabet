@@ -119,7 +119,7 @@ void Game::run() {
         
         // Input ///////////////////////////////////////////////////////////
 		int ch = getch();
-		handleInput(ch, map, protagonist, lista_mostri, giocatore, lista_proiettili);
+		lista_proiettili = handleInput(ch, map, protagonist, lista_mostri, giocatore, lista_proiettili);
         int monster_mode = 0;
 
 
@@ -205,7 +205,7 @@ void Game::run() {
     endwin();
 }
 
-void Game::handleInput(int c, Map& map, Character& protagonist, pmon lista_mostri, Player& giocatore, pbul bullet_list) {
+pbul Game::handleInput(int c, Map& map, Character& protagonist, pmon lista_mostri, Player& giocatore, pbul bullet_list) {
 	if(c == ERR) {;/*no tasti premuti dall'utente*/}
 	else {
 		switch(c)
@@ -221,6 +221,7 @@ void Game::handleInput(int c, Map& map, Character& protagonist, pmon lista_mostr
 				break;
 			case KEY_RIGHT:
 				protagonist.moveright(map);
+
 				break;
             case KEY_BACKSPACE:
                 bullet_list = protagonist.fire(bullet_list);
@@ -231,7 +232,9 @@ void Game::handleInput(int c, Map& map, Character& protagonist, pmon lista_mostr
 				break;
 		}
 	}
+    return bullet_list;
 }
+
 
 void Game::update(Map& map, Character& protagonist, int prev_x, int prev_y) {
         map.setMapChar(prev_y, prev_x, ' ');
