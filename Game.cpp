@@ -223,7 +223,7 @@ pbul Game::handleInput(int c, Map& map, Character& protagonist, pmon lista_mostr
 				protagonist.moveright(map);
 
 				break;
-            case KEY_BACKSPACE:
+            case ' ':
                 bullet_list = protagonist.fire(bullet_list);
                 break;
             case 'q':
@@ -262,8 +262,6 @@ void Game::draw(WINDOW* win, Map& map, Character& protagonist, int prev_x, int p
 	    wrefresh(win);
 	    mvwprintw(win, protagonist.getY(), protagonist.getX(), "%c",protagonist.getLook());
         wrefresh(win);
-
-
 }
 
 void Game::drawMonster(WINDOW* win, Map& map, pmon monster_list) {
