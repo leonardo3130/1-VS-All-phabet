@@ -60,9 +60,22 @@ int global_blt_id = 0;               //da inizializzare nel main
 pbul lista_proiettili = NULL;        //  "   "
 
 pbul Character::fire(pbul ls_proiettili){
-    Bullet nuovo_proiettile = Bullet(this->x, this->y, this->mode, '*');
-    ls_proiettili = new_bullet(ls_proiettili, nuovo_proiettile);
-    return ls_proiettili;
+  Bullet nuovo_proiettile;
+  if (this->mode == 0){
+    nuovo_proiettile = Bullet(this->x + 1, this->y, this->mode, '*');
+  }
+  else if (this->mode == 1){
+    nuovo_proiettile = Bullet(this->x, this->y + 1, this->mode, '*');
+  }
+  else if (this->mode == 2){
+    nuovo_proiettile = Bullet(this->x - 1, this->y, this->mode, '*');
+  }
+  else{
+    nuovo_proiettile = Bullet(this->x , this->y - 1, this->mode, '*');
+  }
+
+  ls_proiettili = new_bullet(ls_proiettili, nuovo_proiettile);
+  return ls_proiettili;
 }
 
 void Character::SetHp(int hp){
