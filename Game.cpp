@@ -84,11 +84,11 @@ void Game::run() {
 	time_t lag = time_t(0.0);
 	time_t current, elapsed;
 
-	int prev_x, prev_y, c=0, b=0;
+	int prev_x, prev_y, c=0, b=0, d=0;
 
     pbul tmp1 = NULL, tmp2 = NULL, tmp_erino = NULL;
 
-    pmon tmp_m1 = NULL, tmp_m2 = NULL, tmp_m3 = NULL;
+    pmon tmp_m1 = NULL, tmp_m2 = NULL, tmp_m3 = NULL, tmp_m4 = NULL;
 
 	int const MS = 50;
 
@@ -127,7 +127,7 @@ void Game::run() {
         // Mostri ///////////////////////////////////////////////////////////
 
 
-        if(c == 9) {
+        if(c == 90) {
             tmp_m2 = lista_mostri;
             while(tmp_m2 != NULL){
                 int monster_prob = rand()%5;
@@ -137,13 +137,23 @@ void Game::run() {
 
                 tmp_m2->mon.move(map, giocatore, monster_mode);
                 lista_proiettili = tmp_m2->mon.fire(lista_proiettili);
+
+                
                 tmp_m2 = tmp_m2->next;
             }
         }
+        /*
+        if(d == 40){
+            tmp_m4 = lista_mostri;
+            while(tmp_m4 != NULL){
+                lista_proiettili = tmp_m4->mon.fire(lista_proiettili);
+                tmp_m4 = tmp_m4->next;
+            }
+        }*/
         
         
         // Proiettili ////////////////////////////////////////////////////
-        if(b==3){
+        if(b==5){
             tmp2 = lista_proiettili;
             tmp_erino = lista_proiettili;
             
@@ -189,16 +199,20 @@ void Game::run() {
         if(prev_y != protagonist.getY() || prev_x != protagonist.getX()){
             draw(game_win, map, protagonist, prev_x, prev_y);
         }
-        if(c == 9) {
+        if(c == 90) {
             drawMonster(game_win, map, lista_mostri);
             c = 0;
         }
-        if(b==3){
+        if(b==5){
             drawBullet(game_win, map, lista_proiettili);
             b=0;
         }
+        /*if(d=40){
+            d=0;
+        }*/
         b++;
         c++;
+        d++;
 
 
 	}
