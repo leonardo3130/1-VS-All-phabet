@@ -17,7 +17,7 @@ void Game::run() {
 
 	Character protagonist(3,3,10,10,10,0,'1');
 
-    int numero_mostri = 6;
+    int numero_mostri = 2;
 
     Player giocatore(nick, psw, 2);
 	Map map(40,80);
@@ -94,6 +94,7 @@ void Game::run() {
 
 	while(true) //condizione che andrà in base ad hp e altro
     {
+        napms(5);
 		current = time(nullptr);
 		elapsed = current - previous_time;
 		previous_time = current;
@@ -126,7 +127,7 @@ void Game::run() {
         // Mostri ///////////////////////////////////////////////////////////
 
 
-        if(c == 900000) {
+        if(c == 9) {
             tmp_m2 = lista_mostri;
             while(tmp_m2 != NULL){
                 int monster_prob = rand()%5;
@@ -142,7 +143,7 @@ void Game::run() {
         
         
         // Proiettili ////////////////////////////////////////////////////
-        if(b==30000){
+        if(b==3){
             tmp2 = lista_proiettili;
             tmp_erino = lista_proiettili;
             
@@ -188,11 +189,11 @@ void Game::run() {
         if(prev_y != protagonist.getY() || prev_x != protagonist.getX()){
             draw(game_win, map, protagonist, prev_x, prev_y);
         }
-        if(c == 900000) {
+        if(c == 9) {
             drawMonster(game_win, map, lista_mostri);
             c = 0;
         }
-        if(b==30000){
+        if(b==3){
             drawBullet(game_win, map, lista_proiettili);
             b=0;
         }
