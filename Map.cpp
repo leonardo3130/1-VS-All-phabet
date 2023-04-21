@@ -204,7 +204,7 @@ void Map::writeMap(int level, char *nickPlayer){
 
 
 bool Map::is_inside(int x, int y){
-  if(this->getWidth() >= x && this->getHeight() >= y)
+  if(this->width - 3 >= x && x >= 2 && this->height - 2 >= y && y >= 1)
     return true;
   else
     return false;
