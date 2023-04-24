@@ -109,34 +109,32 @@ char Character::getLook(){
 
 //si controlla se nelle coordinate vicine è presente un proiettile, in tal caso si controlla se questo ha la direzione che va contro il personaggio, in tal caso il proiettile vien eliminato e il personaggio perde vita
 void Character::bullet_check(Map m, pbul lista_proiettili){
-  while(this->hp>0){
-    if( int(m.getMapChar(this->x-1, this->y)) == 42){
-      pbul proiettile = search_bullet_by_xy(lista_proiettili, this->x-1, this->y);
-      if(proiettile->bul.dir == 0){
-        lista_proiettili = remove_bullet(lista_proiettili, proiettile->bul.x, proiettile->bul.y, proiettile->bul.dir);
-        this->hp -= 1/this->def;
-      }
+  if( int(m.getMapChar(this->x-1, this->y)) == 42){
+    pbul proiettile = search_bullet_by_xy(lista_proiettili, this->x-1, this->y);
+    if(proiettile->bul.dir == 0){
+      //lista_proiettili = remove_bullet(lista_proiettili, proiettile->bul.x, proiettile->bul.y, proiettile->bul.dir);
+      this->hp =0;//-= 1/this->def;
     }
-    else if(int(m.getMapChar(this->x+1, this->y)) == 42){
-      pbul proiettile = search_bullet_by_xy(lista_proiettili, this->x, this->y+1);
-      if(proiettile->bul.dir == 2){
-        lista_proiettili = remove_bullet(lista_proiettili, proiettile->bul.x, proiettile->bul.y, proiettile->bul.dir);
-        this->hp -= 1/this->def;
-      }
+  }
+  else if(int(m.getMapChar(this->x+1, this->y)) == 42){
+    pbul proiettile = search_bullet_by_xy(lista_proiettili, this->x, this->y+1);
+    if(proiettile->bul.dir == 2){
+      //lista_proiettili = remove_bullet(lista_proiettili, proiettile->bul.x, proiettile->bul.y, proiettile->bul.dir);
+      this->hp =0;//-= 1/this->def;
     }
-    else if(int(m.getMapChar(this->x, this->y-1)) == 42){
-      pbul proiettile = search_bullet_by_xy(lista_proiettili, this->x, this->y-1);
-      if(proiettile->bul.dir == 1){
-        lista_proiettili = remove_bullet(lista_proiettili, proiettile->bul.x, proiettile->bul.y, proiettile->bul.dir);
-        this->hp -= 1/this->def;
-      }    
-    }
-    else if(int(m.getMapChar(this->x, this->y+1)) == 42){
-      pbul proiettile = search_bullet_by_xy(lista_proiettili, this->x, this->y+1);
-      if(proiettile->bul.dir == 3){
-        lista_proiettili = remove_bullet(lista_proiettili, proiettile->bul.x, proiettile->bul.y, proiettile->bul.dir);        
-        this->hp -= 1/this->def;
-      }
+  }
+  else if(int(m.getMapChar(this->x, this->y-1)) == 42){
+    pbul proiettile = search_bullet_by_xy(lista_proiettili, this->x, this->y-1);
+    if(proiettile->bul.dir == 1){
+      //lista_proiettili = remove_bullet(lista_proiettili, proiettile->bul.x, proiettile->bul.y, proiettile->bul.dir);
+      this->hp =0;//-= 1/this->def;
+    }    
+  }
+  else if(int(m.getMapChar(this->x, this->y+1)) == 42){
+    pbul proiettile = search_bullet_by_xy(lista_proiettili, this->x, this->y+1);
+    if(proiettile->bul.dir == 3){
+      //lista_proiettili = remove_bullet(lista_proiettili, proiettile->bul.x, proiettile->bul.y, proiettile->bul.dir);        
+      this->hp =0;//-= 1/this->def;
     }
   }
 }
