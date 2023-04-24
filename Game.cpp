@@ -32,9 +32,9 @@ void Game::run() {
         Monster mostro(5,4, i);
         mostro.x = rand()%(map.getWidth()-2);
         mostro.y = rand()%(map.getHeight()-1);
-        mostro.hp = 10;
+        mostro.hp = 1;
         mostro.atk = 10;
-        mostro.def = 10;
+        mostro.def = 1;
         mostro.mode = rand()%4;
         mostro.look = 'y';
         lista_mostri = new_monster(lista_mostri, mostro);   
@@ -88,7 +88,7 @@ void Game::run() {
 
     pbul tmp1 = NULL, tmp2 = NULL, tmp_erino = NULL;
 
-    pmon tmp_m1 = NULL, tmp_m2 = NULL, tmp_m3 = NULL, tmp_m4 = NULL;
+    pmon tmp_m1 = NULL, tmp_m2 = NULL, tmp_m3 = NULL, tmp_m4 = NULL, tmp_m5 = NULL, tmp_m6 = NULL, lista_nera_mostri = NULL;
 
 	int const MS = 50;
 
@@ -117,6 +117,11 @@ void Game::run() {
             tmp1->prev_y = tmp1->bul.y;
             tmp1 = tmp1->next;
         }
+
+        if(protagonist.hp <= 0){
+            drawGameover(game_win, map);
+            break;
+        }
         
         // Input ///////////////////////////////////////////////////////////
 		int ch = getch();
@@ -126,22 +131,40 @@ void Game::run() {
 
         // Mostri ///////////////////////////////////////////////////////////
 
-
+ 
         if(c == 90) {
             tmp_m2 = lista_mostri;
             while(tmp_m2 != NULL){
                 int monster_prob = rand()%5;
                 int monster_mode;
-                if(monster_prob == 1)
+                if(monster_prob == 1)   
                     monster_mode = rand()%4;
 
-                tmp_m2->mon.move(map, giocatore, monster_mode);
-                lista_proiettili = tmp_m2->mon.fire(lista_proiettili, map, 2);
+                tmp_m2->mon.move(map, giocatore, monster_mode); //movimento 
 
-                
+                lista_proiettili = tmp_m2->mon.fire(lista_proiettili, map, 2);  //sparo
+
+                if(tmp_m2->mon.hp <= 0){    //controllo hp
+                    lista_nera_mostri = new_monster(lista_nera_mostri, tmp_m2->mon);
+                }
+
                 tmp_m2 = tmp_m2->next;
             }
+
+            tmp_m5 = lista_mostri;
+            while(lista_nera_mostri != NULL){
+                while(tmp_m5 != NULL){
+                    if(tmp_m5->mon.id == lista_nera_mostri->mon.id){
+                        lista_mostri = delete_monster(lista_mostri, tmp_m5->mon.id);
+                    }
+                    tmp_m5 = tmp_m5->next;
+                }
+                lista_nera_mostri = lista_nera_mostri->next;
+            }
         }
+
+
+
         /*
         if(d == 40){
             tmp_m4 = lista_mostri;
@@ -154,6 +177,17 @@ void Game::run() {
         
         // Proiettili ////////////////////////////////////////////////////
         if(b==5){
+            
+
+            //controllo per quando i proiettili colpiscono i personaggi
+            tmp_m6 = lista_mostri;
+            while(tmp_m6 != NULL){
+                tmp_m6->mon.bullet_check(map, lista_proiettili);
+                tmp_m6 = tmp_m6->next;
+            }
+            protagonist.bullet_check(map, lista_proiettili);
+
+
             tmp2 = lista_proiettili;
             tmp_erino = lista_proiettili;
             
@@ -214,6 +248,8 @@ void Game::run() {
         c++;
         d++;
 
+
+        
 
 	}
 	getch();
@@ -307,6 +343,13 @@ void Game::drawBullet(WINDOW* win, Map& map, pbul bul_list) {
         wrefresh(win);
         tmp3 = tmp3->next;
     }
+}
+void Game::drawGameover(WINDOW* win, Map& map){
+
+
+    //grafica game over
+
+
 }
 
 void Game::timed_print(char *text, int text_len, int micro_seconds_delay, int l, int c){
