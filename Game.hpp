@@ -18,6 +18,7 @@ class Game {
 		void update(Map& map, Character& protagonist, int prev_x, int prev_y) ;
 		void monsterUpdate(Map &map, pmon monster_list);
 		void drawBullet(WINDOW* win, Map& map, pbul bul_list);
+		void drawGameover(WINDOW* win, Map& map);
 	public:
 		Game();
 		void run();
