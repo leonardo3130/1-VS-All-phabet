@@ -13,7 +13,7 @@ class Bullet{
         int dir;        //direzioen proiettile (corriponde alla mode del personaggio da cui viene sparato)
         Bullet(int x = 0, int y = 0, int dir = 0, char look = '.');
         //void delete_bullet();
-        bool move_bul(Map& mappa); 
+        int move_bul(Map& mappa); 
 };
 
 //codice per lista proiettili
