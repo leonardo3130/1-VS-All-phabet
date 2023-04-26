@@ -116,7 +116,8 @@ Map::Map(int h, int w) {
         }
         walls -= len;
     }
-    for(int i = 1 ; i < this->height - 1 ; i++)
+    //pulizia mappa
+    for(int i = 1 ; i < this->height - 1; i++)
     {
         for(int j = 2 ; j < this->width - 2; j++)
         {
@@ -128,6 +129,19 @@ Map::Map(int h, int w) {
                     this->matrix[i][j] = ' ';
                     this->matrix[i][j+1] = ' ';
                 }
+        }
+    }
+    //aggiunta monete alle mappa
+    int tmp_coins = this->coins;
+    int coin_x, coin_y;
+    while(tmp_coins > 0) 
+    {
+        coin_y = rand() % (this->height - 2) + 1;
+        coin_x = rand() % (this->width - 4) + 2;
+        if(this->matrix[coin_y][coin_x] == ' ')
+        {
+            this->matrix[coin_y][coin_x] = '@';
+            tmp_coins--;
         }
     }
 }
@@ -211,8 +225,16 @@ bool Map::is_inside(int x, int y){
 }
 
 bool Map::isempty(int x, int y){
-  if(this->getMapChar(y,x)==' ')
+  if(this->getMapChar(y,x)==' ' || this->getMapChar(y,x)=='@')
     return true;
   else
     return false;
+}
+
+int Map::getCoins() {
+    return this->coins;
+}
+
+void Map::setCoins(int coins) {
+    this->coins = coins;
 }
