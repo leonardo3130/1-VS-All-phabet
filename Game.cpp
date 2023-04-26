@@ -193,11 +193,36 @@ void Game::run() {
             
             pbul lista_nera = NULL; //priettili da eliminare;
             while(tmp2 != NULL){
-                bool collision = 0;
+
+                int collision = 0;
                 collision = tmp2->bul.move_bul(map); //collision per riciclare i controlli che vengono eseguiti in move_bul
-                if(collision == 1){
+
+                if(collision != 0){
                     lista_nera = new_bullet(lista_nera, tmp2->bul);
+
+                    if(collision == 2){
+                        protagonist.hp -= 1;
+                    }
+
+                    else if(collision == 3){
+                        pmon m = lista_mostri; 
+                        pmon x = NULL;/*
+                        if(tmp2->bul.dir == 1){
+                            x = search_monster_by_xy(m, (tmp2->bul.x) + 1, (tmp2->bul.y));
+                        }
+                        else if(tmp2->bul.dir == 2){
+                            x = search_monster_by_xy(m, (tmp2->bul.x), (tmp2->bul.y) + 1);
+                        }
+                        else if(tmp2->bul.dir == 3){
+                            x = search_monster_by_xy(m, (tmp2->bul.x) - 1, (tmp2->bul.y));
+                        }
+                        else if(tmp2->bul.dir == 4){
+                            x = search_monster_by_xy(m, (tmp2->bul.x), (tmp2->bul.y) - 1);
+                        }
+                        x->mon.hp -= 1; */
+                    }
                 }
+
                 tmp2 = tmp2->next;
             }
             while(lista_nera != NULL){
