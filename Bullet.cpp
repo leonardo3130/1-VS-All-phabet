@@ -12,127 +12,63 @@ Bullet::Bullet(int x, int y, int dir, char look){
 
 int Bullet::move_bul(Map& mappa){
     int collision = 0;
-    char next_char;
-    if(this->dir == 0  &&  mappa.isempty(this->x + 1, this->y)==true){
-        this->x+=1;
-    }
-    else if(this->dir == 1  &&  mappa.isempty(this->x, this->y + 1)==true){
-        this->y+=1;
-        
-    }
-    else if(this->dir == 2  &&  mappa.isempty(this->x - 1, this->y)==true){
-        this->x-=1;
-    }    
-    else if(this->dir == 3  &&  mappa.isempty(this->x, this->y - 1)==true){
-        this->y-=1;
-    }
-    else{
-        if(this->dir == 0){
-            next_char = mappa.getMapChar(this->x+1, this->y);
-        }
-        else if(this->dir == 1){
-            next_char = mappa.getMapChar(this->x, this->y+1);
-        }
-        else if(this->dir == 2){
-            next_char = mappa.getMapChar(this->x-1, this->y);
-        }
-        else if(this->dir == 3){
-            next_char = mappa.getMapChar(this->x, this->y-1);
-        }
-        
-        if(next_char == '/'){
-            collision = 1;
-        }
-        else if(next_char == '1'){
-            collision = 2;
-        }
-        else{
-            collision = 3;
-        }
-
-    }
-    return(collision);
-    /*
-    int collision = 0;
     char next_char = ' ';
-//m_mode determina la direzione di spostamento: come per l'attributo mode di Character 0=right  1=down  2=left  3=up
     if(this->dir == 0 ){
-        if(mappa.isempty(this->x + 1, this->y)==true){
+        if(mappa.isempty((this->x) + 1, this->y)==true){
             this->x+=1;
         }
         else{
-            next_char = mappa.getMapChar(this->x+1, this->y);
+            collision = 1;
+            //next_char = mappa.getMapChar((this->x)+1, this->y);
         }
     }
-    else if(this->dir == 1){
-        if(mappa.isempty(this->x, this->y + 1)==true){
+    else if(this->dir == 1 ){
+        if(mappa.isempty(this->x, (this->y) + 1)==true){
             this->y+=1;
         }
         else{
-            next_char = mappa.getMapChar(this->x, this->y+1);
+            collision = 1;
+            //next_char = mappa.getMapChar(this->x, (this->y)+1);
         }
+        
     }
     else if(this->dir == 2 ){
-        if(mappa.isempty(this->x - 1, this->y)==true){
+        if(mappa.isempty((this->x) - 1, this->y)==true){
             this->x-=1;
         }
         else{
-            next_char = mappa.getMapChar(this->x-1, this->y);
+            collision = 1;
+            //next_char = mappa.getMapChar((this->x)-1, this->y);
         }
     }    
     else if(this->dir == 3 ){
-        if(mappa.isempty(this->x, this->y - 1)==true){
+        if(mappa.isempty(this->x, (this->y) - 1)==true){
             this->y-=1;
         }
         else{
-            next_char = mappa.getMapChar(this->x, this->y-1);
+            collision = 1;
+            //next_char = mappa.getMapChar(this->x, (this->y)-1);
         }
+        
     }
-
-    if(next_char == ' '){
-        return 0;    
-    }
-    else
-        return 1;
-    
-    else if(next_char >= 'A' && next_char <= 'Z'){
-        return 1;
+    /*
+    if(int(next_char) >= 65 && int(next_char) <= 90){
+        collision = 3;
     }
     else if(next_char == '1'){
-        return 1;
+        collision = 2;
     }
     else{
-        return 1;
+        collision = 1;
     }*/
+    /*
+    if(next_char!=' '){
+        collision = 1;
+    }*/
+    return(collision);
+   
 }
-/*
-    int bul_delay = 100 / this->speed; //100 millisecondi / velocità : più è alta la velocità, minore è il delay di movimento del proiettile
 
-    if(this->dir == 0){
-        while(mappa.isempty(this->x + 1, this->y) == true){ 
-            napms(bul_delay);
-            this->x += 1; //proiettile sparato a destra
-        }
-    }
-    else if(this->dir == 2){
-        while(mappa.isempty(this->x - 1, this->y) == true){
-            napms(bul_delay);
-            this->x -= 1; //proiettile sparato a sinistra
-        }
-    }
-    else if(this->dir == 3){
-        while(mappa.isempty(this->x, this->y + 1) == true){
-            napms(bul_delay);
-            this->y += 1; //proiettile sparato in alto
-        }
-    }
-    else if(this->dir == 1){
-        while(mappa.isempty(this->x, this->y - 1) == true){
-            napms(bul_delay);
-            this->y -= 1; //proiettile sparato in basso
-        }
-    }
-}*/
 
 //codice lista proiettile
 pbul new_bullet(pbul lista, Bullet b){
