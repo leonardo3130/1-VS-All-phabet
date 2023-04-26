@@ -205,21 +205,21 @@ void Game::run() {
                     }
 
                     else if(collision == 3){
-                        pmon m = lista_mostri; 
-                        pmon x = NULL;/*
-                        if(tmp2->bul.dir == 1){
-                            x = search_monster_by_xy(m, (tmp2->bul.x) + 1, (tmp2->bul.y));
+                        pmon x = lista_mostri;
+                        if(tmp2->bul.dir == 0){
+                            x = search_monster_by_xy(lista_mostri, (tmp2->bul.x) + 1, (tmp2->bul.y));
+                        }
+                        else if(tmp2->bul.dir == 1){
+                            x = search_monster_by_xy(lista_mostri, (tmp2->bul.x), (tmp2->bul.y) + 1);
                         }
                         else if(tmp2->bul.dir == 2){
-                            x = search_monster_by_xy(m, (tmp2->bul.x), (tmp2->bul.y) + 1);
+                            x = search_monster_by_xy(lista_mostri, (tmp2->bul.x) - 1, (tmp2->bul.y));
                         }
                         else if(tmp2->bul.dir == 3){
-                            x = search_monster_by_xy(m, (tmp2->bul.x) - 1, (tmp2->bul.y));
+                            x = search_monster_by_xy(lista_mostri, (tmp2->bul.x), (tmp2->bul.y) - 1);
                         }
-                        else if(tmp2->bul.dir == 4){
-                            x = search_monster_by_xy(m, (tmp2->bul.x), (tmp2->bul.y) - 1);
-                        }
-                        x->mon.hp -= 1; */
+                        
+                        //x->mon.hp = 0; 
                     }
                 }
 
