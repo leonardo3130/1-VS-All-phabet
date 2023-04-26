@@ -10,14 +10,15 @@ Bullet::Bullet(int x, int y, int dir, char look){
 
 
 
-bool Bullet::move_bul(Map& mappa){
-    bool collision = 0;
-//m_mode determina la direzione di spostamento: come per l'attributo mode di Character 0=right  1=down  2=left  3=up
+int Bullet::move_bul(Map& mappa){
+    int collision = 0;
+    char next_char;
     if(this->dir == 0  &&  mappa.isempty(this->x + 1, this->y)==true){
         this->x+=1;
     }
     else if(this->dir == 1  &&  mappa.isempty(this->x, this->y + 1)==true){
         this->y+=1;
+        
     }
     else if(this->dir == 2  &&  mappa.isempty(this->x - 1, this->y)==true){
         this->x-=1;
@@ -26,10 +27,83 @@ bool Bullet::move_bul(Map& mappa){
         this->y-=1;
     }
     else{
-        collision = 1;
-        //this->~Bullet();  //viene chiamato il distruttore sull'oggetto (il distruttore c'è di default, non è da dichiarare)
+        if(this->dir == 0){
+            next_char = mappa.getMapChar(this->x+1, this->y);
+        }
+        else if(this->dir == 1){
+            next_char = mappa.getMapChar(this->x, this->y+1);
+        }
+        else if(this->dir == 2){
+            next_char = mappa.getMapChar(this->x-1, this->y);
+        }
+        else if(this->dir == 3){
+            next_char = mappa.getMapChar(this->x, this->y-1);
+        }
+        
+        if(next_char == '/'){
+            collision = 1;
+        }
+        else if(next_char == '1'){
+            collision = 2;
+        }
+        else{
+            collision = 3;
+        }
+
     }
     return(collision);
+    /*
+    int collision = 0;
+    char next_char = ' ';
+//m_mode determina la direzione di spostamento: come per l'attributo mode di Character 0=right  1=down  2=left  3=up
+    if(this->dir == 0 ){
+        if(mappa.isempty(this->x + 1, this->y)==true){
+            this->x+=1;
+        }
+        else{
+            next_char = mappa.getMapChar(this->x+1, this->y);
+        }
+    }
+    else if(this->dir == 1){
+        if(mappa.isempty(this->x, this->y + 1)==true){
+            this->y+=1;
+        }
+        else{
+            next_char = mappa.getMapChar(this->x, this->y+1);
+        }
+    }
+    else if(this->dir == 2 ){
+        if(mappa.isempty(this->x - 1, this->y)==true){
+            this->x-=1;
+        }
+        else{
+            next_char = mappa.getMapChar(this->x-1, this->y);
+        }
+    }    
+    else if(this->dir == 3 ){
+        if(mappa.isempty(this->x, this->y - 1)==true){
+            this->y-=1;
+        }
+        else{
+            next_char = mappa.getMapChar(this->x, this->y-1);
+        }
+    }
+
+    if(next_char == ' '){
+        return 0;    
+    }
+    else
+        return 1;
+    
+    else if(next_char >= 'A' && next_char <= 'Z'){
+        return 1;
+    }
+    else if(next_char == '1'){
+        return 1;
+    }
+    else{
+        return 1;
+    }*/
 }
 /*
     int bul_delay = 100 / this->speed; //100 millisecondi / velocità : più è alta la velocità, minore è il delay di movimento del proiettile
