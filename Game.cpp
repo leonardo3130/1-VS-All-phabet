@@ -46,7 +46,8 @@ void Game::run() {
     int startx = (COLS - 82) / 3;
 
 	game_win = newwin(42, 82, starty, startx);
-
+    player_stats = newwin(20, 30, starty, startx+82);
+    
 	refresh();
 	curs_set(0);
 	refresh();
