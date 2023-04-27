@@ -26,8 +26,6 @@ void Game::run() {
     pbul lista_proiettili = NULL;
     pmon lista_mostri = NULL;
 
-    //Bullet proiettile(1, 5, 5, 0, '*');
-
     for(int i=0; i<numero_mostri; i++){
         Monster mostro(5,4, i);
         mostro.x = rand()%(map.getWidth()-2);
@@ -37,38 +35,22 @@ void Game::run() {
         mostro.def = 1;
         mostro.mode = rand()%4;
         mostro.look = 'Y';
-        lista_mostri = new_monster(lista_mostri, mostro);   
+        lista_mostri = new_monster(lista_mostri, mostro);
     }
 
-    //lista_proiettili = new_bullet(lista_proiettili, proiettile);
-
-
-	//initscr(); cbreak(); noecho();
     keypad(stdscr, TRUE);
 	nodelay(stdscr, TRUE);
 	WINDOW *game_win, *commands, *player_stats;
 
 	int starty = (LINES - 42) / 2;
-    int startx = (COLS - 82) / 2;
+    int startx = (COLS - 82) / 3;
 
 	game_win = newwin(42, 82, starty, startx);
-
-    /*
-    commands = newwin(18, 30, starty+84, startx+100);
-    player_stats = newwin(20, 30, starty+84, startx+100);
-    */
 
 	refresh();
 	curs_set(0);
 	refresh();
 
-    /*
-    box(commands, 0, 0);
-    box(player_stats, 0, 0);
-    refresh();
-    wrefresh(commands);
-    wrefresh(player_stats);
-    */
 	for(int i = 0 ; i < map.getHeight() ; i++){
 		for(int j = 0 ; j < map.getWidth() ; j++){
 			mvwprintw(game_win, i, j, "%c",map.getMapChar(i, j));
@@ -76,10 +58,11 @@ void Game::run() {
 		}
 	}
 
-	// game loop
+    //funzione per disegnare la window delle statistiche
+    drawStats(player_stats, startx, starty, protagonist);
 
+    // game loop
 	bool stop = false;
-	//double time = 0.0;
 	time_t previous_time = time(nullptr);
 	time_t lag = time_t(0.0);
 	time_t current, elapsed;
@@ -122,7 +105,7 @@ void Game::run() {
             drawGameover(game_win, map);
             break;
         }
-        
+
         // Input ///////////////////////////////////////////////////////////
 		int ch = getch();
 		lista_proiettili = handleInput(ch, map, protagonist, lista_mostri, giocatore, lista_proiettili);
@@ -130,17 +113,15 @@ void Game::run() {
 
 
         // Mostri ///////////////////////////////////////////////////////////
-
- 
         if(c == 200) {
             tmp_m2 = lista_mostri;
             while(tmp_m2 != NULL){
                 int monster_prob = rand()%5;
                 int monster_mode;
-                if(monster_prob == 1)   
+                if(monster_prob == 1)
                     monster_mode = rand()%4;
 
-                tmp_m2->mon.move(map, giocatore, monster_mode); //movimento 
+                tmp_m2->mon.move(map, giocatore, monster_mode); //movimento
 
                 lista_proiettili = tmp_m2->mon.fire(lista_proiettili, map, 2);  //sparo
 
@@ -163,8 +144,6 @@ void Game::run() {
             }
         }
 
-
-
         /*
         if(d == 40){
             tmp_m4 = lista_mostri;
@@ -173,33 +152,32 @@ void Game::run() {
                 tmp_m4 = tmp_m4->next;
             }
         }*/
-        
-        
+
         // Proiettili ////////////////////////////////////////////////////
         if(b==30){
 
             tmp2 = lista_proiettili;
             tmp_erino = lista_proiettili;
-            
+
             pbul lista_nera = NULL; //priettili da eliminare;
             while(tmp2 != NULL){
 
-                int collision = tmp2->bul.move_bul(map); 
+                int collision = tmp2->bul.move_bul(map);
 
                 if(collision != 0){
-                    
+
                     lista_nera = new_bullet(lista_nera, tmp2->bul);
                     if(collision == 1){
-                        
+
 
                     }
                     if(collision == 2){
                         protagonist.hp -= 1;
-                        
+
                     }
 
                     else if(collision == 3){
-                        
+
                         pmon x = lista_mostri;
                         if(tmp2->bul.dir == 0){
                             x = search_monster_by_xy(lista_mostri, (tmp2->bul.x) + 1, (tmp2->bul.y));
@@ -213,7 +191,7 @@ void Game::run() {
                         else if(tmp2->bul.dir == 3){
                             x = search_monster_by_xy(lista_mostri, (tmp2->bul.x), (tmp2->bul.y) - 1);
                         }
-                        x->mon.hp = 0; 
+                        x->mon.hp = 0;
                     }
 
                 }
@@ -236,7 +214,6 @@ void Game::run() {
             }
             delete lista_nera;
         }
-
 
         // Update  /////////////////////////////////////////////////////////
 		while(lag >= MS)
@@ -264,11 +241,6 @@ void Game::run() {
 
         b++;
         c++;
-        
-
-
-        
-
 	}
 	getch();
     endwin();
@@ -290,7 +262,6 @@ pbul Game::handleInput(int c, Map& map, Character& protagonist, pmon lista_mostr
 				break;
 			case KEY_RIGHT:
 				protagonist.moveright(map);
-
 				break;
             case 'd':
                 bullet_list = protagonist.fire(bullet_list, map, 0);
@@ -362,6 +333,15 @@ void Game::drawBullet(WINDOW* win, Map& map, pbul bul_list) {
         tmp3 = tmp3->next;
     }
 }
+
+void Game::drawStats(WINDOW *win, int x, int y, Character p){
+    box(win, 0, 0);
+    mvwprintw(win, 0, 2, "Stats");
+
+
+    wrefresh(win);
+}
+
 void Game::drawGameover(WINDOW* win, Map& map){
 
 
