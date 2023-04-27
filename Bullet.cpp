@@ -18,8 +18,7 @@ int Bullet::move_bul(Map& mappa){
             this->x+=1;
         }
         else{
-            collision = 1;
-            //next_char = mappa.getMapChar((this->x)+1, this->y);
+            next_char = mappa.getMapChar(this->y, (this->x)+1);
         }
     }
     else if(this->dir == 1 ){
@@ -27,8 +26,7 @@ int Bullet::move_bul(Map& mappa){
             this->y+=1;
         }
         else{
-            collision = 1;
-            //next_char = mappa.getMapChar(this->x, (this->y)+1);
+            next_char = mappa.getMapChar((this->y)+1, this->x);
         }
         
     }
@@ -37,8 +35,7 @@ int Bullet::move_bul(Map& mappa){
             this->x-=1;
         }
         else{
-            collision = 1;
-            //next_char = mappa.getMapChar((this->x)-1, this->y);
+            next_char = mappa.getMapChar(this->y, (this->x)-1);
         }
     }    
     else if(this->dir == 3 ){
@@ -46,27 +43,22 @@ int Bullet::move_bul(Map& mappa){
             this->y-=1;
         }
         else{
-            collision = 1;
-            //next_char = mappa.getMapChar(this->x, (this->y)-1);
+            next_char = mappa.getMapChar((this->y)-1, this->x);
         }
         
     }
-    /*
-    if(int(next_char) >= 65 && int(next_char) <= 90){
+
+    if(next_char=='/'){
+        collision = 1;
+    }
+    else if(next_char >= 'A' && next_char <= 'Z'){
         collision = 3;
     }
     else if(next_char == '1'){
         collision = 2;
     }
-    else{
-        collision = 1;
-    }*/
-    /*
-    if(next_char!=' '){
-        collision = 1;
-    }*/
+
     return(collision);
-   
 }
 
 
@@ -80,24 +72,31 @@ pbul new_bullet(pbul lista, Bullet b){
 }
 
 pbul remove_bullet(pbul p, int x, int y, int dir){
+    
 	if(p == NULL)
         return(p);
-	else if(p->bul.x == x && p->bul.y == y && p->bul.dir == dir)
+	else if(p->bul.x == x && p->bul.y == y && p->bul.dir == dir){
+        pbul f = p;
         return(p->next);
+        delete f;
+    }
 	else{
 		pbul p_before, head;
 		bool found = false;
 		head = p;
 		while((p != NULL) && !found){
 			if(p->bul.x == x && p->bul.y == y && p->bul.dir == dir)
-        found = true ;
+                found = true ;
 			else{
 				p_before = p;
 				p = p->next;
 			}
 		}
 		if(found){
+
 			p_before->next = p->next;
+            //free(p);
+            
 		}
 		return(head);
 	}
