@@ -130,7 +130,7 @@ void Game::run() {
                     lista_nera_mostri = new_monster(lista_nera_mostri, tmp_m2->mon);
                 }
 
-                tmp_m2 = tmp_m2->next;
+            tmp_m2 = tmp_m2->next;
             }
 
             tmp_m5 = lista_mostri;
@@ -138,10 +138,13 @@ void Game::run() {
                 while(tmp_m5 != NULL){
                     if(tmp_m5->mon.id == lista_nera_mostri->mon.id){
                         lista_mostri = delete_monster(lista_mostri, tmp_m5->mon.id);
+                        map.setMapChar(tmp_m5->mon.y, tmp_m5->mon.x, ' ');
+                        mvwprintw(game_win, tmp_m5->mon.y, tmp_m5->mon.x, " ");
+	                    wrefresh(game_win);
                     }
-                    tmp_m5 = tmp_m5->next;
+                tmp_m5 = tmp_m5->next;
                 }
-                lista_nera_mostri = lista_nera_mostri->next;
+            lista_nera_mostri = lista_nera_mostri->next;
             }
         }
 
@@ -168,18 +171,16 @@ void Game::run() {
                 if(collision != 0){
 
                     lista_nera = new_bullet(lista_nera, tmp2->bul);
-                    if(collision == 1){
 
-
-                    }
                     if(collision == 2){
                         protagonist.hp -= 1;
 
                     }
 
                     else if(collision == 3){
-
+                        
                         pmon x = lista_mostri;
+                        int id;
                         if(tmp2->bul.dir == 0){
                             x = search_monster_by_xy(lista_mostri, (tmp2->bul.x) + 1, (tmp2->bul.y));
                         }
@@ -192,7 +193,10 @@ void Game::run() {
                         else if(tmp2->bul.dir == 3){
                             x = search_monster_by_xy(lista_mostri, (tmp2->bul.x), (tmp2->bul.y) - 1);
                         }
-                        x->mon.hp = 0;
+                        if(x!=NULL){
+                            
+                            x->mon.hp = 0;
+                        }
                     }
 
                 }
@@ -219,12 +223,13 @@ void Game::run() {
         // Update  /////////////////////////////////////////////////////////
 		while(lag >= MS)
 		{
-            if(prev_y != protagonist.getY() || prev_x != protagonist.getX())
-			    update(map, protagonist, prev_y, prev_x);
-                monsterUpdate(map, lista_mostri);
-                bulletUpdate(map, lista_proiettili);
+
             lag -= MS;
 		}
+        if(prev_y != protagonist.getY() || prev_x != protagonist.getX())
+			update(map, protagonist, prev_y, prev_x);
+        monsterUpdate(map, lista_mostri);
+        bulletUpdate(map, lista_proiettili);
 
 
         // Draw  //////////////////////////////////////////////////////////
