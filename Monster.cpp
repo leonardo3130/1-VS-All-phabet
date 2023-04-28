@@ -10,7 +10,7 @@
 //    this->shot_fr = shot_fr;
 //    this->id = id;
 //};
-Monster::Monster(int speed, int shot_fr, int id):Character(x, y, mode, hp, atk, def, look) {
+Monster::Monster(int x, int y, int mode, int hp, int atk, int def, char  look, int speed, int shot_fr, int id):Character(x, y, mode, hp, atk, def, look) {
     this->speed = speed;
     this->shot_fr = shot_fr;
     this->id = id;
@@ -18,7 +18,7 @@ Monster::Monster(int speed, int shot_fr, int id):Character(x, y, mode, hp, atk, 
 
 
 //contatto con player: i mostri perdono hp in base all' atk del player e al prorpio def, e viceversa
-void Monster::fight(Map mappa, Player pl){ 
+void Monster::fight(Map mappa, Player pl){
     this->hp -= 1*(pl.atk)/(this->def);
     pl.hp -= 1*(this->def)/(pl.def);
 }
@@ -26,7 +26,7 @@ void Monster::fight(Map mappa, Player pl){
 /*
 void Monster::fire_loop(Map mappa, int livello, int global_id, pbul lista_p){
 
-    int m_bullet_speed = 1 * (livello / 3); //liv 3 vel = 1, liv 6 vel = 2 ..... 
+    int m_bullet_speed = 1 * (livello / 3); //liv 3 vel = 1, liv 6 vel = 2 .....
 
     while(this->hp>0){
         this->fire(m_bullet_speed, mappa, global_id, lista_p);
@@ -45,25 +45,21 @@ void Monster::move(Map& mappa, Player& p, int& mode){
         if(int(mappa.getMapChar(this->y, this->x+1)) == 1){ //verifica se il carattere incontrato e' il player
             fight(mappa, p);
         }
-
-    }
-    else if(this->mode == 1){
+    }else if(this->mode == 1){
         if(mappa.isempty(this->x, this->y + 1)==true){
             this->movedown(mappa);
         }
         if(int(mappa.getMapChar(this->y + 1, this->x)) == 1){ //verifica se il carattere incontrato e' il player
             fight(mappa, p);
         }
-    }
-    else if(this->mode == 2){
+    }else if(this->mode == 2){
         if(mappa.isempty(this->x - 1, this->y)==true){
             this->moveleft(mappa);
         }
         if(int(mappa.getMapChar(this->y, this->x - 1)) == 1){ //verifica se il carattere incontrato e' il player
             fight(mappa, p);
         }
-    }
-    else if(this->mode == 3){
+    }else if(this->mode == 3){
         if(mappa.isempty(this->x, this->y - 1)==true){
             this->moveup(mappa);
         }
@@ -74,11 +70,11 @@ void Monster::move(Map& mappa, Player& p, int& mode){
 }
 
 pmon new_monster(pmon lista, Monster m){
-  pmon tmp = new mlist;
-  tmp->mon = m;
-  tmp->next = lista;
-  lista = tmp;
-  return lista;
+    pmon tmp = new mlist;
+    tmp->mon = m;
+    tmp->next = lista;
+    lista = tmp;
+    return lista;
 }
 
 pmon delete_monster(pmon p, int val_id){
@@ -109,11 +105,10 @@ pmon search_monster_by_xy(pmon lista_mostri, int x, int y){
         pmon tmp = lista_mostri;
         bool found = false;
         while(!found && tmp != NULL){
-                if(tmp->mon.x == x && tmp->mon.y == y){
-                        found = true;
-                }
-                else
-                        tmp = tmp->next;
+            if(tmp->mon.x == x && tmp->mon.y == y)
+                found = true;
+            else
+                tmp = tmp->next;
         }
         return tmp;
 }
