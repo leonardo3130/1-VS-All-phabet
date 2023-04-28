@@ -25,6 +25,7 @@ class Character{
     void movedown(Map mappa);   //muove giu
     void move_to(Map mappa, int new_x, int new_y); //new_x/new_y = coordinate nuova posizione 
     pbul fire(pbul ls_proiettili, Map& map, int dir);   //funzione spara 
+    int coin_check(Map& m); //ritorna -1 se non ci sono monete intorno, 0 dx, 1 sotto, 2 sx, 3 sopra
     void SetHp(int hp);
     int getHp();
     int getDef();
@@ -32,5 +33,4 @@ class Character{
     int getX();
     int getY();
     char getLook();
-    int coin_check(Map& m);
 };

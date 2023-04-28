@@ -72,32 +72,17 @@ pbul new_bullet(pbul lista, Bullet b){
 }
 
 ///////////////////////////////////////////////         da cancellare
-pbul remove_bullet(pbul p, int x, int y, int dir){
-	if(p == NULL)
-        return(p);
-	else if(p->bul.x == x && p->bul.y == y && p->bul.dir == dir){
-        pbul f = p;
-        return(p->next);
-        delete f;
+pbul remove_bullet(pbul p, pbul p_before, pbul bul_list){
+    
+    if(p == bul_list){
+        bul_list = bul_list->next;
+        p = bul_list;
     }
-	else{
-		pbul p_before, head;
-		bool found = false;
-		head = p;
-		while((p != NULL) && !found){
-			if(p->bul.x == x && p->bul.y == y && p->bul.dir == dir)
-                found = true ;
-			else{
-				p_before = p;
-				p = p->next;
-			}
-		}
-		if(found){
-			p_before->next = p->next;
-            //free(p);
-		}
-		return(head);
-	}
+    else{
+        p_before->next = p->next;
+        p = p->next;
+    }
+    return bul_list;
 }
 ////////////////////////////////////////////////////////////////
 

@@ -78,6 +78,24 @@ pbul Character::fire(pbul ls_proiettili, Map& map, int dir){
   return ls_proiettili;
 }
 
+//si controlla se nelle coordinate vicine è presente una moneta
+int Character::coin_check(Map& m){
+  int coin = -1;
+  if(m.getMapChar(this->y, (this->x) + 1) == '@'){
+    coin = 0;
+  }
+  else if(m.getMapChar((this->y) + 1, this->x) == '@'){
+    coin = 1;
+  }
+  else if(m.getMapChar(this->y, (this->x) - 1) == '@'){
+    coin = 2;
+  }
+  else if(m.getMapChar((this->y) - 1, this->x) == '@'){
+    coin = 3;
+  }
+  return coin;
+}
+
 void Character::SetHp(int hp){
     this->hp = hp;
 }
@@ -107,20 +125,4 @@ char Character::getLook(){
 }
 
 
-//si controlla se nelle coordinate vicine è presente un proiettile, in tal caso si controlla se questo ha la direzione che va contro il personaggio, in tal caso il proiettile vien eliminato e il personaggio perde vita
-int Character::coin_check(Map& m){
-  int coin = -1;
-  if(m.getMapChar(this->y, (this->x) + 1) == '@'){
-    coin = 0;
-  }
-  else if(m.getMapChar((this->y) + 1, this->x) == '@'){
-    coin = 1;
-  }
-  else if(m.getMapChar(this->y, (this->x) - 1) == '@'){
-    coin = 2;
-  }
-  else if(m.getMapChar((this->y) - 1, this->x) == '@'){
-    coin = 3;
-  }
-  return coin;
-}
+
