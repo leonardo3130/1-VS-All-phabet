@@ -60,24 +60,16 @@ void Game::run() {
 
     // game loop
 	bool stop = false;
-	time_t previous_time = time(nullptr);
-	time_t lag = time_t(0.0);
-	time_t current, elapsed;
 
 	int prev_x, prev_y, c=0, b=0, d=0;
 
     pbul tmp_b = NULL, tmp_b2 = NULL;
     pmon tmp_m = NULL;
 
-	int const MS = 50;
 	while(true) //condizione che andrà in base ad hp e altro
     {
         napms(5);
         drawStats(player_stats, startx, starty, protagonist);
-		current = time(nullptr);
-		elapsed = current - previous_time;
-		previous_time = current;
-		lag += elapsed;
 
 
         prev_x = protagonist.getX();
@@ -228,20 +220,8 @@ void Game::run() {
                 }
             }
         }
-
-
-        // Update  /////////////////////////////////////////////////////////
-		/*while(lag >= MS)
-		{
-            if(prev_y != protagonist.getY() || prev_x != protagonist.getX())
-			    update(map, protagonist, prev_y, prev_x);
-            monsterUpdate(map, lista_mostri);
-            bulletUpdate(map, lista_proiettili);
-
-            lag -= MS;
-		}*/
         if(prev_y != protagonist.getY() || prev_x != protagonist.getX())
-			    update(map, protagonist, prev_y, prev_x);
+			update(map, protagonist, prev_y, prev_x);
         monsterUpdate(map, lista_mostri);
         bulletUpdate(map, lista_proiettili);
         /*
