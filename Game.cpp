@@ -145,21 +145,6 @@ void Game::run() {
                     tmp_m = tmp_m->next;
                 }
             }
-
-
-            /*tmp_m = lista_mostri;
-            while(lista_nera_mostri != NULL){
-                while(tmp_m != NULL){
-                    if(tmp_m->mon.id == lista_nera_mostri->mon.id){
-                        lista_mostri = delete_monster(lista_mostri, tmp_m->mon.id);
-                        map.setMapChar(tmp_m->mon.y, tmp_m->mon.x, ' ');
-                        mvwprintw(game_win, tmp_m->mon.y, tmp_m->mon.x, " ");
-	                    wrefresh(game_win);
-                    }
-                tmp_m = tmp_m->next;
-                }
-            lista_nera_mostri = lista_nera_mostri->next;
-            }*/
         }
 
         /*
@@ -183,9 +168,6 @@ void Game::run() {
                 int collision = tmp_b->bul.move_bul(map);
 
                 if(collision != 0){
-
-                    //lista_nera = new_bullet(lista_nera, tmp_b->bul);
-
 
                     if(collision == 2){
                         protagonist.hp -= 1;
@@ -217,7 +199,7 @@ void Game::run() {
                     map.setMapChar(tmp_b->bul.y, tmp_b->bul.x, ' ');
                     mvwprintw(game_win, tmp_b->bul.y, tmp_b->bul.x, " ");
 	                wrefresh(game_win);
-
+                    
                     //eliminazione proiettile
                     if(tmp_b == lista_proiettili)
                     {
@@ -237,24 +219,6 @@ void Game::run() {
                     tmp_b = tmp_b->next;
                 }
             }
-
-            /*
-            while(lista_nera != NULL){
-                while(tmp_b2 != NULL){
-                    if( lista_nera->bul.x == tmp_b2->bul.x &&
-                        lista_nera->bul.y == tmp_b2->bul.y &&
-                        lista_nera->bul.dir == tmp_b2->bul.dir   ){
-                            lista_proiettili = remove_bullet(lista_proiettili, tmp_b2->bul.x, tmp_b2->bul.y, tmp_b2->bul.dir);
-                            map.setMapChar(tmp_b2->bul.y, tmp_b2->bul.x, ' ');
-                            mvwprintw(game_win, tmp_b2->bul.y, tmp_b2->bul.x, " ");
-	                        wrefresh(game_win);
-                    }
-                    tmp_b2 = tmp_b2->next;
-                }
-                lista_nera = lista_nera->next;
-            }
-            delete lista_nera;
-        */
         }
 
 
