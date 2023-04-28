@@ -27,5 +27,5 @@ struct blist{
 typedef blist *pbul;
 
 pbul new_bullet(pbul lista, Bullet b);
-pbul remove_bullet(pbul p, int x, int y, int dir);
+pbul remove_bullet(pbul p, pbul p_before, pbul bul_list);
 pbul search_bullet_by_xy(pbul lista_proiettili, int x, int y);
