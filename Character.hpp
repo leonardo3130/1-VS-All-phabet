@@ -32,5 +32,5 @@ class Character{
     int getX();
     int getY();
     char getLook();
-    void bullet_check(Map m, pbul lista_proiettili);
+    int coin_check(Map& m);
 };

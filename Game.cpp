@@ -311,15 +311,32 @@ pbul Game::handleInput(int c, Map& map, pmon lista_mostri, Player& giocatore, pb
 		switch(c)
 		{
 			case KEY_UP:
+                if(giocatore.coin_check(map) == 3)
+                {
+                    giocatore.money += 1;
+                }
 				giocatore.moveup(map);
 				break;
+
 			case KEY_DOWN:
+                if(giocatore.coin_check(map) == 1)
+                {
+                    giocatore.money += 1;
+                }
 				giocatore.movedown(map);
 				break;
 			case KEY_LEFT:
+                if(giocatore.coin_check(map) == 2)
+                {
+                    giocatore.money += 1;
+                }
 				giocatore.moveleft(map);
 				break;
 			case KEY_RIGHT:
+                if(giocatore.coin_check(map) == 0)
+                {
+                    giocatore.money += 1;
+                }
 				giocatore.moveright(map);
 				break;
             case 'd':
