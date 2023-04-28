@@ -14,4 +14,5 @@ class Player : public Character{
         Player(char* nick, char* psw, int monete, char l);
         char* getNick();
         int getMoney();
+        void takeMoney(int value);
 };

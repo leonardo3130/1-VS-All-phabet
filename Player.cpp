@@ -14,4 +14,7 @@ int Player::getMoney(){
     return this->money;
 }
 
+void Player::takeMoney(int value){
+    this->money = money + value;
+}
 
