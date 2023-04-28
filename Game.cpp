@@ -70,9 +70,9 @@ void Game::run() {
 
 	int prev_x, prev_y, c=0, b=0, d=0;
 
-    pbul tmp1 = NULL, tmp2 = NULL, tmp_erino = NULL;
+    pbul tmp_b = NULL, tmp_b2 = NULL, lista_nera = NULL;
 
-    pmon tmp_m1 = NULL, tmp_m2 = NULL, tmp_m3 = NULL, tmp_m4 = NULL, tmp_m5 = NULL, tmp_m6 = NULL, lista_nera_mostri = NULL;
+    pmon tmp_m = NULL, lista_nera_mostri = NULL;
 
 	int const MS = 50;
 
@@ -88,19 +88,20 @@ void Game::run() {
         prev_x = protagonist.getX();
 		prev_y = protagonist.getY();
 
-        tmp_m1 = lista_mostri;
-        while(tmp_m1 != NULL){
-            tmp_m1->prev_x = tmp_m1->mon.x;
-            tmp_m1->prev_y = tmp_m1->mon.y;
-            tmp_m1 = tmp_m1->next;
+        tmp_m = lista_mostri;
+        while(tmp_m != NULL){
+            tmp_m->prev_x = tmp_m->mon.x;
+            tmp_m->prev_y = tmp_m->mon.y;
+            tmp_m = tmp_m->next;
         }
 
-        tmp1 = lista_proiettili;
-        while(tmp1 != NULL){
-            tmp1->prev_x = tmp1->bul.x;
-            tmp1->prev_y = tmp1->bul.y;
-            tmp1 = tmp1->next;
+        tmp_b = lista_proiettili;
+        while(tmp_b != NULL){
+            tmp_b->prev_x = tmp_b->bul.x;
+            tmp_b->prev_y = tmp_b->bul.y;
+            tmp_b = tmp_b->next;
         }
+        
 
         if(protagonist.hp <= 0){
             drawGameover(game_win, map);
@@ -115,34 +116,34 @@ void Game::run() {
 
         // Mostri ///////////////////////////////////////////////////////////
         if(c == 200) {
-            tmp_m2 = lista_mostri;
-            while(tmp_m2 != NULL){
+            tmp_m = lista_mostri;
+            while(tmp_m != NULL){
                 int monster_prob = rand()%5;
                 int monster_mode;
                 if(monster_prob == 1)
                     monster_mode = rand()%4;
 
-                tmp_m2->mon.move(map, giocatore, monster_mode); //movimento
+                tmp_m->mon.move(map, giocatore, monster_mode); //movimento
 
-                lista_proiettili = tmp_m2->mon.fire(lista_proiettili, map, 2);  //sparo
+                lista_proiettili = tmp_m->mon.fire(lista_proiettili, map, 2);  //sparo
 
-                if(tmp_m2->mon.hp <= 0){    //controllo hp
-                    lista_nera_mostri = new_monster(lista_nera_mostri, tmp_m2->mon);
+                if(tmp_m->mon.hp <= 0){    //controllo hp
+                    lista_nera_mostri = new_monster(lista_nera_mostri, tmp_m->mon);
                 }
 
-            tmp_m2 = tmp_m2->next;
+            tmp_m = tmp_m->next;
             }
 
-            tmp_m5 = lista_mostri;
+            tmp_m = lista_mostri;
             while(lista_nera_mostri != NULL){
-                while(tmp_m5 != NULL){
-                    if(tmp_m5->mon.id == lista_nera_mostri->mon.id){
-                        lista_mostri = delete_monster(lista_mostri, tmp_m5->mon.id);
-                        map.setMapChar(tmp_m5->mon.y, tmp_m5->mon.x, ' ');
-                        mvwprintw(game_win, tmp_m5->mon.y, tmp_m5->mon.x, " ");
+                while(tmp_m != NULL){
+                    if(tmp_m->mon.id == lista_nera_mostri->mon.id){
+                        lista_mostri = delete_monster(lista_mostri, tmp_m->mon.id);
+                        map.setMapChar(tmp_m->mon.y, tmp_m->mon.x, ' ');
+                        mvwprintw(game_win, tmp_m->mon.y, tmp_m->mon.x, " ");
 	                    wrefresh(game_win);
                     }
-                tmp_m5 = tmp_m5->next;
+                tmp_m = tmp_m->next;
                 }
             lista_nera_mostri = lista_nera_mostri->next;
             }
@@ -150,27 +151,27 @@ void Game::run() {
 
         /*
         if(d == 40){
-            tmp_m4 = lista_mostri;
-            while(tmp_m4 != NULL){
-                lista_proiettili = tmp_m4->mon.fire(lista_proiettili);
-                tmp_m4 = tmp_m4->next;
+            tmp_m = lista_mostri;
+            while(tmp_m != NULL){
+                lista_proiettili = tmp_m->mon.fire(lista_proiettili);
+                tmp_m = tmp_m->next;
             }
         }*/
 
         // Proiettili ////////////////////////////////////////////////////
         if(b==30){
 
-            tmp2 = lista_proiettili;
-            tmp_erino = lista_proiettili;
+            tmp_b = lista_proiettili;
+            tmp_b2 = lista_proiettili;
 
-            pbul lista_nera = NULL; //priettili da eliminare;
-            while(tmp2 != NULL){
+            lista_nera = NULL; //priettili da eliminare;
+            while(tmp_b != NULL){
 
-                int collision = tmp2->bul.move_bul(map);
+                int collision = tmp_b->bul.move_bul(map);
 
                 if(collision != 0){
 
-                    lista_nera = new_bullet(lista_nera, tmp2->bul);
+                    lista_nera = new_bullet(lista_nera, tmp_b->bul);
 
                     if(collision == 2){
                         protagonist.hp -= 1;
@@ -181,39 +182,37 @@ void Game::run() {
                         
                         pmon x = lista_mostri;
                         int id;
-                        if(tmp2->bul.dir == 0){
-                            x = search_monster_by_xy(lista_mostri, (tmp2->bul.x) + 1, (tmp2->bul.y));
+                        if(tmp_b->bul.dir == 0){
+                            x = search_monster_by_xy(lista_mostri, (tmp_b->bul.x) + 1, (tmp_b->bul.y));
                         }
-                        else if(tmp2->bul.dir == 1){
-                            x = search_monster_by_xy(lista_mostri, (tmp2->bul.x), (tmp2->bul.y) + 1);
+                        else if(tmp_b->bul.dir == 1){
+                            x = search_monster_by_xy(lista_mostri, (tmp_b->bul.x), (tmp_b->bul.y) + 1);
                         }
-                        else if(tmp2->bul.dir == 2){
-                            x = search_monster_by_xy(lista_mostri, (tmp2->bul.x) - 1, (tmp2->bul.y));
+                        else if(tmp_b->bul.dir == 2){
+                            x = search_monster_by_xy(lista_mostri, (tmp_b->bul.x) - 1, (tmp_b->bul.y));
                         }
-                        else if(tmp2->bul.dir == 3){
-                            x = search_monster_by_xy(lista_mostri, (tmp2->bul.x), (tmp2->bul.y) - 1);
+                        else if(tmp_b->bul.dir == 3){
+                            x = search_monster_by_xy(lista_mostri, (tmp_b->bul.x), (tmp_b->bul.y) - 1);
                         }
                         if(x!=NULL){
                             
                             x->mon.hp = 0;
                         }
                     }
-
                 }
-
-                tmp2 = tmp2->next;
+                tmp_b = tmp_b->next;
             }
             while(lista_nera != NULL){
-                while(tmp_erino != NULL){
-                    if( lista_nera->bul.x == tmp_erino->bul.x &&
-                        lista_nera->bul.y == tmp_erino->bul.y &&
-                        lista_nera->bul.dir == tmp_erino->bul.dir   ){
-                            lista_proiettili = remove_bullet(lista_proiettili, tmp_erino->bul.x, tmp_erino->bul.y, tmp_erino->bul.dir);
-                            map.setMapChar(tmp_erino->bul.y, tmp_erino->bul.x, ' ');
-                            mvwprintw(game_win, tmp_erino->bul.y, tmp_erino->bul.x, " ");
+                while(tmp_b2 != NULL){
+                    if( lista_nera->bul.x == tmp_b2->bul.x &&
+                        lista_nera->bul.y == tmp_b2->bul.y &&
+                        lista_nera->bul.dir == tmp_b2->bul.dir   ){
+                            lista_proiettili = remove_bullet(lista_proiettili, tmp_b2->bul.x, tmp_b2->bul.y, tmp_b2->bul.dir);
+                            map.setMapChar(tmp_b2->bul.y, tmp_b2->bul.x, ' ');
+                            mvwprintw(game_win, tmp_b2->bul.y, tmp_b2->bul.x, " ");
 	                        wrefresh(game_win);
                     }
-                    tmp_erino = tmp_erino->next;
+                    tmp_b2 = tmp_b2->next;
                 }
                 lista_nera = lista_nera->next;
             }
@@ -223,13 +222,23 @@ void Game::run() {
         // Update  /////////////////////////////////////////////////////////
 		while(lag >= MS)
 		{
+            if(prev_y != protagonist.getY() || prev_x != protagonist.getX())
+			    update(map, protagonist, prev_y, prev_x);
+            monsterUpdate(map, lista_mostri);
+            bulletUpdate(map, lista_proiettili);
 
             lag -= MS;
 		}
-        if(prev_y != protagonist.getY() || prev_x != protagonist.getX())
-			update(map, protagonist, prev_y, prev_x);
-        monsterUpdate(map, lista_mostri);
-        bulletUpdate(map, lista_proiettili);
+        /*
+        map.setMapChar(protagonist.y, protagonist.x, protagonist.look);
+
+        pmon tmp = lista_mostri;
+        while (tmp != NULL){
+            map.setMapChar(tmp->prev_y, tmp->prev_x, ' ');
+            map.setMapChar(tmp->mon.getY(), tmp->mon.getX(), tmp->mon.getLook());
+        tmp = tmp->next;
+        }*/
+        
 
 
         // Draw  //////////////////////////////////////////////////////////
