@@ -65,8 +65,8 @@ void Game::run() {
 
 	int prev_x, prev_y, c=0, b=0, d=0;
 
-    pbul tmp_b = NULL, tmp_b2 = NULL, lista_nera = NULL;
-    pmon tmp_m = NULL, lista_nera_mostri = NULL;
+    pbul tmp_b = NULL, tmp_b2 = NULL;
+    pmon tmp_m = NULL;
 
 	int const MS = 50;
 	while(true) //condizione che andrà in base ad hp e altro
@@ -108,8 +108,10 @@ void Game::run() {
         int monster_mode = 0;
 
 
+
         // Mostri ///////////////////////////////////////////////////////////
         if(c == 200) {
+            pmon before = NULL;
             tmp_m = lista_mostri;
             while(tmp_m != NULL){
                 int monster_prob = rand()%5;
@@ -122,13 +124,29 @@ void Game::run() {
                 lista_proiettili = tmp_m->mon.fire(lista_proiettili, map, 2);  //sparo
 
                 if(tmp_m->mon.hp <= 0){    //controllo hp
-                    lista_nera_mostri = new_monster(lista_nera_mostri, tmp_m->mon);
-                }
+                    //lista_nera_mostri = new_monster(lista_nera_mostri, tmp_m->mon);
+                    map.setMapChar(tmp_m->mon.y, tmp_m->mon.x, ' ');
+                    mvwprintw(game_win, tmp_m->mon.y, tmp_m->mon.x, " ");
+	                wrefresh(game_win);
 
-            tmp_m = tmp_m->next;
+                    if(tmp_m == lista_mostri)
+                    {
+                        lista_mostri = lista_mostri->next;
+                        tmp_m = lista_mostri;
+                    }
+                    else{
+                        before->next =tmp_m->next;
+                        tmp_m = tmp_m->next;
+                    }
+                }
+                else{
+                    before = tmp_m;
+                    tmp_m = tmp_m->next;
+                }
             }
 
-            tmp_m = lista_mostri;
+
+            /*tmp_m = lista_mostri;
             while(lista_nera_mostri != NULL){
                 while(tmp_m != NULL){
                     if(tmp_m->mon.id == lista_nera_mostri->mon.id){
@@ -140,7 +158,7 @@ void Game::run() {
                 tmp_m = tmp_m->next;
                 }
             lista_nera_mostri = lista_nera_mostri->next;
-            }
+            }*/
         }
 
         /*
@@ -158,14 +176,14 @@ void Game::run() {
             tmp_b = lista_proiettili;
             tmp_b2 = lista_proiettili;
 
-            lista_nera = NULL; //priettili da eliminare;
+            pbul p_before = NULL;
             while(tmp_b != NULL){
 
                 int collision = tmp_b->bul.move_bul(map);
 
                 if(collision != 0){
 
-                    lista_nera = new_bullet(lista_nera, tmp_b->bul);
+                    //lista_nera = new_bullet(lista_nera, tmp_b->bul);
 
 
                     if(collision == 2){
@@ -193,11 +211,33 @@ void Game::run() {
 
                             x->mon.hp = 0;
                         }
-                    }
-                }
 
-                tmp_b = tmp_b->next;
+                    }
+                    map.setMapChar(tmp_b->bul.y, tmp_b->bul.x, ' ');
+                    mvwprintw(game_win, tmp_b->bul.y, tmp_b->bul.x, " ");
+	                wrefresh(game_win);
+
+                    //eliminazione proiettile
+                    if(tmp_b == lista_proiettili)
+                    {
+                        lista_proiettili = lista_proiettili -> next;
+                        tmp_b = lista_proiettili;
+                    }
+                    else
+                    {
+                        p_before -> next = tmp_b -> next;
+                        tmp_b = tmp_b -> next;
+                    }
+                    /////////////////////////////
+                }
+                else
+                {
+                    p_before = tmp_b;
+                    tmp_b = tmp_b->next;
+                }
             }
+
+            /*
             while(lista_nera != NULL){
                 while(tmp_b2 != NULL){
                     if( lista_nera->bul.x == tmp_b2->bul.x &&
@@ -213,7 +253,9 @@ void Game::run() {
                 lista_nera = lista_nera->next;
             }
             delete lista_nera;
+        */
         }
+
 
         // Update  /////////////////////////////////////////////////////////
 		/*while(lag >= MS)
@@ -246,13 +288,14 @@ void Game::run() {
             draw(game_win, map, protagonist, prev_x, prev_y);
         }
         if(c == 200) {
+            drawMonster(game_win, map, lista_mostri);
             c = 0;
         }
         if(b==30){
+            drawBullet(game_win, map, lista_proiettili);
             b=0;
         }
-        drawBullet(game_win, map, lista_proiettili);
-        drawMonster(game_win, map, lista_mostri);
+
 
         b++;
         c++;
@@ -300,7 +343,7 @@ pbul Game::handleInput(int c, Map& map, pmon lista_mostri, Player& giocatore, pb
 }
 
 
-void Game::update(Map& map, Character& protagonist, int prev_x, int prev_y) {
+void Game::update(Map& map, Character& protagonist, int prev_y, int prev_x) {
         map.setMapChar(prev_y, prev_x, ' ');
         map.setMapChar(protagonist.getY(), protagonist.getX(), protagonist.getLook());
 }
@@ -352,10 +395,10 @@ void Game::drawBullet(WINDOW* win, Map& map, pbul bul_list) {
 void Game::drawStats(WINDOW *win, int x, int y, Player pp){
     box(win, 0, 0);
     mvwprintw(win, 0, 7, "Stats di %s", pp.getNick());
-    mvwprintw(win, 2, 3, " Monete : %d", pp.getMoney());
-    mvwprintw(win, 4, 3, "   Vita : %d", pp.getHp());
-    mvwprintw(win, 6, 3, "Attacco : %d", pp.getAtk());
-    mvwprintw(win, 8, 3, " Difesa : %d", pp.getDef());
+    mvwprintw(win, 2, 3, " Monete : %d  ", pp.getMoney());
+    mvwprintw(win, 4, 3, "   Vita : %d  ", pp.getHp());
+    mvwprintw(win, 6, 3, "Attacco : %d  ", pp.getAtk());
+    mvwprintw(win, 8, 3, " Difesa : %d  ", pp.getDef());
     wrefresh(win);
 }
 
