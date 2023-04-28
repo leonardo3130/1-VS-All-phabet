@@ -15,7 +15,7 @@ class Game {
 		void draw(WINDOW* win, Map& map, Character& protagonist, int prev_x, int prev_y);
 		void drawMonster(WINDOW* win, Map& map, pmon monster_list);
 		void bulletUpdate(Map &map, pbul bul_list);
-		void update(Map& map, Character& protagonist, int prev_x, int prev_y) ;
+		void update(Map& map, Character& protagonist, int prev_y, int prev_x) ;
 		void monsterUpdate(Map &map, pmon monster_list);
 		void drawBullet(WINDOW* win, Map& map, pbul bul_list);
 		void drawStats(WINDOW *win, int x, int y, Player pp);
