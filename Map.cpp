@@ -134,7 +134,7 @@ Map::Map(int h, int w) {
     //aggiunta monete alle mappa
     int tmp_coins = this->coins;
     int coin_x, coin_y;
-    while(tmp_coins > 0) 
+    while(tmp_coins > 0)
     {
         coin_y = rand() % (this->height - 2) + 1;
         coin_x = rand() % (this->width - 4) + 2;
@@ -225,7 +225,7 @@ bool Map::is_inside(int x, int y){
 }
 
 bool Map::isempty(int x, int y){
-  if(this->getMapChar(y,x)==' ' || this->getMapChar(y,x)=='@')
+  if(this->getMapChar(y,x)==' ' || this->getMapChar(y,x)=='@' || this->getMapChar(y,x) =='*')
     return true;
   else
     return false;

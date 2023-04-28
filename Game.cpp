@@ -14,7 +14,7 @@ void Game::run() {
     char* psw = "leo";
 
 	//Character protagonist(3,3,10,10,10,0,'1');
-    int numero_mostri = 2;
+    int numero_mostri = 4;
     Player protagonist(nick, psw, 100, '1');
 	Map map(40,80);
 
@@ -22,14 +22,15 @@ void Game::run() {
     pmon lista_mostri = NULL;
 
     for(int i=0; i<numero_mostri; i++){
-        Monster mostro(5,4, i);
-        mostro.x = rand()%(map.getWidth()-2);
-        mostro.y = rand()%(map.getHeight()-1);
-        mostro.hp = 1;
-        mostro.atk = 10;
-        mostro.def = 1;
-        mostro.mode = rand()%4;
-        mostro.look = 'Y';
+
+        int x = rand()%(map.getWidth()-4)+2;
+        int y = rand()%(map.getHeight()-2)+1;
+        int hp = 1;
+        int atk = 10;
+        int def = 1;
+        int mode = rand()%4;
+        char look = 'Y';
+        Monster mostro(x, y, mode, hp, atk, def, look, 5, 4, i);
         lista_mostri = new_monster(lista_mostri, mostro);
     }
 
@@ -72,7 +73,7 @@ void Game::run() {
 	while(true) //condizione che andrà in base ad hp e altro
     {
         napms(5);
-        drawStats(player_stats, startx, starty, protagonist);\
+        drawStats(player_stats, startx, starty, protagonist);
 		current = time(nullptr);
 		elapsed = current - previous_time;
 		previous_time = current;
@@ -126,7 +127,7 @@ void Game::run() {
                 if(tmp_m->mon.hp <= 0){    //controllo hp
                     //lista_nera_mostri = new_monster(lista_nera_mostri, tmp_m->mon);
                     map.setMapChar(tmp_m->mon.y, tmp_m->mon.x, ' ');
-                    mvwprintw(game_win, tmp_m->mon.y, tmp_m->mon.x, " ");
+                    mvwprintw(game_win, tmp_m->prev_y, tmp_m->prev_x, " ");
 	                wrefresh(game_win);
 
                     if(tmp_m == lista_mostri)
