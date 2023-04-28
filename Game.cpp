@@ -10,18 +10,13 @@ Game::Game() {};
 
 void Game::run() {
     srand(time(NULL));
-
     char* nick = "leo";
     char* psw = "leo";
 
-
-	Character protagonist(3,3,10,10,10,0,'1');
-
+	//Character protagonist(3,3,10,10,10,0,'1');
     int numero_mostri = 2;
-
-    Player giocatore(nick, psw, 2);
+    Player protagonist(nick, psw, 100, '1');
 	Map map(40,80);
-
 
     pbul lista_proiettili = NULL;
     pmon lista_mostri = NULL;
@@ -47,7 +42,7 @@ void Game::run() {
 
 	game_win = newwin(42, 82, starty, startx);
     player_stats = newwin(20, 30, starty, startx+82);
-    
+
 	refresh();
 	curs_set(0);
 	refresh();
@@ -71,14 +66,13 @@ void Game::run() {
 	int prev_x, prev_y, c=0, b=0, d=0;
 
     pbul tmp_b = NULL, tmp_b2 = NULL, lista_nera = NULL;
-
     pmon tmp_m = NULL, lista_nera_mostri = NULL;
 
 	int const MS = 50;
-
 	while(true) //condizione che andrà in base ad hp e altro
     {
         napms(5);
+        drawStats(player_stats, startx, starty, protagonist);\
 		current = time(nullptr);
 		elapsed = current - previous_time;
 		previous_time = current;
@@ -101,16 +95,16 @@ void Game::run() {
             tmp_b->prev_y = tmp_b->bul.y;
             tmp_b = tmp_b->next;
         }
-        
+
 
         if(protagonist.hp <= 0){
             drawGameover(game_win, map);
-            break;
+            game_exit();
         }
 
         // Input ///////////////////////////////////////////////////////////
 		int ch = getch();
-		lista_proiettili = handleInput(ch, map, protagonist, lista_mostri, giocatore, lista_proiettili);
+		lista_proiettili = handleInput(ch, map, lista_mostri, protagonist, lista_proiettili);
         int monster_mode = 0;
 
 
@@ -123,7 +117,7 @@ void Game::run() {
                 if(monster_prob == 1)
                     monster_mode = rand()%4;
 
-                tmp_m->mon.move(map, giocatore, monster_mode); //movimento
+                tmp_m->mon.move(map, protagonist, monster_mode); //movimento
 
                 lista_proiettili = tmp_m->mon.fire(lista_proiettili, map, 2);  //sparo
 
@@ -173,13 +167,14 @@ void Game::run() {
 
                     lista_nera = new_bullet(lista_nera, tmp_b->bul);
 
+
                     if(collision == 2){
                         protagonist.hp -= 1;
 
                     }
 
                     else if(collision == 3){
-                        
+
                         pmon x = lista_mostri;
                         int id;
                         if(tmp_b->bul.dir == 0){
@@ -195,11 +190,12 @@ void Game::run() {
                             x = search_monster_by_xy(lista_mostri, (tmp_b->bul.x), (tmp_b->bul.y) - 1);
                         }
                         if(x!=NULL){
-                            
+
                             x->mon.hp = 0;
                         }
                     }
                 }
+
                 tmp_b = tmp_b->next;
             }
             while(lista_nera != NULL){
@@ -220,7 +216,7 @@ void Game::run() {
         }
 
         // Update  /////////////////////////////////////////////////////////
-		while(lag >= MS)
+		/*while(lag >= MS)
 		{
             if(prev_y != protagonist.getY() || prev_x != protagonist.getX())
 			    update(map, protagonist, prev_y, prev_x);
@@ -228,7 +224,11 @@ void Game::run() {
             bulletUpdate(map, lista_proiettili);
 
             lag -= MS;
-		}
+		}*/
+        if(prev_y != protagonist.getY() || prev_x != protagonist.getX())
+			    update(map, protagonist, prev_y, prev_x);
+        monsterUpdate(map, lista_mostri);
+        bulletUpdate(map, lista_proiettili);
         /*
         map.setMapChar(protagonist.y, protagonist.x, protagonist.look);
 
@@ -238,7 +238,7 @@ void Game::run() {
             map.setMapChar(tmp->mon.getY(), tmp->mon.getX(), tmp->mon.getLook());
         tmp = tmp->next;
         }*/
-        
+
 
 
         // Draw  //////////////////////////////////////////////////////////
@@ -261,34 +261,34 @@ void Game::run() {
     endwin();
 }
 
-pbul Game::handleInput(int c, Map& map, Character& protagonist, pmon lista_mostri, Player& giocatore, pbul bullet_list) {
+pbul Game::handleInput(int c, Map& map, pmon lista_mostri, Player& giocatore, pbul bullet_list) {
 	if(c == ERR) {;/*no tasti premuti dall'utente*/}
 	else {
 		switch(c)
 		{
 			case KEY_UP:
-				protagonist.moveup(map);
+				giocatore.moveup(map);
 				break;
 			case KEY_DOWN:
-				protagonist.movedown(map);
+				giocatore.movedown(map);
 				break;
 			case KEY_LEFT:
-				protagonist.moveleft(map);
+				giocatore.moveleft(map);
 				break;
 			case KEY_RIGHT:
-				protagonist.moveright(map);
+				giocatore.moveright(map);
 				break;
             case 'd':
-                bullet_list = protagonist.fire(bullet_list, map, 0);
+                bullet_list = giocatore.fire(bullet_list, map, 0);
                 break;
             case 's':
-                bullet_list = protagonist.fire(bullet_list, map, 1);
+                bullet_list = giocatore.fire(bullet_list, map, 1);
                 break;
             case 'a':
-                bullet_list = protagonist.fire(bullet_list, map, 2);
+                bullet_list = giocatore.fire(bullet_list, map, 2);
                 break;
             case 'w':
-                bullet_list = protagonist.fire(bullet_list, map, 3);
+                bullet_list = giocatore.fire(bullet_list, map, 3);
                 break;
             case 'q':
                 game_exit();
@@ -349,11 +349,13 @@ void Game::drawBullet(WINDOW* win, Map& map, pbul bul_list) {
     }
 }
 
-void Game::drawStats(WINDOW *win, int x, int y, Character p){
+void Game::drawStats(WINDOW *win, int x, int y, Player pp){
     box(win, 0, 0);
-    mvwprintw(win, 0, 2, "Stats");
-
-
+    mvwprintw(win, 0, 7, "Stats di %s", pp.getNick());
+    mvwprintw(win, 2, 3, " Monete : %d", pp.getMoney());
+    mvwprintw(win, 4, 3, "   Vita : %d", pp.getHp());
+    mvwprintw(win, 6, 3, "Attacco : %d", pp.getAtk());
+    mvwprintw(win, 8, 3, " Difesa : %d", pp.getDef());
     wrefresh(win);
 }
 
