@@ -4,8 +4,8 @@
 Character::Character(){} //costruttore di default
 
 Character::Character(char look){
-    this->x = 1;
-    this->y = 1;
+    this->x = 3;
+    this->y = 4;
     this->mode = 0;
     this->look = look;
     this->hp = 10;
@@ -94,16 +94,16 @@ int Character::getAtk(){
     return this->atk;
 }
 
-int Character::getX(){ 
-    return this->x; 
+int Character::getX(){
+    return this->x;
 }
 
-int Character::getY(){ 
-    return this->y; 
+int Character::getY(){
+    return this->y;
 }
 
-char Character::getLook(){ 
-    return this->look; 
+char Character::getLook(){
+    return this->look;
 }
 
 
@@ -128,12 +128,12 @@ void Character::bullet_check(Map m, pbul lista_proiettili){
     if(proiettile->bul.dir == 1){
       //lista_proiettili = remove_bullet(lista_proiettili, proiettile->bul.x, proiettile->bul.y, proiettile->bul.dir);
       this->hp =0;//-= 1/this->def;
-    }    
+    }
   }
   else if(int(m.getMapChar(this->x, this->y+1)) == 42){
     pbul proiettile = search_bullet_by_xy(lista_proiettili, this->x, this->y+1);
     if(proiettile->bul.dir == 3){
-      //lista_proiettili = remove_bullet(lista_proiettili, proiettile->bul.x, proiettile->bul.y, proiettile->bul.dir);        
+      //lista_proiettili = remove_bullet(lista_proiettili, proiettile->bul.x, proiettile->bul.y, proiettile->bul.dir);
       this->hp =0;//-= 1/this->def;
     }
   }
