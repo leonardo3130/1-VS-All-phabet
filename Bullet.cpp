@@ -5,7 +5,7 @@ Bullet::Bullet(int x, int y, int dir, char look){
     this->x = x; //posizione di partenza del proiettile
     this->y = y;
     if(dir>=0 && dir<=3){ this->dir = dir; } else{ this->dir = 0; }
-    this->look = look; 
+    this->look = look;
     }
 
 
@@ -28,7 +28,7 @@ int Bullet::move_bul(Map& mappa){
         else{
             next_char = mappa.getMapChar((this->y)+1, this->x);
         }
-        
+
     }
     else if(this->dir == 2 ){
         if(mappa.isempty((this->x) - 1, this->y)==true){
@@ -37,7 +37,7 @@ int Bullet::move_bul(Map& mappa){
         else{
             next_char = mappa.getMapChar(this->y, (this->x)-1);
         }
-    }    
+    }
     else if(this->dir == 3 ){
         if(mappa.isempty(this->x, (this->y) - 1)==true){
             this->y-=1;
@@ -45,7 +45,7 @@ int Bullet::move_bul(Map& mappa){
         else{
             next_char = mappa.getMapChar((this->y)-1, this->x);
         }
-        
+
     }
 
     if(next_char=='/'){
@@ -71,8 +71,8 @@ pbul new_bullet(pbul lista, Bullet b){
   return lista;
 }
 
+///////////////////////////////////////////////         da cancellare
 pbul remove_bullet(pbul p, int x, int y, int dir){
-    
 	if(p == NULL)
         return(p);
 	else if(p->bul.x == x && p->bul.y == y && p->bul.dir == dir){
@@ -93,23 +93,23 @@ pbul remove_bullet(pbul p, int x, int y, int dir){
 			}
 		}
 		if(found){
-
 			p_before->next = p->next;
             //free(p);
-            
 		}
 		return(head);
 	}
 }
+////////////////////////////////////////////////////////////////
+
 pbul search_bullet_by_xy(pbul lista_proiettili, int x, int y){
         pbul tmp = lista_proiettili;
         bool found = false;
         while(!found && tmp != NULL){
-                if(tmp->bul.x == x && tmp->bul.y == y){
-                        found = true;
-                }
-                else
-                        tmp = tmp->next;
+            if(tmp->bul.x == x && tmp->bul.y == y){
+                found = true;
+            }
+            else
+                tmp = tmp->next;
         }
         return tmp;
 }
