@@ -132,12 +132,16 @@ void Game::run() {
 
                     if(tmp_m == lista_mostri)
                     {
+                        pmon to_del = lista_mostri;
                         lista_mostri = lista_mostri->next;
                         tmp_m = lista_mostri;
+                        delete to_del;
                     }
                     else{
+                        pmon to_del = tmp_m;
                         before->next =tmp_m->next;
                         tmp_m = tmp_m->next;
+                        delete to_del;
                     }
                 }
                 else{
@@ -203,13 +207,17 @@ void Game::run() {
                     //eliminazione proiettile
                     if(tmp_b == lista_proiettili)
                     {
+                        pbul to_del = lista_proiettili;
                         lista_proiettili = lista_proiettili -> next;
                         tmp_b = lista_proiettili;
+                        delete to_del;
                     }
                     else
                     {
+                        pbul to_del = tmp_b;
                         p_before -> next = tmp_b -> next;
                         tmp_b = tmp_b -> next;
+                        delete to_del;
                     }
                     /////////////////////////////
                 }
