@@ -1,7 +1,17 @@
 #include "Player.hpp"
 
-Player::Player(char* nick, char* psw, int m):Character(x, y, mode, hp, atk, def, look){
+Player::Player(char* nick, char* psw, int m, char l) : Character(l){
     strcpy(this->nick, nick);
-    strcpy(this->psw, psw); 
-    this->monete = m;
-};
+    strcpy(this->psw, psw);
+    this->money = m;
+}
+
+char* Player::getNick(){
+    return this->nick;
+}
+
+int Player::getMoney(){
+    return this->money;
+}
+
+
