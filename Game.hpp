@@ -11,14 +11,14 @@ using namespace std;
 class Game {
 	private:
 		//WINDOW *create_new_win(int h, int w, int y, int x);
-		pbul handleInput(int c, Map& map, Character& protagonist, pmon lista_mostri,Player& giocatore, pbul bul_list);
+		pbul handleInput(int c, Map& map, pmon lista_mostri,Player& giocatore, pbul bul_list);
 		void draw(WINDOW* win, Map& map, Character& protagonist, int prev_x, int prev_y);
 		void drawMonster(WINDOW* win, Map& map, pmon monster_list);
 		void bulletUpdate(Map &map, pbul bul_list);
 		void update(Map& map, Character& protagonist, int prev_x, int prev_y) ;
 		void monsterUpdate(Map &map, pmon monster_list);
 		void drawBullet(WINDOW* win, Map& map, pbul bul_list);
-		void drawStats(WINDOW *win, int x, int y, Character p);
+		void drawStats(WINDOW *win, int x, int y, Player pp);
 		void drawGameover(WINDOW* win, Map& map);
 	public:
 		Game();
