@@ -20,11 +20,12 @@ void Game::run() {
 
     pbul lista_proiettili = NULL;
     pmon lista_mostri = NULL;
+    int x = 4;
 
     for(int i=0; i<numero_mostri; i++){
 
-        int x = rand()%(map.getWidth()-4)+2;
-        int y = rand()%(map.getHeight()-2)+1;
+        //int x = 4//rand()%(map.getWidth()-4)+2;
+        int y = 5;//rand()%(map.getHeight()-2)+1;
         int hp = 1;
         int atk = 10;
         int def = 1;
@@ -32,6 +33,7 @@ void Game::run() {
         char look = 'Y';
         Monster mostro(x, y, mode, hp, atk, def, look, 5, 4, i);
         lista_mostri = new_monster(lista_mostri, mostro);
+        x += 4;
     }
 
     keypad(stdscr, TRUE);
@@ -114,7 +116,7 @@ void Game::run() {
 
                 tmp_m->mon.move(map, protagonist, monster_mode); //movimento
 
-                lista_proiettili = tmp_m->mon.fire(lista_proiettili, map, 2);  //sparo
+                lista_proiettili = tmp_m->mon.fire(lista_proiettili, map, 2, 1);  //sparo
 
                 if(tmp_m->mon.hp <= 0){    //controllo hp
                     //lista_nera_mostri = new_monster(lista_nera_mostri, tmp_m->mon);
@@ -292,16 +294,16 @@ pbul Game::handleInput(int c, Map& map, pmon lista_mostri, Player& giocatore, pb
 				giocatore.moveright(map);
 				break;
             case 'd':
-                bullet_list = giocatore.fire(bullet_list, map, 0);
+                bullet_list = giocatore.fire(bullet_list, map, 0, 0);
                 break;
             case 's':
-                bullet_list = giocatore.fire(bullet_list, map, 1);
+                bullet_list = giocatore.fire(bullet_list, map, 1, 0);
                 break;
             case 'a':
-                bullet_list = giocatore.fire(bullet_list, map, 2);
+                bullet_list = giocatore.fire(bullet_list, map, 2, 0);
                 break;
             case 'w':
-                bullet_list = giocatore.fire(bullet_list, map, 3);
+                bullet_list = giocatore.fire(bullet_list, map, 3, 0);
                 break;
             case 'q':
                 game_exit();

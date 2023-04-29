@@ -1,11 +1,12 @@
 #include <ncurses.h>
 #include "Bullet.hpp"
 
-Bullet::Bullet(int x, int y, int dir, char look){
+Bullet::Bullet(int x, int y, int dir, char look, bool from){
     this->x = x; //posizione di partenza del proiettile
     this->y = y;
     if(dir>=0 && dir<=3){ this->dir = dir; } else{ this->dir = 0; }
     this->look = look;
+    this->from = from;
     }
 
 
@@ -74,7 +75,13 @@ int Bullet::move_bul(Map& mappa){
         collision = 1;
     }
     else if(next_char >= 'A' && next_char <= 'Z'){
-        collision = 3;
+        if(this->from == 0){
+            collision = 3;
+        }
+        else{
+            collision = 1;
+        }
+        
     }
     else if(next_char == '1'){
         collision = 2;
