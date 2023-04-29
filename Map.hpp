@@ -23,5 +23,6 @@ class Map {
 		void writeMap(int level, char* nickPlayer);
                 bool is_inside(int x, int y);   //dice se la cella (x,y) e' nella mappa
                 bool isempty(int x, int y);     //dice se la cella (x,y) e' vuota
+                bool ismoney(int x, int y);
 };
 
