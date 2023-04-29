@@ -78,23 +78,6 @@ pbul Character::fire(pbul ls_proiettili, Map& map, int dir, bool from){
   return ls_proiettili;
 }
 
-//si controlla se nelle coordinate vicine è presente una moneta
-int Character::coin_check(Map& m){
-  int coin = -1;
-  if(m.getMapChar(this->y, (this->x) + 1) == '@'){
-    coin = 0;
-  }
-  else if(m.getMapChar((this->y) + 1, this->x) == '@'){
-    coin = 1;
-  }
-  else if(m.getMapChar(this->y, (this->x) - 1) == '@'){
-    coin = 2;
-  }
-  else if(m.getMapChar((this->y) - 1, this->x) == '@'){
-    coin = 3;
-  }
-  return coin;
-}
 
 void Character::SetHp(int hp){
     this->hp = hp;

@@ -18,53 +18,26 @@ Monster::Monster(int x, int y, int mode, int hp, int atk, int def, char  look, i
 
 
 //contatto con player: i mostri perdono hp in base all' atk del player e al prorpio def, e viceversa
-void Monster::fight(Map mappa, Player pl){
-    this->hp -= 1*(pl.atk)/(this->def);
-    pl.hp -= 1*(this->def)/(pl.def);
-}
 
-/*
-void Monster::fire_loop(Map mappa, int livello, int global_id, pbul lista_p){
 
-    int m_bullet_speed = 1 * (livello / 3); //liv 3 vel = 1, liv 6 vel = 2 .....
-
-    while(this->hp>0){
-        this->fire(m_bullet_speed, mappa, global_id, lista_p);
-        napms(100 * this->shot_fr);
-    }
-
-}*/
-
-void Monster::move(Map& mappa, Player& p, int& mode){
+void Monster::move(Map& mappa, int& mode){
 //m_mode determina la direzione di spostamento: come per l'attributo mode di Character 0=right  1=down  2=left  3=up
     this->mode = mode;
     if(this->mode == 0){
         if(mappa.isempty(this->x + 1, this->y)==true){
             this->moveright(mappa);
         }
-        if(int(mappa.getMapChar(this->y, this->x+1)) == 1){ //verifica se il carattere incontrato e' il player
-            fight(mappa, p);
-        }
     }else if(this->mode == 1){
         if(mappa.isempty(this->x, this->y + 1)==true){
             this->movedown(mappa);
-        }
-        if(int(mappa.getMapChar(this->y + 1, this->x)) == 1){ //verifica se il carattere incontrato e' il player
-            fight(mappa, p);
         }
     }else if(this->mode == 2){
         if(mappa.isempty(this->x - 1, this->y)==true){
             this->moveleft(mappa);
         }
-        if(int(mappa.getMapChar(this->y, this->x - 1)) == 1){ //verifica se il carattere incontrato e' il player
-            fight(mappa, p);
-        }
     }else if(this->mode == 3){
         if(mappa.isempty(this->x, this->y - 1)==true){
             this->moveup(mappa);
-        }
-        if(int(mappa.getMapChar(this->y - 1, this->x)) == 1){ //verifica se il carattere incontrato e' il player
-            fight(mappa, p);
         }
     }
 }
