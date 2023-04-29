@@ -20,20 +20,20 @@ void Game::run() {
 
     pbul lista_proiettili = NULL;
     pmon lista_mostri = NULL;
-    int x = 4;
 
+    //generazione mostri //////////////////
+    int m_x, m_y, m_hp, m_atk, m_def, m_mode; 
+    char m_look;
     for(int i=0; i<numero_mostri; i++){
-
-        //int x = 4//rand()%(map.getWidth()-4)+2;
-        int y = 5;//rand()%(map.getHeight()-2)+1;
-        int hp = 1;
-        int atk = 10;
-        int def = 1;
-        int mode = rand()%4;
-        char look = 'Y';
-        Monster mostro(x, y, mode, hp, atk, def, look, 5, 4, i);
+        m_x = rand()%(map.getWidth()-4)+2;
+        m_y = rand()%(map.getHeight()-2)+1;
+        m_hp = 1;
+        m_atk = 10;
+        m_def = 1;
+        m_mode = rand()%4;
+        m_look = 'A';
+        Monster mostro(m_x, m_y, m_mode, m_hp, m_atk, m_def, m_look, 5, 4, i);
         lista_mostri = new_monster(lista_mostri, mostro);
-        x += 4;
     }
 
     keypad(stdscr, TRUE);
@@ -64,6 +64,8 @@ void Game::run() {
 	bool stop = false;
 
 	int prev_x, prev_y, c=0, b=0, d=0;
+
+    arnd around;
 
     pbul tmp_b = NULL, tmp_b2 = NULL;
     pmon tmp_m = NULL;
@@ -97,11 +99,12 @@ void Game::run() {
             game_exit();
         }
 
+        around = protagonist.check_around(map);
+
         // Input ///////////////////////////////////////////////////////////
 		int ch = getch();
-		lista_proiettili = handleInput(ch, map, lista_mostri, protagonist, lista_proiettili);
+		lista_proiettili = handleInput(ch, map, lista_mostri, protagonist, lista_proiettili, around);
         int monster_mode = 0;
-
 
 
         // Mostri ///////////////////////////////////////////////////////////
@@ -109,17 +112,17 @@ void Game::run() {
             pmon before = NULL;
             tmp_m = lista_mostri;
             while(tmp_m != NULL){
+                srand(time(NULL));
                 int monster_prob = rand()%5;
                 int monster_mode;
                 if(monster_prob == 1)
                     monster_mode = rand()%4;
 
-                tmp_m->mon.move(map, protagonist, monster_mode); //movimento
+                tmp_m->mon.move(map, monster_mode); //movimento
 
                 lista_proiettili = tmp_m->mon.fire(lista_proiettili, map, 2, 1);  //sparo
 
                 if(tmp_m->mon.hp <= 0){    //controllo hp
-                    //lista_nera_mostri = new_monster(lista_nera_mostri, tmp_m->mon);
                     map.setMapChar(tmp_m->mon.y, tmp_m->mon.x, ' ');
                     mvwprintw(game_win, tmp_m->prev_y, tmp_m->prev_x, " ");
 	                wrefresh(game_win);
@@ -222,6 +225,12 @@ void Game::run() {
                 }
             }
         }
+
+        if(d = 100){
+            //protagonist.fight(around, lista_mostri);
+        }
+
+
         if(prev_y != protagonist.getY() || prev_x != protagonist.getX())
 			update(map, protagonist, prev_y, prev_x);
         monsterUpdate(map, lista_mostri);
@@ -250,22 +259,26 @@ void Game::run() {
             drawBullet(game_win, map, lista_proiettili);
             b=0;
         }
+        if(d == 100){
+            d = 0;
+        }
 
 
         b++;
         c++;
+        d++;
 	}
 	getch();
     endwin();
 }
 
-pbul Game::handleInput(int c, Map& map, pmon lista_mostri, Player& giocatore, pbul bullet_list) {
+pbul Game::handleInput(int c, Map& map, pmon lista_mostri, Player& giocatore, pbul bullet_list, arnd around) {
 	if(c == ERR) {;/*no tasti premuti dall'utente*/}
 	else {
 		switch(c)
 		{
 			case KEY_UP:
-                if(giocatore.coin_check(map) == 3)
+                if(around.above == 2)
                 {
                     giocatore.money += 1;
                 }
@@ -273,21 +286,23 @@ pbul Game::handleInput(int c, Map& map, pmon lista_mostri, Player& giocatore, pb
 				break;
 
 			case KEY_DOWN:
-                if(giocatore.coin_check(map) == 1)
+                if(around.under == 2)
                 {
                     giocatore.money += 1;
                 }
 				giocatore.movedown(map);
 				break;
+
 			case KEY_LEFT:
-                if(giocatore.coin_check(map) == 2)
+                if(around.left == 2)
                 {
                     giocatore.money += 1;
                 }
 				giocatore.moveleft(map);
 				break;
 			case KEY_RIGHT:
-                if(giocatore.coin_check(map) == 0)
+
+                if(around.right == 2)
                 {
                     giocatore.money += 1;
                 }
