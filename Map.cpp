@@ -231,6 +231,13 @@ bool Map::isempty(int x, int y){
     return false;
 }
 
+bool Map::ismoney(int x, int y){
+    if(this->getMapChar(y,x)=='@')
+        return true;
+    else
+        return false;
+}
+
 int Map::getCoins() {
     return this->coins;
 }
