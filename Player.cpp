@@ -1,5 +1,5 @@
 #include "Player.hpp"
-#include "Monster.hpp"
+
 
 Player::Player(char* nick, char* psw, int m, char l) : Character(l){
     strcpy(this->nick, nick);
@@ -7,12 +7,12 @@ Player::Player(char* nick, char* psw, int m, char l) : Character(l){
     this->money = m;
 }
 
-/*
-pmon Player::fight(arnd around, pmon monster_list){
-    if(around.right == )
-    this->hp -= 1*(pl.atk)/(this->def);
-    pl.hp -= 1*(this->def)/(pl.def);
-}*/
+
+int Player::fight(int m_hp, int m_atk, int m_def){
+    this->hp -= 0.05;  //1*(m_atk)/(this->def);
+    m_hp -= 1;  //1*(this->def)/(m_def);
+    return m_hp;
+}
 
 arnd Player::check_around(Map& m){  
     arnd around;    //0 vuoto, 1 mostro, 2 moneta

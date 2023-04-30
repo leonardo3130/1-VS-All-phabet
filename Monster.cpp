@@ -1,7 +1,6 @@
 #include <ncurses.h>
 #include <cmath>
 #include "Monster.hpp"
-#include "Player.hpp"
 #include <unistd.h>
 
 //costruttore
