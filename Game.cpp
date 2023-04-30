@@ -99,7 +99,7 @@ void Game::run() {
             game_exit();
         }
 
-        around = protagonist.check_around(map);
+        
 
         // Input ///////////////////////////////////////////////////////////
 		int ch = getch();
@@ -178,7 +178,6 @@ void Game::run() {
                     else if(collision == 3){
 
                         pmon x = lista_mostri;
-                        int id;
                         if(tmp_b->bul.dir == 0){
                             x = search_monster_by_xy(lista_mostri, (tmp_b->bul.x) + 1, (tmp_b->bul.y));
                         }
@@ -226,8 +225,42 @@ void Game::run() {
             }
         }
 
+        // fight ////////////////////////////////////////
         if(d = 100){
-            //protagonist.fight(around, lista_mostri);
+            around = protagonist.check_around(map);
+            
+            pmon x = lista_mostri;
+            int id;
+            if(around.right == 1){
+                x = search_monster_by_xy(lista_mostri, (protagonist.x) + 1, (protagonist.y));
+                if(x!=NULL){
+                    x->mon.hp = 0;
+                }
+            }
+
+            x = lista_mostri;
+            if(around.under == 1){
+                x = search_monster_by_xy(lista_mostri, (protagonist.x), (protagonist.y) + 1);
+                if(x!=NULL){
+                    x->mon.hp = 0;
+                }
+            }
+
+            x = lista_mostri;
+            if(around.left == 1){
+                x = search_monster_by_xy(lista_mostri, (protagonist.x) - 1, (protagonist.y));
+                if(x!=NULL){
+                    x->mon.hp = 0;
+                }
+            }
+
+            x = lista_mostri;
+            if(around.above == 1){
+                x = search_monster_by_xy(lista_mostri, (protagonist.x), (protagonist.y) - 1);
+                if(x!=NULL){
+                    x->mon.hp = 0;
+                }
+            }
         }
 
 
