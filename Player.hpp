@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cstring>
 #include "Character.hpp"
+#include "Monster.hpp"
 
 struct arnd{
     int right;
@@ -19,7 +20,7 @@ class Player : public Character{
     public:
         int money;     //numero di monete del giocatore
         Player(char* nick, char* psw, int monete, char l);
-        //void fight(arnd around, pmon monster_list);                //interazione tra mostro e player
+        int fight(int m_hp, int m_atk, int m_def);                //interazione tra mostro e player
         char* getNick();
         int getMoney();
         void takeMoney(int value);
