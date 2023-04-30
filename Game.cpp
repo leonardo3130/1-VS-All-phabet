@@ -27,7 +27,7 @@ void Game::run() {
     for(int i=0; i<numero_mostri; i++){
         m_x = rand()%(map.getWidth()-4)+2;
         m_y = rand()%(map.getHeight()-2)+1;
-        m_hp = 1;
+        m_hp = 3;
         m_atk = 10;
         m_def = 1;
         m_mode = rand()%4;
@@ -225,40 +225,41 @@ void Game::run() {
             }
         }
 
-        // fight ////////////////////////////////////////
-        if(d = 100){
+        
+        if(d = 200){
+
+            //controllo intorno a player
             around = protagonist.check_around(map);
-            
+
+
+            // fight /////////////////////////////////////////////////////////////////////////////
+            //ho provato a mettere tutto in un metodo di player ma non si riesce per via di errori di inclusion
             pmon x = lista_mostri;
-            int id;
             if(around.right == 1){
                 x = search_monster_by_xy(lista_mostri, (protagonist.x) + 1, (protagonist.y));
                 if(x!=NULL){
-                    x->mon.hp = 0;
+                    x->mon.hp = protagonist.fight(x->mon.hp, x->mon.atk, x->mon.def);
                 }
             }
-
             x = lista_mostri;
             if(around.under == 1){
                 x = search_monster_by_xy(lista_mostri, (protagonist.x), (protagonist.y) + 1);
                 if(x!=NULL){
-                    x->mon.hp = 0;
+                    x->mon.hp = protagonist.fight(x->mon.hp, x->mon.atk, x->mon.def);
                 }
             }
-
             x = lista_mostri;
             if(around.left == 1){
                 x = search_monster_by_xy(lista_mostri, (protagonist.x) - 1, (protagonist.y));
                 if(x!=NULL){
-                    x->mon.hp = 0;
+                    x->mon.hp = protagonist.fight(x->mon.hp, x->mon.atk, x->mon.def);
                 }
             }
-
             x = lista_mostri;
             if(around.above == 1){
                 x = search_monster_by_xy(lista_mostri, (protagonist.x), (protagonist.y) - 1);
                 if(x!=NULL){
-                    x->mon.hp = 0;
+                    x->mon.hp = protagonist.fight(x->mon.hp, x->mon.atk, x->mon.def);
                 }
             }
         }
@@ -292,7 +293,7 @@ void Game::run() {
             drawBullet(game_win, map, lista_proiettili);
             b=0;
         }
-        if(d == 100){
+        if(d == 200){
             d = 0;
         }
 
