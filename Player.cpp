@@ -10,7 +10,7 @@ Player::Player(char* nick, char* psw, int m, char l) : Character(l){
 
 int Player::fight(int m_hp, int m_atk, int m_def){
     this->hp -= 0.05;  //1*(m_atk)/(this->def);
-    m_hp -= 1;  //1*(this->def)/(m_def);
+    m_hp -= 0.05;  //1*(this->def)/(m_def);
     return m_hp;
 }
 
