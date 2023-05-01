@@ -204,7 +204,7 @@ void Game::run() {
                         }
                         if(x!=NULL){
 
-                            x->mon.hp = x->mon.hp - 5;
+                            x->mon.hp -= 5;
                         }
                     }
 
@@ -237,7 +237,7 @@ void Game::run() {
             }
         }
 
-        if(d = 200){
+        if(d = 400){
             //controllo intorno a player
             around = protagonist.check_around(map);
 
@@ -247,28 +247,28 @@ void Game::run() {
             if(around.right == 1){
                 x = search_monster_by_xy(lista_mostri, (protagonist.x) + 1, (protagonist.y));
                 if(x!=NULL){
-                    x->mon.hp -= 0.2;//protagonist.fight(x->mon.hp, x->mon.atk, x->mon.def);
+                    x->mon.hp = protagonist.fight(x->mon.hp, x->mon.atk, x->mon.def);
                 }
             }
             x = lista_mostri;
             if(around.under == 1){
                 x = search_monster_by_xy(lista_mostri, (protagonist.x), (protagonist.y) + 1);
                 if(x!=NULL){
-                    x->mon.hp -= 0.2; //protagonist.fight(x->mon.hp, x->mon.atk, x->mon.def);
+                    x->mon.hp = protagonist.fight(x->mon.hp, x->mon.atk, x->mon.def);
                 }
             }
             x = lista_mostri;
             if(around.left == 1){
                 x = search_monster_by_xy(lista_mostri, (protagonist.x) - 1, (protagonist.y));
                 if(x!=NULL){
-                    x->mon.hp -= 0.2; //protagonist.fight(x->mon.hp, x->mon.atk, x->mon.def);
+                    x->mon.hp = protagonist.fight(x->mon.hp, x->mon.atk, x->mon.def);
                 }
             }
             x = lista_mostri;
             if(around.above == 1){
                 x = search_monster_by_xy(lista_mostri, (protagonist.x), (protagonist.y) - 1);
                 if(x!=NULL){
-                    x->mon.hp -= 0.2;// protagonist.fight(x->mon.hp, x->mon.atk, x->mon.def);
+                    x->mon.hp = protagonist.fight(x->mon.hp, x->mon.atk, x->mon.def);
                 }
             }
         }
@@ -291,7 +291,7 @@ void Game::run() {
             drawBullet(game_win, map, lista_proiettili);
             b=0;
         }
-        if(d == 200){
+        if(d == 400){
             d = 0;
         }
         if(e == m_shot_fr){

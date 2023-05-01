@@ -13,7 +13,7 @@ Character::Character(char look){
     this->def = 5;
 };
 
-Character::Character(int x, int y, int hp, int atk, int def, int mode, char look){
+Character::Character(int x, int y, double hp, int atk, int def, int mode, char look){
     this->x = x;
     this->y = y;
     this->mode = mode;
