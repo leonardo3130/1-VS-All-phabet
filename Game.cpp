@@ -34,7 +34,7 @@ void Game::run() {
         m_def = 1;
         m_mode = rand()%4;
         m_look = 'A';
-        Monster mostro(m_x, m_y, m_mode, max_m_hp, m_atk, m_def, m_look, 5, 4, i);
+        Monster mostro(m_x, m_y, max_m_hp, m_atk, m_def, m_mode, m_look, 5, 4, i);
         lista_mostri = new_monster(lista_mostri, mostro);
     }
 
@@ -162,12 +162,15 @@ void Game::run() {
             }
         }
 
+
+        // update monster look ///////////////////////////////////////
         if(f == 20){
             tmp_m = lista_mostri;
             while(tmp_m != NULL){
-                tmp_m->mon.look = 65+ ((25 * tmp_m->mon.hp) / max_m_hp);
+                tmp_m->mon.look = 90- ((25 * tmp_m->mon.hp) / max_m_hp);
                 tmp_m = tmp_m->next;
             }
+            monsterUpdate(map, lista_mostri);
         }
 
         // Proiettili ////////////////////////////////////////////////////
@@ -201,7 +204,7 @@ void Game::run() {
                         }
                         if(x!=NULL){
 
-                            x->mon.hp -= 5;
+                            x->mon.hp = x->mon.hp - 5;
                         }
                     }
 
