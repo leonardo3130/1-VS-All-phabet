@@ -9,10 +9,17 @@
 //    this->shot_fr = shot_fr;
 //    this->id = id;
 //};
-Monster::Monster(int x, int y, int mode, int hp, int atk, int def, char  look, int speed, int shot_fr, int id):Character(x, y, mode, hp, atk, def, look) {
-    this->speed = speed;
-    this->shot_fr = shot_fr;
+Monster::Monster(int x, int y,int hp, int atk ,int def, int mode, char look, int id, int speed, int shot_fr) {
+    this->x = x;
+    this->y = y;
+    this->mode = mode;
+    this->look = look;
+    this->hp = hp;
+    this->atk = atk;
+    this->def = def;
     this->id = id;
+    this->speed = speed;
+    this->shot_fr = shot_fr; 
 };
 
 
