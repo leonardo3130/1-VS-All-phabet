@@ -10,7 +10,7 @@ class Character{
   public:
     int x;      //coordinata x
     int y;      //coordinata y
-    int hp;     //healt points
+    double hp;     //healt points
     int atk;      //attacco (contatto)
     int def;      //difesa
 
@@ -18,7 +18,7 @@ class Character{
     char look;  //lettera usata per identificare il personaggio
     Character();
     Character(char look); //costruttore
-    Character(int x, int y, int hp, int atk, int def, int mode, char look); //costruttore
+    Character(int x, int y, double hp, int atk, int def, int mode, char look); //costruttore
     void moveright(Map mappa);  //muove a dx
     void moveleft(Map mappa);   //muove a sx
     void moveup(Map mappa);     //muove su
