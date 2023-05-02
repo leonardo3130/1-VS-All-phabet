@@ -26,22 +26,23 @@ Monster::Monster(int x, int y,int hp, int atk ,int def, int mode, char look, int
 //contatto con player: i mostri perdono hp in base all' atk del player e al prorpio def, e viceversa
 
 
-void Monster::move(Map& mappa, int& mode){
+void Monster::move(Map& mappa){
 //m_mode determina la direzione di spostamento: come per l'attributo mode di Character 0=right  1=down  2=left  3=up
-    this->mode = mode;
-    if(this->mode == 0){
+    int mode;
+    
+    if(mode == 0){
         if(mappa.isempty(this->x + 1, this->y)==true){
             this->moveright(mappa);
         }
-    }else if(this->mode == 1){
+    }else if(mode == 1){
         if(mappa.isempty(this->x, this->y + 1)==true){
             this->movedown(mappa);
         }
-    }else if(this->mode == 2){
+    }else if(mode == 2){
         if(mappa.isempty(this->x - 1, this->y)==true){
             this->moveleft(mappa);
         }
-    }else if(this->mode == 3){
+    }else if(mode == 3){
         if(mappa.isempty(this->x, this->y - 1)==true){
             this->moveup(mappa);
         }

@@ -245,3 +245,42 @@ int Map::getCoins() {
 void Map::setCoins(int coins) {
     this->coins = coins;
 }
+
+
+bool Map::freeWay(int x1, int y1, int x2, int y2){
+    bool empty = 1;
+    int a, b;
+    if(x1 == x2 && y1 != y2){
+        if(y1>y2){
+            a = y1;
+            b = y2;
+        }
+        else{
+            a = y2;
+            b = y1;
+        }
+        for(int i=a; i<b & empty; i++){
+            if(this->getMapChar(x1, i) == '/'){
+                empty = 0;
+            }
+        }
+        empty = 1;
+    }
+    else if(y1 = y2 && x1 != x2){
+        if(x1>x2){
+            a = x1;
+            b = x2;
+        }
+        else{
+            a = x2;
+            b = x1;
+        }
+        for(int i=a; i<b & empty; i++){
+            if(this->getMapChar(i, y1) == '/'){
+                empty = 0;
+            }
+        }
+        empty = 1;
+    }
+    return empty;
+}
