@@ -12,3 +12,7 @@ Makefile compila ed esegue il gioco (prima di consegnare va modificato) e poi ca
 ```sh
 make
 ```
+# Link Relazione del Progetto
+```sh
+https://docs.google.com/document/d/1qKrCzQvuM9lWxvQD8znN8tCQDLdZqcdMxinh7FZyy0o/edit?usp=sharing
+```
