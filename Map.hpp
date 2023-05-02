@@ -24,5 +24,6 @@ class Map {
                 bool is_inside(int x, int y);   //dice se la cella (x,y) e' nella mappa
                 bool isempty(int x, int y);     //dice se la cella (x,y) e' vuota
                 bool ismoney(int x, int y);
+                bool freeWay(int x1, int y1, int x2, int y2);
 };
 
