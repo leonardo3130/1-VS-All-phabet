@@ -158,9 +158,26 @@ void Game::run() {
 
         // sparo mostri ///////////////////////////////////////////////////////
         if(e == m_shot_fr){
+            int b_mode;
             tmp_m = lista_mostri;
             while(tmp_m != NULL){
-                lista_proiettili = tmp_m->mon.fire(lista_proiettili, map, 2, 1);                 
+                if(protagonist.x == tmp_m->mon.x){
+                    if(protagonist.y < tmp_m->mon.y){
+                        b_mode = 3;
+                    }
+                    else{
+                        b_mode = 1;
+                    }
+                }
+                else if(protagonist.y == tmp_m->mon.y){
+                    if(protagonist.x < tmp_m->mon.x){
+                        b_mode = 2;
+                    }
+                    else{
+                        b_mode = 0;
+                    }
+                }
+                lista_proiettili = tmp_m->mon.fire(lista_proiettili, map, b_mode, 1);                 
                 tmp_m = tmp_m->next;
             }
         }
