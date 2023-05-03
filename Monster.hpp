@@ -14,7 +14,7 @@ class Monster : public Character{
         int speed;  // velocita'
         int shot_fr; //ogni quanto spara
         Monster(int x = 2, int y = 3,int hp = 100, int atk = 10,int def = 10, int mode = 0, char look = 'A', int id = 0, int speed = 1, int shot_fr = 1);
-        void move(Map& mappa);
+        void move(Map& mappa, int x_p, int y_p);
 };
 
 
