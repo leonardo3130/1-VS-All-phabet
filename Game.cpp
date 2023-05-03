@@ -105,10 +105,10 @@ void Game::run() {
             drawGameover(game_win, map);
             game_exit();
         }
-
+/*
         if(map.freeWay(3, 20, 60, 20)== 1){
             game_exit();
-        }
+        }*/
 
         // Input ///////////////////////////////////////////////////////////
 		int ch = getch();
@@ -127,7 +127,7 @@ void Game::run() {
                 //if(monster_prob == 1)
                   //  monster_mode = rand()%4;
 
-                tmp_m->mon.move(map); //movimento
+                tmp_m->mon.move(map, protagonist.x, protagonist.y); //movimento
 
                 if(tmp_m->mon.hp <= 0){    //controllo hp
                     map.setMapChar(tmp_m->mon.y, tmp_m->mon.x, ' ');
