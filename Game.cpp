@@ -291,10 +291,8 @@ void Game::run() {
         bulletUpdate(map, lista_proiettili);
 
         // Draw  //////////////////////////////////////////////////////////
-        if(prev_y != protagonist.getY() || prev_x != protagonist.getX()){
-            draw(game_win, map, protagonist, prev_x, prev_y);
-            wrefresh(game_win);
-        }
+        draw(game_win, map, protagonist, prev_x, prev_y);
+        wrefresh(game_win);
         if(c == mon_speed) {
             drawMonster(game_win, map, lista_mostri);
             c = 0;
