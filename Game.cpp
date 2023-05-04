@@ -4,27 +4,30 @@
 #include "Game.hpp"
 #include <unistd.h>
 
-#define NUM_COLORS 8
+#define IN_GAME 0
+#define WIN 1
+#define LOSE -1
 
 Game::Game() {};
 
 void Game::run() {
+
+    int esito = IN_GAME;
+
     srand(time(NULL));
     char* nick = "leo";
     char* psw = "leo";
 
 	//Character protagonist(3,3,10,10,10,0,'1');
     int numero_mostri = 4;
-    Player protagonist(nick, psw, 100, '1');
+    Player protagonist(nick, psw, 10, '1');
 	Map map(40,80);
 
     pbul lista_proiettili = NULL;
     pmon lista_mostri = NULL;
 
-    
-
     //generazione mostri //////////////////
-    int m_x, m_y, m_atk, m_def, m_mode; 
+    int m_x, m_y, m_atk, m_def, m_mode;
     int max_m_hp = 200;
     char m_look;
     for(int i=0; i<numero_mostri; i++){
@@ -59,12 +62,7 @@ void Game::run() {
 		}
 	}
 
-    //funzione per disegnare la window delle statistiche
-    drawStats(player_stats, startx, starty, protagonist);
-
     // game loop
-	bool stop = false;
-
 	int prev_x, prev_y, c=0, b=0, d=0, e=0, f = 0;
 
     int bul_speed = 10;     //abbassare i valori per aumentare le velocità
@@ -72,15 +70,15 @@ void Game::run() {
     int m_shot_fr = 100;
 
     arnd around;
-
     pbul tmp_b = NULL, tmp_b2 = NULL;
     pmon tmp_m = NULL;
 
-	while(true) //condizione che andrà in base ad hp e altro
+	while(esito == IN_GAME) //condizione che andrà in base ad hp e altro
     {
         napms(5);
-        drawStats(player_stats, startx, starty, protagonist);
 
+        //funzione per disegnare la window delle statistiche
+        drawStats(player_stats, startx, starty, protagonist);
 
         prev_x = protagonist.getX();
 		prev_y = protagonist.getY();
@@ -98,14 +96,14 @@ void Game::run() {
             tmp_b->prev_y = tmp_b->bul.y;
             tmp_b = tmp_b->next;
         }
-        
 
+        //se il protagonista muore
+        if(protagonist.hp <= 0)     esito = LOSE;
 
-        if(protagonist.hp <= 0){
-            drawGameover(game_win, map);
-            game_exit();
-        }
-/*
+        //se il protagonista ammazza tutti i mostri
+        if(lista_mostri == NULL)    esito = WIN;
+
+        /*
         if(map.freeWay(3, 20, 60, 20)== 1){
             game_exit();
         }*/
@@ -115,18 +113,11 @@ void Game::run() {
 		lista_proiettili = handleInput(ch, map, lista_mostri, protagonist, lista_proiettili, around);
         int monster_mode = 0;
 
-
         // Mostri ///////////////////////////////////////////////////////////
         if(c == mon_speed ) {
             pmon before = NULL;
             tmp_m = lista_mostri;
             while(tmp_m != NULL){
-                srand(time(NULL));
-                int monster_prob = rand()%5;
-                int monster_mode;
-                //if(monster_prob == 1)
-                  //  monster_mode = rand()%4;
-
                 tmp_m->mon.move(map, protagonist.x, protagonist.y); //movimento
 
                 if(tmp_m->mon.hp <= 0){    //controllo hp
@@ -177,7 +168,7 @@ void Game::run() {
                         b_mode = 0;
                     }
                 }
-                lista_proiettili = tmp_m->mon.fire(lista_proiettili, map, b_mode, 1);                 
+                lista_proiettili = tmp_m->mon.fire(lista_proiettili, map, b_mode, 1);
                 tmp_m = tmp_m->next;
             }
         }
@@ -231,7 +222,7 @@ void Game::run() {
                     map.setMapChar(tmp_b->bul.y, tmp_b->bul.x, ' ');
                     mvwprintw(game_win, tmp_b->bul.y, tmp_b->bul.x, " ");
 	                wrefresh(game_win);
-                    
+
                     //eliminazione proiettile
                     if(tmp_b == lista_proiettili)
                     {
@@ -302,6 +293,7 @@ void Game::run() {
         // Draw  //////////////////////////////////////////////////////////
         if(prev_y != protagonist.getY() || prev_x != protagonist.getX()){
             draw(game_win, map, protagonist, prev_x, prev_y);
+            wrefresh(game_win);
         }
         if(c == mon_speed) {
             drawMonster(game_win, map, lista_mostri);
@@ -326,6 +318,14 @@ void Game::run() {
         e++;
         f++;
 	}
+
+    clear();
+    if(esito == WIN){
+        //salva game corrente su file
+        //stampa messaggio di vittoria
+    }else if(esito == LOSE){
+        drawGameover(game_win, map);
+    }
 	getch();
     endwin();
 }
@@ -409,6 +409,7 @@ void Game::bulletUpdate(Map &map, pbul bul_list){
         tmp3 = tmp3->next;
     }
 }
+
 void Game::draw(WINDOW* win, Map& map, Character& protagonist, int prev_x, int prev_y) {
         mvwprintw(win, prev_y, prev_x, " ");
 	    wrefresh(win);
@@ -426,6 +427,7 @@ void Game::drawMonster(WINDOW* win, Map& map, pmon monster_list) {
         tmp = tmp->next;
     }
 }
+
 void Game::drawBullet(WINDOW* win, Map& map, pbul bul_list) {
     pbul tmp3 = bul_list;
     while(tmp3 != NULL){
@@ -440,18 +442,19 @@ void Game::drawBullet(WINDOW* win, Map& map, pbul bul_list) {
 void Game::drawStats(WINDOW *win, int x, int y, Player pp){
     box(win, 0, 0);
     mvwprintw(win, 0, 7, "Stats di %s", pp.getNick());
-    mvwprintw(win, 2, 3, " Monete : %d  ", pp.getMoney());
-    mvwprintw(win, 4, 3, "   Vita : %d  ", pp.getHp());
-    mvwprintw(win, 6, 3, "Attacco : %d  ", pp.getAtk());
-    mvwprintw(win, 8, 3, " Difesa : %d  ", pp.getDef());
+    mvwprintw(win, 2, 3, " Monete : %d     ", pp.getMoney());
+    mvwprintw(win, 4, 3, "   Vita : %d     ", pp.getHp());
+    mvwprintw(win, 6, 3, "Attacco : %d     ", pp.getAtk());
+    mvwprintw(win, 8, 3, " Difesa : %d     ", pp.getDef());
     wrefresh(win);
 }
 
 void Game::drawGameover(WINDOW* win, Map& map){
-
-
-    //grafica game over
-
+    clear();
+    mvwprintw(win, LINES/2, COLS/2, "Game Over");
+    wrefresh(win);
+    getchar();
+    game_exit();
 
 }
 

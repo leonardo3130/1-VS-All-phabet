@@ -6,6 +6,8 @@
 #include "Monster.hpp"
 #include <ncurses.h>
 
+#define NUM_COLORS 8
+
 using namespace std;
 
 class Game {
