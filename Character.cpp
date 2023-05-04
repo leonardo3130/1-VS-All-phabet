@@ -8,7 +8,7 @@ Character::Character(char look){
     this->y = 4;
     this->mode = 0;
     this->look = look;
-    this->hp = 100;
+    this->hp = 10;
     this->atk = 5;
     this->def = 5;
 };
