@@ -33,8 +33,11 @@ int Game::run() {
         m_def = 1;
         m_mode = rand()%4;
         m_look = 'A';
-        Monster mostro(m_x, m_y, max_m_hp, m_atk, m_def, m_mode, m_look, 5, 4, i);
-        lista_mostri = new_monster(lista_mostri, mostro);
+        if(map.isempty(m_x, m_y)) {
+            Monster mostro(m_x, m_y, max_m_hp, m_atk, m_def, m_mode, m_look, 5, 4, i);
+            lista_mostri = new_monster(lista_mostri, mostro);
+        }
+        else i--;
     }
 
     keypad(stdscr, TRUE);
