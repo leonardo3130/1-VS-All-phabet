@@ -10,7 +10,7 @@ class Map {
                 int height;
                 int width;
                 char matrix[MAX_H][MAX_W];
-                int coins = 5;
+                int coins = 0;
         public:
                 Map(int h = 40, int w = 80);
                 char getMapChar(int y, int x);

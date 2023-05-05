@@ -87,19 +87,47 @@ bool login(char *user, char *psw, char *filename){
 }
 
 //insert
-ptr_livelli new_level(ptr_livelli l, int n = 1, ptr_livelli previous = NULL){
+/*ptr_livelli new_level(ptr_livelli l, int n = 1, ptr_livelli previous = NULL){
 	if(l == NULL) {
-		ptr_livelli new_l = new livello;
-		new_l->next = NULL;
-		new_l->prev = previous;
-		new_l->partita = Game();
-		new_l->n_liv = n;
-		l = new_l;
+		l = new livello;
+		l->next = NULL;
+		l->prev = previous;
+		l->partita = Game();
+		l->n_liv = n;
 		return l;
 	}else{
 		l -> next = new_level(l->next, n+1, l);
+		return l -> next;
+	}
+}*/
+
+ptr_livelli new_level(ptr_livelli l, int n){
+	if(l == NULL) {
+		l = new livello;
+		l->next = NULL;
+		l->prev = NULL;
+		l->partita = Game();
+		l->n_liv = n;
 		return l;
 	}
+	else {
+		ptr_livelli new_l = new livello;
+		new_l->next = NULL;
+		new_l->prev = l;
+		new_l->partita = Game();
+		new_l->n_liv = n;
+		l = l -> next = new_l;
+		return l;
+	}
+}
+
+//search
+ptr_livelli getLevel(ptr_livelli list, int n){
+	ptr_livelli tmp = list;
+	for(int i = 1; i != n; i++, tmp = tmp->next)
+		tmp = tmp->next;
+
+	return tmp;
 }
 
 int main(){
@@ -115,30 +143,32 @@ int main(){
 	*/
 
 	//inizio game + messaggio iniziale (grafica)
-	ptr_livelli gioco = NULL;
 	int esito_partita = 0;
-	gioco = new_level(gioco);
+	int livello_corrente = 1;
+	ptr_livelli head, gioco = new_level(gioco, livello_corrente);
+	head = gioco;
+
+	/*
+	gioco->partita.run(gioco->n_liv);
+	gioco = new_level(gioco, livello_corrente + 1);
+	esito_partita = gioco->partita.run(gioco->n_liv);*/
 
 	do
 	{
 		esito_partita = (gioco->partita).run(gioco->n_liv);
 		if(esito_partita == GO_TO_PREV){
-			gioco = gioco->prev;
+			gioco = gioco->prev, livello_corrente--;
 		}else if(esito_partita == GO_TO_NEXT){
 			if(gioco->next != NULL)
 				gioco = gioco->next;
 			else
-				gioco = gioco->next = new_level(gioco);
+				gioco = new_level(gioco, livello_corrente + 1);
+
+			livello_corrente++;
 		}
 	}
 	while (esito_partita != LOSE);
 
-
-
-
-
-
-	clear();
 
 	//vedo se il giocatore desidera effetuare il login (0), registrarsi (1) o uscire (2)
 	int choice = 1; //game.choice_menu();
