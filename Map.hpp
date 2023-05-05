@@ -1,4 +1,4 @@
-#pragma once 
+#pragma once
 #include <cmath>
 #include <ctime>
 #include <fstream>
@@ -12,7 +12,7 @@ class Map {
                 char matrix[MAX_H][MAX_W];
                 int coins = 5;
         public:
-                Map(int h, int w);
+                Map(int h = 40, int w = 80);
                 char getMapChar(int y, int x);
                 void setMapChar(int y, int x, char c);
                 int getWidth();
