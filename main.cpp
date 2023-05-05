@@ -13,18 +13,20 @@
 #define NUM_COLORS 8
 using namespace std;
 
-typedef struct livelli{
-	int n;			//numero livello;
-	Map mappa;		//matrice della mappa
-
-	livelli *next;	//livello successivo
-	livelli *prev;	//livello precedente
+typedef struct livello{
+	int n_liv;		// numero livello;
+	Map mappa;		// mappa
+	Game partita;	// partita
+	livello *next;	// livello successivo
+	livello *prev;	// livello precedente
 }* ptr_livelli;
+
 
 struct Session{
 	Player p;			//giocatore in gioco
 	ptr_livelli liv;	//livelli affrontati
 };
+
 
 //funzione per creare un nuovo account
 bool signIn(char *psw, char *filename){
@@ -85,12 +87,41 @@ bool login(char *user, char *psw, char *filename){
 	return exists;
 }
 
+//insert
+ptr_livelli new_level(ptr_livelli l, int n = 1, ptr_livelli previous = NULL){
+	if(l == NULL) {
+		ptr_livelli new_l = new livello;
+		new_l->next = NULL;
+		new_l->prev = previous;
+		new_l->mappa = Map(40,80);
+		new_l->partita = Game();
+		new_l->n_liv = n;
+		l = new_l;
+		return l;
+	}else{
+		l -> next = new_level(l->next, n+1, l);
+		return l;
+	}
+}
 
 int main(){
 	srand(time(NULL));
 
 	// Inizializzazione della libreria ncurses
 	initscr();cbreak();noecho();
+	ptr_livelli gioco = NULL;
+	int esito_partita = 0;
+
+	do
+	{
+		gioco = new_level(gioco);
+		esito_partita = (gioco->partita).run();
+	}
+	while (esito_partita == WIN);
+
+
+
+
 
 	//inizio game + messaggio iniziale (grafica)
 	Game game = Game();
