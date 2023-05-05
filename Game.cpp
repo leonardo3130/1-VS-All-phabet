@@ -99,16 +99,6 @@ int Game::run(int level) {
             tmp_b = tmp_b->next;
         }
 
-        //se il protagonista muore
-        if(protagonist.hp <= 0)     esito = LOSE;
-
-        //se il protagonista ammazza tutti i mostri
-        if(map.getCoins() == 0)    esito = WIN;
-
-        if(this->map.getCoins() == 0 && (this->map).protagonistInNextPortal())     esito = GO_TO_NEXT;
-
-        if((this->map).protagonistInPrevPortal()) esito = GO_TO_PREV;
-
         /*
         if(map.freeWay(3, 20, 60, 20)== 1){
             game_exit();
@@ -303,33 +293,32 @@ int Game::run(int level) {
             drawMonster(game_win, map, lista_mostri);
             c = 0;
         }
-        if(b==bul_speed){
+        if(b == bul_speed){
             drawBullet(game_win, map, lista_proiettili);
-            b=0;
+            b = 0;
         }
-        if(d == 400){
-            d = 0;
-        }
-        if(e == m_shot_fr){
-            e=0;
-        }
-        if(f==20){
-            f=0;
-        }
-        b++;
-        c++;
-        d++;
-        e++;
-        f++;
+
+        if(d == 400)            d = 0;
+        if(e == m_shot_fr)      e = 0;
+        if(f == 20)             f = 0;
+
+        b++, c++, d++, e++, f++;
+
+        //se il protagonista muore
+        if(protagonist.hp <= 0)     esito = LOSE;
+
+        //se il protagonista raccoglie tutte le monete
+        if(map.getCoins() == 0)    esito = WIN;
+
+        //il protagonista va al livello successivo
+        if(this->map.getCoins() == 0 && (this->map).protagonistInNextPortal())     esito = GO_TO_NEXT;
+
+        //il protagonista va al livello precedente
+        if((this->map).protagonistInPrevPortal() && level != 1) esito = GO_TO_PREV;
 	}
 
-    if(esito == LOSE){
-        drawGameover(game_win, game_over_win);
-    }else if(esito == GO_TO_NEXT){
+    if(esito == LOSE)   drawGameover(game_win, game_over_win);
 
-    }else if(esito == GO_TO_PREV){
-
-    }
     getch();
     return esito;
 }
