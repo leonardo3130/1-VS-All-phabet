@@ -4,13 +4,9 @@
 #include "Game.hpp"
 #include <unistd.h>
 
-#define IN_GAME 0
-#define WIN 1
-#define LOSE -1
-
 Game::Game() {};
 
-void Game::run() {
+int Game::run() {
 
     int esito = IN_GAME;
 
@@ -43,13 +39,14 @@ void Game::run() {
 
     keypad(stdscr, TRUE);
 	nodelay(stdscr, TRUE);
-	WINDOW *game_win, *commands, *player_stats;
+	WINDOW *game_win, *commands_win, *player_stats_win, *game_over_win;
 
 	int starty = (LINES - 42) / 2;
     int startx = (COLS - 82) / 3;
 
 	game_win = newwin(42, 82, starty, startx);
-    player_stats = newwin(20, 30, starty, startx+82);
+    player_stats_win = newwin(20, 30, starty, startx+82);
+    game_over_win = newwin(3, 11, LINES/2, COLS/2 - 30);
 
 	refresh();
 	curs_set(0);
@@ -78,7 +75,7 @@ void Game::run() {
         napms(5);
 
         //funzione per disegnare la window delle statistiche
-        drawStats(player_stats, startx, starty, protagonist);
+        drawStats(player_stats_win, startx, starty, protagonist);
 
         prev_x = protagonist.getX();
 		prev_y = protagonist.getY();
@@ -322,10 +319,11 @@ void Game::run() {
         //salva game corrente su file
         //stampa messaggio di vittoria
     }else if(esito == LOSE){
-        drawGameover(game_win, map);
+        drawGameover(game_win, game_over_win);
+
     }
-	getch();
-    endwin();
+    getch();
+    return esito;
 }
 
 pbul Game::handleInput(int c, Map& map, pmon lista_mostri, Player& giocatore, pbul bullet_list, arnd around) {
@@ -447,13 +445,14 @@ void Game::drawStats(WINDOW *win, int x, int y, Player pp){
     wrefresh(win);
 }
 
-void Game::drawGameover(WINDOW* win, Map& map){
-    clear();
-    mvwprintw(win, LINES/2, COLS/2, "Game Over");
-    wrefresh(win);
+void Game::drawGameover(WINDOW* game_win, WINDOW* game_over_win){
+    //werase(game_win);
+    //wrefresh(game_win);
+    box(game_over_win, 0, 0);
+    mvwprintw(game_over_win, 1, 1, "Game Over");
+    wrefresh(game_over_win);
     getchar();
     game_exit();
-
 }
 
 void Game::timed_print(char *text, int text_len, int micro_seconds_delay, int l, int c){
