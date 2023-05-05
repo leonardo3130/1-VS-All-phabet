@@ -144,6 +144,12 @@ Map::Map(int h, int w) {
             tmp_coins--;
         }
     }
+    //aggiunta portale livello precedente
+    this->matrix[2][3] = '[';
+    this->matrix[2][4] = ']';
+    //aggiunta portale livello successvo
+    this->matrix[height - 3][width - 4] = '[';
+    this->matrix[height - 3][width - 4] = ']';
 }
 
 char Map::getMapChar(int y, int x){
@@ -225,19 +231,25 @@ bool Map::is_inside(int x, int y){
 }
 
 bool Map::isempty(int x, int y){
-  if(this->getMapChar(y,x)==' ' || this->getMapChar(y,x)=='@' || this->getMapChar(y,x) =='*')
+  if(this->matrix[y][x] ==' ' || this->matrix[y][x] =='@' || this->matrix[y][x]  =='*' )
     return true;
   else
     return false;
 }
 
 bool Map::ismoney(int x, int y){
-    if(this->getMapChar(y,x)=='@')
+    if(this->matrix[y][x] =='@')
         return true;
     else
         return false;
 }
 
+bool Map::isportale(int x, int y){
+    if(this->matrix[y][x] =='[' || this->matrix[y][x] ==']')
+        return true;
+    else
+        return false;
+}
 int Map::getCoins() {
     return this->coins;
 }
