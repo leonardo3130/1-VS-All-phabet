@@ -7,9 +7,12 @@
 #include <ncurses.h>
 
 #define NUM_COLORS 8
+
 #define IN_GAME 0
 #define WIN 1
 #define LOSE -1
+#define GO_TO_NEXT 2
+#define GO_TO_PREV 2
 
 using namespace std;
 
@@ -25,9 +28,11 @@ class Game {
 		void drawBullet(WINDOW *win, Map &map, pbul bul_list);
 		void drawStats(WINDOW *win, int x, int y, Player pp);
 		void drawGameover(WINDOW *win, WINDOW *game_over_win);
+	protected:
+		Map map;
 	public:
 		Game();
-		int run();
+		int run(int level);
 		void timed_print(char *text, int text_len, int micro_seconds_delay, int l, int c);
 		void init_message();
 		void getCredentials(char* username, char* password);

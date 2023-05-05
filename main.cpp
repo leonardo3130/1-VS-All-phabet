@@ -15,7 +15,6 @@ using namespace std;
 
 typedef struct livello{
 	int n_liv;		// numero livello;
-	Map mappa;		// mappa
 	Game partita;	// partita
 	livello *next;	// livello successivo
 	livello *prev;	// livello precedente
@@ -93,7 +92,6 @@ ptr_livelli new_level(ptr_livelli l, int n = 1, ptr_livelli previous = NULL){
 		ptr_livelli new_l = new livello;
 		new_l->next = NULL;
 		new_l->prev = previous;
-		new_l->mappa = Map(40,80);
 		new_l->partita = Game();
 		new_l->n_liv = n;
 		l = new_l;
@@ -109,23 +107,37 @@ int main(){
 
 	// Inizializzazione della libreria ncurses
 	initscr();cbreak();noecho();
+
+	/*
+
+		LOGIN O CREAZIONE ACCOUNT
+
+	*/
+
+	//inizio game + messaggio iniziale (grafica)
 	ptr_livelli gioco = NULL;
 	int esito_partita = 0;
+	gioco = new_level(gioco);
 
 	do
 	{
-		gioco = new_level(gioco);
-		esito_partita = (gioco->partita).run();
+		esito_partita = (gioco->partita).run(gioco->n_liv);
+		if(esito_partita == GO_TO_PREV){
+			gioco = gioco->prev;
+		}else if(esito_partita == GO_TO_NEXT){
+			if(gioco->next != NULL)
+				gioco = gioco->next;
+			else
+				gioco = gioco->next = new_level(gioco);
+		}
 	}
-	while (esito_partita == WIN);
+	while (esito_partita != LOSE);
 
 
 
 
 
-	//inizio game + messaggio iniziale (grafica)
-	Game game = Game();
-	//game.init_message();
+
 	clear();
 
 	//vedo se il giocatore desidera effetuare il login (0), registrarsi (1) o uscire (2)
@@ -164,8 +176,8 @@ int main(){
 	}
 	*/
 
-	if(choice <= 1){
+	/*if(choice <= 1){
 		game.run();
-	}
+	}*/
 	return 0;
 }

@@ -2,11 +2,14 @@
 #include <ctime>
 #include <curses.h>
 #include "Game.hpp"
+#include "Map.hpp"
 #include <unistd.h>
 
-Game::Game() {};
+Game::Game() {
+    this->map = Map(40, 80);
+};
 
-int Game::run() {
+int Game::run(int level) {
 
     int esito = IN_GAME;
 
@@ -17,7 +20,6 @@ int Game::run() {
 	//Character protagonist(3,3,10,10,10,0,'1');
     int numero_mostri = 4;
     Player protagonist(nick, psw, 10, '1');
-	Map map(40,80);
 
     pbul lista_proiettili = NULL;
     pmon lista_mostri = NULL;
@@ -73,7 +75,7 @@ int Game::run() {
     pbul tmp_b = NULL, tmp_b2 = NULL;
     pmon tmp_m = NULL;
 
-	while(esito == IN_GAME) //condizione che andrà in base ad hp e altro
+	while(esito == IN_GAME || esito == WIN)
     {
         napms(5);
 
@@ -101,7 +103,11 @@ int Game::run() {
         if(protagonist.hp <= 0)     esito = LOSE;
 
         //se il protagonista ammazza tutti i mostri
-        if(lista_mostri == NULL)    esito = WIN;
+        if(map.getCoins() == 0)    esito = WIN;
+
+        if(this->map.getCoins() == 0 && (this->map).protagonistInNextPortal())     esito = GO_TO_NEXT;
+
+        if((this->map).protagonistInPrevPortal()) esito = GO_TO_PREV;
 
         /*
         if(map.freeWay(3, 20, 60, 20)== 1){
@@ -317,12 +323,11 @@ int Game::run() {
         f++;
 	}
 
-    clear();
-    if(esito == WIN){
-        //salva game corrente su file
-        //stampa messaggio di vittoria
-    }else if(esito == LOSE){
+    if(esito == LOSE){
         drawGameover(game_win, game_over_win);
+    }else if(esito == GO_TO_NEXT){
+
+    }else if(esito == GO_TO_PREV){
 
     }
     getch();
@@ -338,6 +343,7 @@ pbul Game::handleInput(int c, Map& map, pmon lista_mostri, Player& giocatore, pb
                 if(around.above == 2)
                 {
                     giocatore.money += 1;
+                    map.setCoins(map.getCoins() - 1);
                 }
 				giocatore.moveup(map);
 				break;
@@ -346,6 +352,7 @@ pbul Game::handleInput(int c, Map& map, pmon lista_mostri, Player& giocatore, pb
                 if(around.under == 2)
                 {
                     giocatore.money += 1;
+                    map.setCoins(map.getCoins() - 1);
                 }
 				giocatore.movedown(map);
 				break;
@@ -354,6 +361,7 @@ pbul Game::handleInput(int c, Map& map, pmon lista_mostri, Player& giocatore, pb
                 if(around.left == 2)
                 {
                     giocatore.money += 1;
+                    map.setCoins(map.getCoins() - 1);
                 }
 				giocatore.moveleft(map);
 				break;
@@ -362,6 +370,7 @@ pbul Game::handleInput(int c, Map& map, pmon lista_mostri, Player& giocatore, pb
                 if(around.right == 2)
                 {
                     giocatore.money += 1;
+                    map.setCoins(map.getCoins() - 1);
                 }
 				giocatore.moveright(map);
 				break;
@@ -445,6 +454,13 @@ void Game::drawStats(WINDOW *win, int x, int y, Player pp){
     mvwprintw(win, 4, 3, "   Vita : %d     ", pp.getHp());
     mvwprintw(win, 6, 3, "Attacco : %d     ", pp.getAtk());
     mvwprintw(win, 8, 3, " Difesa : %d     ", pp.getDef());
+    if(this->map.getCoins() > 1)
+        mvwprintw(win, 18, 2, "Mancano ancora %d monete   ", this->map.getCoins());
+    else if(this->map.getCoins() == 1)
+        mvwprintw(win, 18, 2, "Dai, manca l'ultima moneta!", this->map.getCoins());
+    else if(this->map.getCoins() == 0)
+        mvwprintw(win, 18, 2, " Livello superato!         ", this->map.getCoins());
+
     wrefresh(win);
 }
 

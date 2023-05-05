@@ -71,7 +71,7 @@ int Bullet::move_bul(Map& mappa){
         }
     }
 
-    if(next_char=='/'){
+    if(next_char == '/' || next_char == '[' || next_char == ']'){
         collision = 1;
     }
     else if(next_char >= 'A' && next_char <= 'Z'){
@@ -81,7 +81,7 @@ int Bullet::move_bul(Map& mappa){
         else{
             collision = 1;
         }
-        
+
     }
     else if(next_char == '1'){
         collision = 2;
@@ -102,7 +102,7 @@ pbul new_bullet(pbul lista, Bullet b){
 
 ///////////////////////////////////////////////         da cancellare
 pbul remove_bullet(pbul p, pbul p_before, pbul bul_list){
-    
+
     if(p == bul_list){
         bul_list = bul_list->next;
         p = bul_list;

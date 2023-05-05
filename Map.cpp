@@ -146,10 +146,10 @@ Map::Map(int h, int w) {
     }
     //aggiunta portale livello precedente
     this->matrix[2][3] = '[';
-    this->matrix[2][4] = ']';
+    this->matrix[2][5] = ']';
     //aggiunta portale livello successvo
-    this->matrix[height - 3][width - 4] = '[';
-    this->matrix[height - 3][width - 4] = ']';
+    this->matrix[this -> height - 3][this -> width - 6] = '[';
+    this->matrix[this -> height - 3][this -> width - 4] = ']';
 }
 
 char Map::getMapChar(int y, int x){
@@ -165,6 +165,12 @@ int Map::getWidth(){
 }
 int Map::getHeight(){
     return this->height;
+}
+bool Map::protagonistInNextPortal(){
+    return this->matrix[this -> height - 3][this -> width - 5] == '1';
+}
+bool Map::protagonistInPrevPortal(){
+    return this->matrix[2][4] == '1';
 }
 
 void Map::readMap(int level, char* nickPlayer){
