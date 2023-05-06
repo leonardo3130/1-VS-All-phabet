@@ -16,6 +16,13 @@
 
 using namespace std;
 
+typedef struct Session{
+	Player p;			//giocatore in gioco
+	int curr_level;		//livello corrente in cui si trova il player
+}* p_session;
+
+
+
 class Game {
 	private:
 		//WINDOW *create_new_win(int h, int w, int y, int x);
@@ -26,13 +33,13 @@ class Game {
 		void update(Map& map, Character& protagonist, int prev_y, int prev_x) ;
 		void monsterUpdate(Map &map, pmon monster_list);
 		void drawBullet(WINDOW *win, Map &map, pbul bul_list);
-		void drawStats(WINDOW *win, int x, int y, Player pp);
+		void drawStats(WINDOW *win, int x, int y, p_session Sessione);
 		void drawGameover(WINDOW *win, WINDOW *game_over_win);
 	protected:
 		Map map;
 	public:
 		Game();
-		int run(int level);
+		int run(p_session Sessione);
 		void timed_print(char *text, int text_len, int micro_seconds_delay, int l, int c);
 		void init_message();
 		void getCredentials(char* username, char* password);
