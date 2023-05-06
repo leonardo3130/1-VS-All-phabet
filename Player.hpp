@@ -20,15 +20,18 @@ class Player : public Character{
     public:
         int money;     //numero di monete del giocatore
         Player();
-        Player(char* nick, char* psw, int monete, char l);
+        Player(char* nick, char* psw, char l);
         int fight(int m_hp, int m_atk, int m_def);                //interazione tra mostro e player
         char* getNick();
         int getMoney();
         void takeMoney(int value);
         arnd check_around(Map& m);  //ritorna una struct con 4 interi che dicono cosa si trova nelle 4 posizioni intorno al player: 0 vuoto, 1 mostro, 2 moneta
         int choice_menu();
-        bool signIn(char *psw, char *filename);
-        bool login(char *user, char *psw, char *filename);
+        void getCredentials(char username[], char password[]);
+        bool signIn(char *user, char *psw);
+        bool login(char *user, char *psw, int& curr_level);
+        void saveStats(int curr_level);
+        void setCredentials(char *user, char *psw);
 };
 
 
