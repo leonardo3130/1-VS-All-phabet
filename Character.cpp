@@ -103,6 +103,10 @@ int Character::getY(){
     return this->y;
 }
 
+void Character::setX_Y(int x0, int y0){
+    this->x = x0, this->y = y0;
+}
+
 char Character::getLook(){
     return this->look;
 }
