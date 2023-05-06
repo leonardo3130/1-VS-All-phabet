@@ -7,15 +7,12 @@
 
 Game::Game() {
     this->map = Map(40, 80);
+    //aggiungere numero mostri + la lista dei mostri
 };
 
 int Game::run(p_session Sessione) {
-
-    int esito = IN_GAME;
-
     srand(time(NULL));
-
-	//Character protagonist(3,3,10,10,10,0,'1');
+    int esito = IN_GAME;
     int numero_mostri = 4;
 
     pbul lista_proiettili = NULL;
@@ -41,6 +38,8 @@ int Game::run(p_session Sessione) {
 
     keypad(stdscr, TRUE);
 	nodelay(stdscr, TRUE);
+
+    //box mappa, statistiche e comandi
 	WINDOW *game_win, *commands_win, *player_stats_win, *game_over_win;
 
 	int starty = (LINES - 42) / 2;
@@ -54,9 +53,9 @@ int Game::run(p_session Sessione) {
 	curs_set(0);
 	refresh();
 
-	for(int i = 0 ; i < map.getHeight() ; i++){
-		for(int j = 0 ; j < map.getWidth() ; j++){
-			mvwprintw(game_win, i, j, "%c",map.getMapChar(i, j));
+	for(int i = 0 ; i < this->map.getHeight() ; i++){
+		for(int j = 0 ; j < this->map.getWidth() ; j++){
+			mvwprintw(game_win, i, j, "%c", this->map.getMapChar(i, j));
 			wrefresh(game_win);
 		}
 	}
@@ -72,6 +71,7 @@ int Game::run(p_session Sessione) {
     pbul tmp_b = NULL, tmp_b2 = NULL;
     pmon tmp_m = NULL;
 
+    Sessione->p.setX_Y(3, 4);
 	while(esito == IN_GAME || esito == WIN)
     {
         napms(5);
@@ -103,7 +103,9 @@ int Game::run(p_session Sessione) {
 
         // Input ///////////////////////////////////////////////////////////
 		int ch = getch();
-		lista_proiettili = handleInput(ch, map, lista_mostri, Sessione->p, lista_proiettili, around);
+
+        lista_proiettili = handleInput(ch, map, lista_mostri, Sessione->p, lista_proiettili, around, esito);
+
         int monster_mode = 0;
 
         // Mostri ///////////////////////////////////////////////////////////
@@ -277,15 +279,14 @@ int Game::run(p_session Sessione) {
             }
         }
 
-
+        //update
         if(prev_y != Sessione->p.getY() || prev_x != Sessione->p.getX())
 			update(map, Sessione->p, prev_y, prev_x);
-        monsterUpdate(map, lista_mostri);
-        bulletUpdate(map, lista_proiettili);
+        monsterUpdate(map, lista_mostri); bulletUpdate(map, lista_proiettili);
 
         // Draw  //////////////////////////////////////////////////////////
-        draw(game_win, map, Sessione->p, prev_x, prev_y);
-        wrefresh(game_win);
+        draw(game_win, map, Sessione->p, prev_x, prev_y);wrefresh(game_win);
+
         if(c == mon_speed) {
             drawMonster(game_win, map, lista_mostri);
             c = 0;
@@ -301,26 +302,35 @@ int Game::run(p_session Sessione) {
 
         b++, c++, d++, e++, f++;
 
-        //se il protagonista muore
-        if(Sessione->p.hp <= 0)     esito = LOSE;
+        if(esito != EXIT) {
+            //se il protagonista muore
+            if(Sessione->p.hp <= 0)     esito = LOSE;
 
-        //se il protagonista raccoglie tutte le monete
-        if(map.getCoins() == 0)    esito = WIN;
+            //se il protagonista raccoglie tutte le monete
+            if(map.getCoins() == 0)    esito = WIN;
 
-        //il protagonista va al livello successivo
-        if(this->map.getCoins() == 0 && (this->map).protagonistInNextPortal())     esito = GO_TO_NEXT;
+            //il protagonista va al livello successivo
+            if(this->map.getCoins() == 0 && (this->map).protagonistInNextPortal())    esito = GO_TO_NEXT;
 
-        //il protagonista va al livello precedente
-        if((this->map).protagonistInPrevPortal() && Sessione->curr_level != 1) esito = GO_TO_PREV;
+            //il protagonista va al livello precedente
+            if((this->map).protagonistInPrevPortal() && Sessione->curr_level != 1)   esito = GO_TO_PREV;
+        }
 	}
 
-    if(esito == LOSE)   drawGameover(game_win, game_over_win);
+    //if(esito != EXIT){
+        if(esito == LOSE)
+            drawGameover(game_win, game_over_win), getch();
+        else if(esito == GO_TO_NEXT)
+            this->map.setMapChar(this->map.getHeight() - 3, this->map.getWidth() - 5, ' ');
+        else if(esito == GO_TO_PREV)
+            this->map.setMapChar(2, 4, ' ');
+    //}
+    delwin(game_win);wrefresh(game_win);
 
-    getch();
     return esito;
 }
 
-pbul Game::handleInput(int c, Map& map, pmon lista_mostri, Player& giocatore, pbul bullet_list, arnd around) {
+pbul Game::handleInput(int c, Map& map, pmon lista_mostri, Player& giocatore, pbul bullet_list, arnd around, int& e) {
 	if(c == ERR) {;/*no tasti premuti dall'utente*/}
 	else {
 		switch(c)
@@ -373,7 +383,7 @@ pbul Game::handleInput(int c, Map& map, pmon lista_mostri, Player& giocatore, pb
                 bullet_list = giocatore.fire(bullet_list, map, 3, 0);
                 break;
             case 'q':
-                game_exit();
+                e = EXIT;
 			default:
 				break;
 		}
@@ -445,7 +455,7 @@ void Game::drawStats(WINDOW *win, int x, int y, p_session Sessione){
     else if(this->map.getCoins() == 1)
         mvwprintw(win, 18, 2, "Dai, manca l'ultima moneta!", this->map.getCoins());
     else if(this->map.getCoins() == 0)
-        mvwprintw(win, 18, 2, " Livello %d superato!         ", Sessione->curr_level);
+        mvwprintw(win, 18, 2, " Livello %d superato!       ", Sessione->curr_level);
 
     wrefresh(win);
 }
@@ -496,35 +506,8 @@ void Game::init_message(){
     getch();
 }
 
-//get credentials from the terminal
-void Game::getCredentials(char* username, char* password) {
-    // Crea il box verde
-    attron(COLOR_PAIR(COLOR_GREEN));
-    box(stdscr, 0, 0);
-
-    mvprintw(LINES/2 - 4, COLS/2 - 14, "Please enter your credentials:");
-    mvprintw(LINES/2 - 2, COLS/2 - 15, "Username: ");
-    mvprintw(LINES/2, COLS/2 - 15, "Password: ");
-
-    // Crea la finestra di input per l'username
-    mvprintw(LINES/2 - 2, COLS/2 - 7, "[               ]");
-
-    // Crea la finestra di input per la password
-    mvprintw(LINES/2, COLS/2 - 7, "[               ]");
-    attroff(COLOR_PAIR(COLOR_GREEN));
-
-    // Sposta il cursore sulla finestra dell'username
-    move(LINES/2 - 2, COLS/2 - 4);
-    echo();
-    getstr(username);
-
-    // Sposta il cursore sulla finestra della password
-    move(LINES/2, COLS/2 - 4);
-    noecho();
-    getstr(password);
-
-    // Pulisco lo schermo
-    clear();
+Map Game::getMap(){
+    return this->map;
 }
 
 void Game::game_exit(){

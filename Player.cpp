@@ -1,11 +1,11 @@
 #include "Player.hpp"
 
-Player::Player(){}
+Player::Player() : Character('1'){
+}
 
-Player::Player(char* nick, char* psw, int m, char l) : Character(l){
+Player::Player(char* nick, char* psw, char l='1') : Character(l){
     strcpy(this->nick, nick);
     strcpy(this->psw, psw);
-    this->money = m;
 }
 
 
@@ -113,9 +113,49 @@ int Player::choice_menu() {
     return highlights;
 }
 
+//get credentials from the terminal
+void Player::getCredentials(char username[], char password[]) {
+    // Crea il box verde
+    attron(COLOR_PAIR(COLOR_GREEN));
+    box(stdscr, 0, 0);
+
+    mvprintw(LINES/2 - 4, COLS/2 - 14, "Please enter your credentials:");
+    mvprintw(LINES/2 - 2, COLS/2 - 15, "Username: ");
+    mvprintw(LINES/2, COLS/2 - 15, "Password: ");
+
+    // Crea la finestra di input per l'username
+    mvprintw(LINES/2 - 2, COLS/2 - 7, "[               ]");
+
+    // Crea la finestra di input per la password
+    mvprintw(LINES/2, COLS/2 - 7, "[               ]");
+    attroff(COLOR_PAIR(COLOR_GREEN));
+
+    // Sposta il cursore sulla finestra dell'username
+    move(LINES/2 - 2, COLS/2 - 4);
+    echo();
+    getstr(username);
+
+    // Sposta il cursore sulla finestra della password
+    move(LINES/2, COLS/2 - 4);
+    noecho();
+    getstr(password);
+
+    // Pulisco lo schermo
+    clear();
+}
+
+
 //funzione per creare un nuovo account
-bool Player::signIn(char *psw, char *filename){
+bool Player::signIn(char *user, char *psw){
 	bool isCorrect = false;
+    char filename[50], mkdir[50];
+
+    strcpy(mkdir, "mkdir Archivio/");
+    system(strcat(mkdir, user));
+
+    strcpy(filename, "Archivio/");
+    strcat(filename, user);
+    strcat(filename, "/credentials.txt");
 
 	//scrivo nel file delle credenziali le informazioni degli utenti
 	ofstream credenziali;
@@ -134,9 +174,13 @@ bool Player::signIn(char *psw, char *filename){
 }
 
 //funzione per effettuare il login ad un account esistente
-bool Player::login(char *user, char *psw, char *filename){
+bool Player::login(char *user, char *psw, int& curr_level){
+    char filename[50];
+    strcpy(filename, "Archivio/");
+    strcat(filename, user);
+    strcat(filename, "/credentials.txt");
+
 	ifstream input_file(filename);
-	int hp = 0, atk = 0, def = 0, money = 0;
 	bool exists;
 
     if (input_file.is_open()) {
@@ -146,10 +190,11 @@ bool Player::login(char *user, char *psw, char *filename){
 
 		//se la psw è giusta prendo le informazioni del player
 		if(strcmp(line, psw) == 0)	{
-			input_file >> hp;
-			input_file >> atk;
-			input_file >> def;
-			input_file >> money;
+			input_file >> this->hp;
+			input_file >> this->atk;
+			input_file >> this->def;
+			input_file >> this->money;
+            input_file >> curr_level;
 			exists = true;
 
 			//Character c = Character(100, 100, '1', hp, atk, def);
@@ -170,4 +215,30 @@ bool Player::login(char *user, char *psw, char *filename){
 		exists = false;
     }
 	return exists;
+}
+
+
+
+
+void Player::saveStats(int curr_level){
+    char filename[50];
+    strcpy(filename, "Archivio/");
+    strcat(filename, "leo");
+    strcat(filename, "/credentials.txt");
+
+    ofstream credenziali;
+	credenziali.open(filename);
+
+	credenziali << this->psw << endl;
+	credenziali << this->hp << endl;
+	credenziali << this->atk << endl;
+	credenziali << this->def << endl;
+	credenziali << this->money << endl;
+    credenziali << curr_level << endl;
+	credenziali.close();
+}
+
+void Player::setCredentials(char *user, char *psw){
+    strcpy(this->nick, user), strcpy(this->psw, psw);
+
 }
