@@ -12,7 +12,7 @@
 #define WIN 1
 #define LOSE -1
 #define GO_TO_NEXT 2
-#define GO_TO_PREV 2
+#define GO_TO_PREV -2
 
 using namespace std;
 
