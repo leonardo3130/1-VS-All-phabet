@@ -8,6 +8,7 @@
 
 #define NUM_COLORS 8
 
+#define EXIT -3
 #define IN_GAME 0
 #define WIN 1
 #define LOSE -1
@@ -21,12 +22,10 @@ typedef struct Session{
 	int curr_level;		//livello corrente in cui si trova il player
 }* p_session;
 
-
-
 class Game {
 	private:
 		//WINDOW *create_new_win(int h, int w, int y, int x);
-		pbul handleInput(int c, Map& map, pmon lista_mostri,Player& giocatore, pbul bul_list, arnd around);
+		pbul handleInput(int c, Map& map, pmon lista_mostri,Player& giocatore, pbul bul_list, arnd around, int& e);
 		void draw(WINDOW* win, Map& map, Character& protagonist, int prev_x, int prev_y);
 		void drawMonster(WINDOW* win, Map& map, pmon monster_list);
 		void bulletUpdate(Map &map, pbul bul_list);
@@ -42,9 +41,8 @@ class Game {
 		int run(p_session Sessione);
 		void timed_print(char *text, int text_len, int micro_seconds_delay, int l, int c);
 		void init_message();
-		void getCredentials(char* username, char* password);
-		int choice_menu();
 		void game_exit();
+		Map getMap();
 		//void muovi_mostro(Map& mappa, Monster& m, Player& p);
 		//bool isOver();
 };

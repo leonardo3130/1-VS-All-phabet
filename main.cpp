@@ -20,7 +20,6 @@ typedef struct livello{
 	livello *prev;	// livello precedente
 }* ptr_livelli;
 
-
 //crea un nuovo livello e ritorna il puntatore a quest'ultimo
 ptr_livelli new_level(ptr_livelli l, int n){
 	if(l == NULL) {
@@ -47,39 +46,66 @@ int main(){
 	// Inizializzazione della libreria ncurses
 	initscr();cbreak();noecho();
 
-	/*
 
-		LOGIN O CREAZIONE ACCOUNT
+	Player protagonist;
+	bool correct_input = false;
+	int choice = protagonist.choice_menu();//0;		//significa che il player esiste già, quindi deve solo prendere le statistiche
+	char username[20], password[20];
+	int curr_level;
 
-	*/
-					 //nick    psw
-	Player protagonist("leo", "leo", 10, '1');
+	while(!correct_input){
+		if(choice <= 1){
+			protagonist.getCredentials(username, password);
+		}
+		switch(choice){
+			case 0:
+                correct_input = protagonist.login(username, password, curr_level);
+                break;
+            case 1:
+                //creo la cartella per salvare i file di gioco del giocatore (rinominata col suo nome)
+                //system(strcat(mkdir, username));
+                correct_input = protagonist.signIn(username, password);
+				curr_level = 1;
+                break;
+            case 2:
+                clear();
+				endwin();
+				exit(0);
+                break;
+            default:
+                break;
 
+        }
+	}
+
+	protagonist.setCredentials(username, password);
 	p_session Sessione = new Session;
 	Sessione->p = protagonist;
-	Sessione->curr_level = 1;
+	Sessione->curr_level = curr_level;
 
+
+
+	/*
+
+				GAME
+
+	*/
 
 
 	//inizio game + messaggio iniziale (grafica)
 	int esito_partita = 0;
-	int livello_corrente = 1;
-	ptr_livelli head;
-	ptr_livelli gioco = NULL;
-	gioco = new_level(gioco, Sessione->curr_level);
-	head = gioco;
-
-	/*
-	gioco->partita.run(gioco->n_liv);
-	gioco = new_level(gioco, livello_corrente + 1);
-	esito_partita = gioco->partita.run(gioco->n_liv);*/
+	ptr_livelli gioco = new_level(gioco, Sessione->curr_level),
+				head = gioco;
 
 	do
 	{
+		Sessione->p.setX_Y(3, 4);
 		esito_partita = (gioco->partita).run(Sessione);
-		if(esito_partita == GO_TO_PREV && Sessione->curr_level > 1){
+
+		if(esito_partita == GO_TO_PREV){
 			gioco = gioco->prev, (Sessione->curr_level)--;
-		}else if(esito_partita == GO_TO_NEXT){
+		}
+		else if(esito_partita == GO_TO_NEXT){
 			if(gioco->next != NULL){
 				gioco = gioco->next;
 			}
@@ -89,17 +115,38 @@ int main(){
 			(Sessione->curr_level)++;
 		}
 	}
-	while (esito_partita != LOSE);
+	while (esito_partita != EXIT);
 
+	//inizio salvataggio livelli
+	ptr_livelli tmp = gioco;
+	while (tmp != NULL){
+		Map mappa = tmp->partita.getMap();
+		mappa.writeMap(tmp->n_liv, Sessione->p.getNick());
+		tmp = tmp->prev;
+	}
 
-	//vedo se il giocatore desidera effetuare il login (0), registrarsi (1) o uscire (2)
-	int choice = 1; //game.choice_menu();
+	tmp = gioco;
+	while (tmp != NULL){
+		Map mappa = tmp->partita.getMap();
+		mappa.writeMap(tmp->n_liv, Sessione->p.getNick());
+		tmp = tmp->next;
+	}
+
+	//salvo statistiche player
+	Sessione->p.saveStats(Sessione->curr_level);
+
 	clear();
+	endwin();
+	return 0;
+}
+	//vedo se il giocatore desidera effetuare il login (0), registrarsi (1) o uscire (2)
+	//int choice = 1; //game.choice_menu();
+	//clear();
 
 /*
 	char username[20], password[20], filename[50], mkdir[50];
 	strcpy(mkdir, "mkdir Archivio/");
-	bool correct_input = false;
+
 
 	//scrivo in filename la path per raggiungere le credenziali
 	while(!correct_input){
@@ -131,5 +178,4 @@ int main(){
 	/*if(choice <= 1){
 		game.run();
 	}*/
-	return 0;
-}
+
