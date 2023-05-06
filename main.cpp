@@ -116,8 +116,7 @@ ptr_livelli new_level(ptr_livelli l, int n){
 		new_l->prev = l;
 		new_l->partita = Game();
 		new_l->n_liv = n;
-		l = l -> next = new_l;
-		return l;
+		return new_l;
 	}
 }
 
@@ -145,7 +144,9 @@ int main(){
 	//inizio game + messaggio iniziale (grafica)
 	int esito_partita = 0;
 	int livello_corrente = 1;
-	ptr_livelli head, gioco = new_level(gioco, livello_corrente);
+	ptr_livelli head;
+	ptr_livelli gioco = NULL;
+	gioco = new_level(gioco, livello_corrente);
 	head = gioco;
 
 	/*
@@ -159,11 +160,12 @@ int main(){
 		if(esito_partita == GO_TO_PREV){
 			gioco = gioco->prev, livello_corrente--;
 		}else if(esito_partita == GO_TO_NEXT){
-			if(gioco->next != NULL)
+			if(gioco->next != NULL){
 				gioco = gioco->next;
-			else
+			}
+			else{
 				gioco = new_level(gioco, livello_corrente + 1);
-
+			}
 			livello_corrente++;
 		}
 	}
