@@ -21,86 +21,7 @@ typedef struct livello{
 }* ptr_livelli;
 
 
-struct Session{
-	Player p;			//giocatore in gioco
-	ptr_livelli liv;	//livelli affrontati
-};
-
-
-//funzione per creare un nuovo account
-bool signIn(char *psw, char *filename){
-	bool isCorrect = false;
-
-	//scrivo nel file delle credenziali le informazioni degli utenti
-	ofstream credenziali;
-	credenziali.open(filename);
-	credenziali << psw << endl;
-
-	Character c = Character('1');
-	credenziali << c.getHp() << endl;
-	credenziali << c.getAtk() << endl;
-	credenziali << c.getDef() << endl;
-	credenziali << 100 << endl;		//default money
-	credenziali.close();
-	isCorrect = true;
-
-	return isCorrect;
-}
-
-//funzione per effettuare il login ad un account esistente
-bool login(char *user, char *psw, char *filename){
-	ifstream input_file(filename);
-	int hp = 0, atk = 0, def = 0, money = 0;
-	bool exists;
-
-    if (input_file.is_open()) {
-		//leggo la psw
-        char line[50];
-		input_file >> line;
-
-		//se la psw è giusta prendo le informazioni del player
-		if(strcmp(line, psw) == 0)	{
-			input_file >> hp;
-			input_file >> atk;
-			input_file >> def;
-			input_file >> money;
-			exists = true;
-
-			//Character c = Character(100, 100, '1', hp, atk, def);
-			//Player p = Player(user, psw, money, c);
-		}else {
-			//Password errata
-            attron(COLOR_PAIR(COLOR_RED));
-            mvprintw(LINES/2 + 3, COLS/2 - 14, "Wrong password!");
-            attroff(COLOR_PAIR(COLOR_RED));
-			exists = false;
-		}
-
-    } else {
-        // Il file non esiste
-        attron(COLOR_PAIR(COLOR_RED));
-        mvprintw(LINES/2 + 3, COLS/2 - 14, "Wrong username!");
-        attroff(COLOR_PAIR(COLOR_RED));
-		exists = false;
-    }
-	return exists;
-}
-
-//insert
-/*ptr_livelli new_level(ptr_livelli l, int n = 1, ptr_livelli previous = NULL){
-	if(l == NULL) {
-		l = new livello;
-		l->next = NULL;
-		l->prev = previous;
-		l->partita = Game();
-		l->n_liv = n;
-		return l;
-	}else{
-		l -> next = new_level(l->next, n+1, l);
-		return l -> next;
-	}
-}*/
-
+//crea un nuovo livello e ritorna il puntatore a quest'ultimo
 ptr_livelli new_level(ptr_livelli l, int n){
 	if(l == NULL) {
 		l = new livello;
@@ -120,15 +41,6 @@ ptr_livelli new_level(ptr_livelli l, int n){
 	}
 }
 
-//search
-ptr_livelli getLevel(ptr_livelli list, int n){
-	ptr_livelli tmp = list;
-	for(int i = 1; i != n; i++, tmp = tmp->next)
-		tmp = tmp->next;
-
-	return tmp;
-}
-
 int main(){
 	srand(time(NULL));
 
@@ -140,13 +52,21 @@ int main(){
 		LOGIN O CREAZIONE ACCOUNT
 
 	*/
+					 //nick    psw
+	Player protagonist("leo", "leo", 10, '1');
+
+	p_session Sessione = new Session;
+	Sessione->p = protagonist;
+	Sessione->curr_level = 1;
+
+
 
 	//inizio game + messaggio iniziale (grafica)
 	int esito_partita = 0;
 	int livello_corrente = 1;
 	ptr_livelli head;
 	ptr_livelli gioco = NULL;
-	gioco = new_level(gioco, livello_corrente);
+	gioco = new_level(gioco, Sessione->curr_level);
 	head = gioco;
 
 	/*
@@ -156,17 +76,17 @@ int main(){
 
 	do
 	{
-		esito_partita = (gioco->partita).run(gioco->n_liv);
-		if(esito_partita == GO_TO_PREV){
-			gioco = gioco->prev, livello_corrente--;
+		esito_partita = (gioco->partita).run(Sessione);
+		if(esito_partita == GO_TO_PREV && Sessione->curr_level > 1){
+			gioco = gioco->prev, (Sessione->curr_level)--;
 		}else if(esito_partita == GO_TO_NEXT){
 			if(gioco->next != NULL){
 				gioco = gioco->next;
 			}
 			else{
-				gioco = new_level(gioco, livello_corrente + 1);
+				gioco = new_level(gioco, (Sessione->curr_level) + 1);
 			}
-			livello_corrente++;
+			(Sessione->curr_level)++;
 		}
 	}
 	while (esito_partita != LOSE);
