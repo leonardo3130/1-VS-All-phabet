@@ -26,6 +26,7 @@ class Map {
                 bool ismoney(int x, int y);
                 bool isportale(int x, int y);
                 bool freeWay(int x1, int y1, int x2, int y2);
+                void clean();
                 bool protagonistInNextPortal();
                 bool protagonistInPrevPortal();
 };

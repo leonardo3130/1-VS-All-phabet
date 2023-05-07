@@ -325,8 +325,9 @@ int Game::run(p_session Sessione) {
         else if(esito == GO_TO_PREV)
             this->map.setMapChar(2, 4, ' ');
     //}
-    delwin(game_win);wrefresh(game_win);
-
+    delwin(game_win);refresh();
+    delete lista_proiettili;
+    this->map.clean();
     return esito;
 }
 
