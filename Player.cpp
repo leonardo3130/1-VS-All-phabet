@@ -76,18 +76,24 @@ int Player::choice_menu() {
     string choices[3] = {"Login", "Sign in", "Exit"};
     int highlights = 0;
 
-    WINDOW *menu = newwin(6, 12 , LINES/2 -1, COLS/2 -2);
+    WINDOW *menu = newwin(50, 110 , LINES/2 -25, COLS/2 -40);
     box(menu, 0, 0);
     refresh();
     wrefresh(menu);
 
     keypad(menu, true);
 
+    mvwprintw(menu, 4, 6, " ____                          _______  __  __                 __            __            __   ");
+    mvwprintw(menu, 5, 6, "|_   |      .--.--..-----.    |   _   ||  ||  | ______ .-----.|  |--..---.-.|  |--..-----.|  |_ ");
+    mvwprintw(menu, 6, 6, " _|  |_     |  |  ||__ --|    |       ||  ||  ||______||  _  ||     ||  _  ||  _  ||  -__||   _|");
+    mvwprintw(menu, 7, 6, "|______|     \\___/ |_____|    |___|___||__||__|        |   __||__|__||___._||_____||_____||____|");
+    mvwprintw(menu, 8, 6, "                                                       |__|                                     ");
+
     while (choice != 10){
-        for(int i=0; i< 3; i++){
-            if(i == highlights)
+        for(int i=23; i< 26; i++){
+            if(i-23 == highlights)
                 wattron(menu, A_REVERSE);
-            mvwprintw(menu, i+1, 1, choices[i].c_str());
+            mvwprintw(menu, i, 55, choices[i-23].c_str());
             wattroff(menu, A_REVERSE);
         }
         choice = wgetch(menu);
