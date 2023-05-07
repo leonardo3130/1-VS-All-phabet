@@ -302,3 +302,14 @@ bool Map::freeWay(int x1, int y1, int x2, int y2){
     }
     return empty;
 }
+
+//rimozione dei proiettili prima del salvataggio
+void Map::clean() {
+    for(int i = 0 ; i < this->height ; i++)
+    {
+        for(int j = 0 ; j < this->width - 1; j++)
+        {
+            if(this->matrix[i][j] == '*')   this->matrix[i][j] = ' ';
+        }
+    }
+}
