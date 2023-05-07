@@ -84,14 +84,6 @@ int main(){
 	Sessione->curr_level = curr_level;
 
 
-
-	/*
-
-				GAME
-
-	*/
-
-
 	//inizio game + messaggio iniziale (grafica)
 	int esito_partita = 0;
 	ptr_livelli gioco = new_level(gioco, Sessione->curr_level),
@@ -139,43 +131,3 @@ int main(){
 	endwin();
 	return 0;
 }
-	//vedo se il giocatore desidera effetuare il login (0), registrarsi (1) o uscire (2)
-	//int choice = 1; //game.choice_menu();
-	//clear();
-
-/*
-	char username[20], password[20], filename[50], mkdir[50];
-	strcpy(mkdir, "mkdir Archivio/");
-
-
-	//scrivo in filename la path per raggiungere le credenziali
-	while(!correct_input){
-		if(choice <= 1){
-			game.getCredentials(username, password);
-			strcpy(filename, "Archivio/");
-			strcat(filename, username);
-			strcat(filename, "/credentials.txt");
-		}
-		switch(choice){
-			case 0:
-                correct_input = login(username, password, filename);
-                break;
-            case 1:
-                //creo la cartella per salvare i file di gioco del giocatore (rinominata col suo nome)
-                system(strcat(mkdir, username));
-                correct_input = signIn(password, filename);
-                break;
-            case 2:
-                game.game_exit();
-                break;
-            default:
-                break;
-
-        }
-	}
-	*/
-
-	/*if(choice <= 1){
-		game.run();
-	}*/
-
