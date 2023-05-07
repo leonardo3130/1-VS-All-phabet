@@ -229,7 +229,7 @@ bool Player::login(char *user, char *psw, int& curr_level){
 void Player::saveStats(int curr_level){
     char filename[50];
     strcpy(filename, "Archivio/");
-    strcat(filename, "leo");
+    strcat(filename, this->nick);
     strcat(filename, "/credentials.txt");
 
     ofstream credenziali;
