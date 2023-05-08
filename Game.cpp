@@ -316,7 +316,7 @@ int Game::run(p_session Sessione) {
             if((this->map).protagonistInPrevPortal() && Sessione->curr_level != 1)   esito = GO_TO_PREV;
         }
 	}
-
+    this->map.clean();
     //if(esito != EXIT){
         if(esito == LOSE)
             drawGameover(game_win, game_over_win), getch();
@@ -327,7 +327,6 @@ int Game::run(p_session Sessione) {
     //}
     delwin(game_win);refresh();
     delete lista_proiettili;
-    this->map.clean();
     return esito;
 }
 
