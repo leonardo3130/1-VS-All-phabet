@@ -79,11 +79,11 @@ pbul Character::fire(pbul ls_proiettili, Map& map, int dir, bool from){
 }
 
 
-void Character::SetHp(int hp){
+void Character::SetHp(double hp){
     this->hp = hp;
 }
 
-int Character::getHp (){
+double Character::getHp (){
     return this->hp;
 };
 
