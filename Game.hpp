@@ -22,10 +22,11 @@ typedef struct Session{
 	int curr_level;		//livello corrente in cui si trova il player
 }* p_session;
 
+
 class Game {
 	private:
 		//WINDOW *create_new_win(int h, int w, int y, int x);
-		pbul handleInput(int c, Map& map, pmon lista_mostri,Player& giocatore, pbul bul_list, arnd around, int& e);
+		pbul handleInput(int c, Map& map, Player& giocatore, pbul bul_list, arnd around, int& e);
 		void draw(WINDOW* win, Map& map, Character& protagonist, int prev_x, int prev_y);
 		void drawMonster(WINDOW* win, Map& map, pmon monster_list);
 		void bulletUpdate(Map &map, pbul bul_list);
@@ -36,8 +37,11 @@ class Game {
 		void drawGameover(WINDOW *win, WINDOW *game_over_win);
 	protected:
 		Map map;
+		int n_mostri;
+		pmon lista_mostri;
+
 	public:
-		Game();
+		Game(int level=1);
 		int run(p_session Sessione);
 		void timed_print(char *text, int text_len, int micro_seconds_delay, int l, int c);
 		void init_message();

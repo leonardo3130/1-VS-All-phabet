@@ -25,19 +25,19 @@ Monster::Monster(int x, int y,int hp, int atk ,int def, int mode, char look, int
 
 //contatto con player: i mostri perdono hp in base all' atk del player e al prorpio def, e viceversa
 void Monster::moveright(Map mappa){
-    if(!mappa.ismoney((this -> x) + 1, this -> y))
+    if(!mappa.ismoney((this -> x) + 1, this -> y) && !mappa.ismonster((this -> x) + 2, this -> y))
         Character::moveright(mappa);
 }
 void Monster::moveleft(Map mappa){
-    if(!mappa.ismoney((this -> x) - 1, this -> y))
+    if(!mappa.ismoney((this -> x) - 1, this -> y) && !mappa.ismonster((this -> x) - 2, this -> y))
         Character::moveleft(mappa);
 }
 void Monster::moveup(Map mappa){
-    if(!mappa.ismoney(this -> x, (this -> y) - 1))
+    if(!mappa.ismoney(this -> x, (this -> y) - 1) && !mappa.ismonster(this -> x, (this -> y) - 2))
         Character::moveup(mappa);
 }
 void Monster::movedown(Map mappa){
-    if(!mappa.ismoney(this -> x, (this -> y) + 1))
+    if(!mappa.ismoney(this -> x, (this -> y) + 1) && !mappa.ismonster(this -> x, (this -> y) + 2))
         Character::movedown(mappa);
 }
 
