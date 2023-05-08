@@ -76,7 +76,7 @@ int Player::choice_menu() {
     string choices[3] = {"Login", "Sign in", "Exit"};
     int highlights = 0;
 
-    WINDOW *menu = newwin(50, 110 , LINES/2 -25, COLS/2 -40);
+    WINDOW *menu = newwin(50, 110 , LINES/2 -25, COLS/2 -55);
     box(menu, 0, 0);
     refresh();
     wrefresh(menu);
@@ -88,6 +88,20 @@ int Player::choice_menu() {
     mvwprintw(menu, 6, 6, " _|  |_     |  |  ||__ --|    |       ||  ||  ||______||  _  ||     ||  _  ||  _  ||  -__||   _|");
     mvwprintw(menu, 7, 6, "|______|     \\___/ |_____|    |___|___||__||__|        |   __||__|__||___._||_____||_____||____|");
     mvwprintw(menu, 8, 6, "                                                       |__|                                     ");
+
+
+
+    mvwprintw(menu, 16, 43, "  _              _");
+    mvwprintw(menu, 17, 43, " | |   ___  __ _(_)_ _");
+    mvwprintw(menu, 18, 43, " | |__/ _ \\/ _` | | '  \\");
+    mvwprintw(menu, 19, 43, " |____\\___/\\__, |_|_||_|");
+    mvwprintw(menu, 20, 43, "           |___/");
+
+
+
+
+
+
 
     while (choice != 10){
         for(int i=23; i< 26; i++){
