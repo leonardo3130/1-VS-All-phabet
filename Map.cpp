@@ -1,6 +1,7 @@
 #include <ctime>
 #include <cmath>
 #include <cstring>
+#include <stdio.h>
 #include "Map.hpp"
 
 using namespace std;
@@ -174,7 +175,7 @@ bool Map::protagonistInPrevPortal(){
 }
 
 void Map::readMap(int level, char* nickPlayer){
-    char filePath[50] , *str;
+    char filePath[50] , str[10];
     strcpy(filePath, "Archivio/");
     sprintf(str, "%d", level);
 
@@ -201,7 +202,7 @@ void Map::readMap(int level, char* nickPlayer){
 }
 
 void Map::writeMap(int level, char *nickPlayer){
-    char filePath[50] , *str;
+    char filePath[50] , str[10];
     strcpy(filePath, "Archivio/");
     sprintf(str, "%d", level);
 
