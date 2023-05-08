@@ -6,12 +6,14 @@
 
 using namespace std;
 
-Map::Map(int h, int w) {
+Map::Map(int h, int w, int l) {
     //controlli errori di input
     if(abs(h) > MAX_H) this->height = MAX_H;
     else this->height = abs(h);
     if(abs(w) > MAX_W) this->width = MAX_W;
     else this->width = abs(w);
+
+    this->coins = 5 + (l/2);  
 
     //caratteri per i bordi della mappa
     for(int i = 0 ; i < this->height ; i++)
@@ -135,6 +137,7 @@ Map::Map(int h, int w) {
     //aggiunta monete alle mappa
     int tmp_coins = this->coins;
     int coin_x, coin_y;
+
     while(tmp_coins > 0)
     {
         coin_y = rand() % (this->height - 2) + 1;
@@ -238,17 +241,15 @@ bool Map::is_inside(int x, int y){
 }
 
 bool Map::isempty(int x, int y){
-  if(this->matrix[y][x] ==' ' || this->matrix[y][x] =='@' || this->matrix[y][x]  =='*' )
-    return true;
-  else
-    return false;
+  return (this->matrix[y][x] ==' ' || this->matrix[y][x] =='@' || this->matrix[y][x]  =='*' );
 }
 
 bool Map::ismoney(int x, int y){
-    if(this->matrix[y][x] =='@')
-        return true;
-    else
-        return false;
+    return (this->matrix[y][x] =='@');
+}
+
+bool Map::ismonster(int x, int y){
+    return (int(this->matrix[y][x]) >= int('A') && int(this->matrix[y][x]) <= int('Z'));
 }
 
 bool Map::isportale(int x, int y){

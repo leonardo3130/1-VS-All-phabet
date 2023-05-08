@@ -23,14 +23,13 @@ class Monster : public Character{
 
 
 //codice per lista mostri
-struct mlist{
+typedef struct mlist{
     Monster mon;
     int prev_x;
     int prev_y;
     mlist *next;
-};
+}* pmon;
 
-typedef struct mlist* pmon;
 
 pmon new_monster(pmon lista, Monster m);
 

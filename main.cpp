@@ -20,13 +20,14 @@ typedef struct livello{
 	livello *prev;	// livello precedente
 }* ptr_livelli;
 
+
 //crea un nuovo livello e ritorna il puntatore a quest'ultimo
 ptr_livelli new_level(ptr_livelli l, int n){
 	if(l == NULL) {
 		l = new livello;
 		l->next = NULL;
 		l->prev = NULL;
-		l->partita = Game();
+		l->partita = Game(n);
 		l->n_liv = n;
 		return l;
 	}
@@ -34,7 +35,7 @@ ptr_livelli new_level(ptr_livelli l, int n){
 		ptr_livelli new_l = new livello;
 		new_l->next = NULL;
 		new_l->prev = l;
-		new_l->partita = Game();
+		new_l->partita = Game(n);
 		new_l->n_liv = n;
 		return new_l;
 	}
