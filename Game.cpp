@@ -447,7 +447,7 @@ void Game::drawStats(WINDOW *win, int x, int y, p_session Sessione){
     box(win, 0, 0);
     mvwprintw(win, 0, 7, "Stats di %s", Sessione->p.getNick());
     mvwprintw(win, 2, 3, " Monete : %d     ", Sessione->p.getMoney());
-    mvwprintw(win, 4, 3, "   Vita : %d     ", Sessione->p.getHp());
+    mvwprintw(win, 4, 3, "   Vita : %f     ", Sessione->p.getHp());
     mvwprintw(win, 6, 3, "Attacco : %d     ", Sessione->p.getAtk());
     mvwprintw(win, 8, 3, " Difesa : %d     ", Sessione->p.getDef());
     if(this->map.getCoins() > 1)
