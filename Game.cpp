@@ -5,37 +5,36 @@
 #include "Map.hpp"
 #include <unistd.h>
 
-Game::Game() {
-    this->map = Map(40, 80);
-    //aggiungere numero mostri + la lista dei mostri
+Game::Game(int level) {
+    this->map = Map(40, 80, level);
+    
+    if(level <= 12)
+        this->n_mostri = 2 + level*0.5;
+    else 
+        this->n_mostri = 20;
+    
+    (this->lista_mostri) = NULL;
+
+    //generazione mostri //////////////////
+    int m_x, m_y, m_atk, m_def, m_mode, m_hp = 150 + (10 * level);
+    char m_look;
+    for(int i=0; i<n_mostri; i++){
+        m_x = rand()%(map.getWidth()-4)+2;
+        m_y = rand()%(map.getHeight()-2)+1;
+
+        if(map.isempty(m_x, m_y) && !map.ismoney(m_x, m_y) && !map.ismonster(m_x, m_y)) {
+            Monster mostro(m_x, m_y, m_hp, 10, 1, rand()%4, 'A', 5, 4, i);
+            this->lista_mostri = new_monster(this->lista_mostri, mostro);
+        }
+        else i--;
+    }
 };
 
 int Game::run(p_session Sessione) {
     srand(time(NULL));
     int esito = IN_GAME;
-    int numero_mostri = 4;
 
     pbul lista_proiettili = NULL;
-    pmon lista_mostri = NULL;
-
-    //generazione mostri //////////////////
-    int m_x, m_y, m_atk, m_def, m_mode;
-    int max_m_hp = 200;
-    char m_look;
-    for(int i=0; i<numero_mostri; i++){
-        m_x = rand()%(map.getWidth()-4)+2;
-        m_y = rand()%(map.getHeight()-2)+1;
-        m_atk = 10;
-        m_def = 1;
-        m_mode = rand()%4;
-        m_look = 'A';
-        if(map.isempty(m_x, m_y)) {
-            Monster mostro(m_x, m_y, max_m_hp, m_atk, m_def, m_mode, m_look, 5, 4, i);
-            lista_mostri = new_monster(lista_mostri, mostro);
-        }
-        else i--;
-    }
-
     keypad(stdscr, TRUE);
 	nodelay(stdscr, TRUE);
 
@@ -82,7 +81,7 @@ int Game::run(p_session Sessione) {
         prev_x = Sessione->p.getX();
 		prev_y = Sessione->p.getY();
 
-        tmp_m = lista_mostri;
+        tmp_m = this->lista_mostri;
         while(tmp_m != NULL){
             tmp_m->prev_x = tmp_m->mon.x;
             tmp_m->prev_y = tmp_m->mon.y;
@@ -104,27 +103,28 @@ int Game::run(p_session Sessione) {
         // Input ///////////////////////////////////////////////////////////
 		int ch = getch();
 
-        lista_proiettili = handleInput(ch, map, lista_mostri, Sessione->p, lista_proiettili, around, esito);
+        lista_proiettili = handleInput(ch, map, Sessione->p, lista_proiettili, around, esito);
 
         int monster_mode = 0;
 
         // Mostri ///////////////////////////////////////////////////////////
         if(c == mon_speed ) {
             pmon before = NULL;
-            tmp_m = lista_mostri;
+            tmp_m = this->lista_mostri;
             while(tmp_m != NULL){
                 tmp_m->mon.move(map, Sessione->p.x, Sessione->p.y); //movimento
 
                 if(tmp_m->mon.hp <= 0){    //controllo hp
+                    this -> n_mostri--;
                     map.setMapChar(tmp_m->mon.y, tmp_m->mon.x, ' ');
                     mvwprintw(game_win, tmp_m->prev_y, tmp_m->prev_x, " ");
 	                wrefresh(game_win);
 
-                    if(tmp_m == lista_mostri)
+                    if(tmp_m == this->lista_mostri)
                     {
-                        pmon to_del = lista_mostri;
-                        lista_mostri = lista_mostri->next;
-                        tmp_m = lista_mostri;
+                        pmon to_del = this->lista_mostri;
+                        this->lista_mostri = this->lista_mostri->next;
+                        tmp_m = this->lista_mostri;
                         delete to_del;
                     }
                     else{
@@ -145,7 +145,7 @@ int Game::run(p_session Sessione) {
         // sparo mostri ///////////////////////////////////////////////////////
         if(e == m_shot_fr){
             int b_mode;
-            tmp_m = lista_mostri;
+            tmp_m = this->lista_mostri;
             while(tmp_m != NULL){
                 if(Sessione->p.x == tmp_m->mon.x){
                     if(Sessione->p.y < tmp_m->mon.y){
@@ -171,12 +171,12 @@ int Game::run(p_session Sessione) {
 
         // update monster look ///////////////////////////////////////
         if(f == 20){
-            tmp_m = lista_mostri;
+            tmp_m = this->lista_mostri;
             while(tmp_m != NULL){
-                tmp_m->mon.look = 90- ((25 * tmp_m->mon.hp) / max_m_hp);
+                tmp_m->mon.look = 90- ((25 * tmp_m->mon.hp) / 200);
                 tmp_m = tmp_m->next;
             }
-            monsterUpdate(map, lista_mostri);
+            monsterUpdate(map, this->lista_mostri);
         }
 
         // Proiettili ////////////////////////////////////////////////////
@@ -195,18 +195,18 @@ int Game::run(p_session Sessione) {
                     }
 
                     else if(collision == 3){
-                        pmon x = lista_mostri;
+                        pmon x = this->lista_mostri;
                         if(tmp_b->bul.dir == 0){
-                            x = search_monster_by_xy(lista_mostri, (tmp_b->bul.x) + 1, (tmp_b->bul.y));
+                            x = search_monster_by_xy(this->lista_mostri, (tmp_b->bul.x) + 1, (tmp_b->bul.y));
                         }
                         else if(tmp_b->bul.dir == 1){
-                            x = search_monster_by_xy(lista_mostri, (tmp_b->bul.x), (tmp_b->bul.y) + 1);
+                            x = search_monster_by_xy(this->lista_mostri, (tmp_b->bul.x), (tmp_b->bul.y) + 1);
                         }
                         else if(tmp_b->bul.dir == 2){
-                            x = search_monster_by_xy(lista_mostri, (tmp_b->bul.x) - 1, (tmp_b->bul.y));
+                            x = search_monster_by_xy(this->lista_mostri, (tmp_b->bul.x) - 1, (tmp_b->bul.y));
                         }
                         else if(tmp_b->bul.dir == 3){
-                            x = search_monster_by_xy(lista_mostri, (tmp_b->bul.x), (tmp_b->bul.y) - 1);
+                            x = search_monster_by_xy(this->lista_mostri, (tmp_b->bul.x), (tmp_b->bul.y) - 1);
                         }
                         if(x!=NULL){
 
@@ -249,30 +249,30 @@ int Game::run(p_session Sessione) {
 
             // fight /////////////////////////////////////////////////////////////////////////////
             //ho provato a mettere tutto in un metodo di player ma non si riesce per via di errori di inclusion
-            pmon x = lista_mostri;
+            pmon x = this->lista_mostri;
             if(around.right == 1){
-                x = search_monster_by_xy(lista_mostri, (Sessione->p.x) + 1, (Sessione->p.y));
+                x = search_monster_by_xy(this->lista_mostri, (Sessione->p.x) + 1, (Sessione->p.y));
                 if(x!=NULL){
                     x->mon.hp = Sessione->p.fight(x->mon.hp, x->mon.atk, x->mon.def);
                 }
             }
-            x = lista_mostri;
+            x = this->lista_mostri;
             if(around.under == 1){
-                x = search_monster_by_xy(lista_mostri, (Sessione->p.x), (Sessione->p.y) + 1);
+                x = search_monster_by_xy(this->lista_mostri, (Sessione->p.x), (Sessione->p.y) + 1);
                 if(x!=NULL){
                     x->mon.hp = Sessione->p.fight(x->mon.hp, x->mon.atk, x->mon.def);
                 }
             }
-            x = lista_mostri;
+            x = this->lista_mostri;
             if(around.left == 1){
-                x = search_monster_by_xy(lista_mostri, (Sessione->p.x) - 1, (Sessione->p.y));
+                x = search_monster_by_xy(this->lista_mostri, (Sessione->p.x) - 1, (Sessione->p.y));
                 if(x!=NULL){
                     x->mon.hp = Sessione->p.fight(x->mon.hp, x->mon.atk, x->mon.def);
                 }
             }
-            x = lista_mostri;
+            x = this->lista_mostri;
             if(around.above == 1){
-                x = search_monster_by_xy(lista_mostri, (Sessione->p.x), (Sessione->p.y) - 1);
+                x = search_monster_by_xy(this->lista_mostri, (Sessione->p.x), (Sessione->p.y) - 1);
                 if(x!=NULL){
                     x->mon.hp = Sessione->p.fight(x->mon.hp, x->mon.atk, x->mon.def);
                 }
@@ -282,13 +282,13 @@ int Game::run(p_session Sessione) {
         //update
         if(prev_y != Sessione->p.getY() || prev_x != Sessione->p.getX())
 			update(map, Sessione->p, prev_y, prev_x);
-        monsterUpdate(map, lista_mostri); bulletUpdate(map, lista_proiettili);
+        monsterUpdate(map, this->lista_mostri); bulletUpdate(map, lista_proiettili);
 
         // Draw  //////////////////////////////////////////////////////////
         draw(game_win, map, Sessione->p, prev_x, prev_y);wrefresh(game_win);
 
         if(c == mon_speed) {
-            drawMonster(game_win, map, lista_mostri);
+            drawMonster(game_win, map, this->lista_mostri);
             c = 0;
         }
         if(b == bul_speed){
@@ -307,7 +307,7 @@ int Game::run(p_session Sessione) {
             if(Sessione->p.hp <= 0)     esito = LOSE;
 
             //se il protagonista raccoglie tutte le monete
-            if(map.getCoins() == 0)    esito = WIN;
+            else if(this->map.getCoins() == 0)    esito = WIN;
 
             //il protagonista va al livello successivo
             if(this->map.getCoins() == 0 && (this->map).protagonistInNextPortal())    esito = GO_TO_NEXT;
@@ -330,7 +330,7 @@ int Game::run(p_session Sessione) {
     return esito;
 }
 
-pbul Game::handleInput(int c, Map& map, pmon lista_mostri, Player& giocatore, pbul bullet_list, arnd around, int& e) {
+pbul Game::handleInput(int c, Map& map, Player& giocatore, pbul bullet_list, arnd around, int& e) {
 	if(c == ERR) {;/*no tasti premuti dall'utente*/}
 	else {
 		switch(c)
@@ -450,6 +450,14 @@ void Game::drawStats(WINDOW *win, int x, int y, p_session Sessione){
     mvwprintw(win, 4, 3, "   Vita : %f     ", Sessione->p.getHp());
     mvwprintw(win, 6, 3, "Attacco : %d     ", Sessione->p.getAtk());
     mvwprintw(win, 8, 3, " Difesa : %d     ", Sessione->p.getDef());
+
+    if(this->n_mostri > 1)
+        mvwprintw(win, 17, 2, "Mancano ancora %d mostri   ", this->n_mostri);
+    else if(this->n_mostri == 1)
+        mvwprintw(win, 17, 2, "Dai, manca l'ultima mostro!", this->n_mostri);
+    else if(this->n_mostri == 0)
+        mvwprintw(win, 17, 2, " Mostri eliminati!       ");
+
     if(this->map.getCoins() > 1)
         mvwprintw(win, 18, 2, "Mancano ancora %d monete   ", this->map.getCoins());
     else if(this->map.getCoins() == 1)

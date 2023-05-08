@@ -10,9 +10,9 @@ class Map {
                 int height;
                 int width;
                 char matrix[MAX_H][MAX_W];
-                int coins = 0;
+                int coins = 5;
         public:
-                Map(int h = 40, int w = 80);
+                Map(int h = 40, int w = 80, int l = 1);
                 char getMapChar(int y, int x);
                 void setMapChar(int y, int x, char c);
                 int getWidth();
@@ -24,6 +24,7 @@ class Map {
                 bool is_inside(int x, int y);   //dice se la cella (x,y) e' nella mappa
                 bool isempty(int x, int y);     //dice se la cella (x,y) e' vuota
                 bool ismoney(int x, int y);
+                bool ismonster(int x, int y);
                 bool isportale(int x, int y);
                 bool freeWay(int x1, int y1, int x2, int y2);
                 void clean();
