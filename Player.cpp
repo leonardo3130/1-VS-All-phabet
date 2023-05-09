@@ -104,7 +104,7 @@ int Player::choice_menu() {
 
         mvwprintw(menu, 22, 43, "  ___(_) __ _ _ __   (_)_ __      ");
         mvwprintw(menu, 23, 43, " / __| |/ _` | '_ \\  | | '_ \\   ");
-        mvwprintw(menu, 24, 43, " \\__ \\ | \\(_| | | | | | | | | |");
+        mvwprintw(menu, 24, 43, " \\__ \\ | (_| | | | | | | | | |");
         mvwprintw(menu, 25, 43, " |___/_|\\__, |_| |_| |_|_| |_|   ");
         mvwprintw(menu, 26, 43, "        |___/");
 
