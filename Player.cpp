@@ -93,29 +93,29 @@ int Player::choice_menu() {
 
         if(highlights == 0) wattron(menu, A_REVERSE);
 
-        mvwprintw(menu, 16, 43, " _              _        ");
-        mvwprintw(menu, 17, 43, "| |   ___  __ _(_)_ _    ");
-        mvwprintw(menu, 18, 43, "| |__/ _ \\/ _` | | '  \\  ");
-        mvwprintw(menu, 19, 43, "|____\\___/\\__, |_|_||_|  ");
-        mvwprintw(menu, 20, 43, "          |___/          ");
+        mvwprintw(menu, 16, 43, " _              _      ");
+        mvwprintw(menu, 17, 43, "| |   ___  __ _(_)_ _  ");
+        mvwprintw(menu, 18, 43, "| |__/ _ \\/ _` | | '  \\");
+        mvwprintw(menu, 19, 43, "|____\\___/\\__, |_|_||_|");
+        mvwprintw(menu, 20, 43, "          |___/        ");
 
         if(highlights == 0) wattroff(menu, A_REVERSE);
         if(highlights == 1) wattron(menu, A_REVERSE);
 
-        mvwprintw(menu, 22, 43, " ___(_) __ _ _ __   (_)_ __    ");
-        mvwprintw(menu, 23, 43, "/ __| |/ _` | '_ \\  | | '_ \\   ");
-        mvwprintw(menu, 24, 43, "\\__ \\ | (_| | | | | | | | | |  ");
-        mvwprintw(menu, 25, 43, "|___/_|\\__, |_| |_| |_|_| |_|  ");
-        mvwprintw(menu, 26, 43, "       |___/                   ");
+        mvwprintw(menu, 22, 43, " ___(_) __ _ _ __   (_)_ __  ");
+        mvwprintw(menu, 23, 43, "/ __| |/ _` | '_ \\  | | '_ \\ ");
+        mvwprintw(menu, 24, 43, "\\__ \\ | (_| | | | | | | | | |");
+        mvwprintw(menu, 25, 43, "|___/_|\\__, |_| |_| |_|_| |_|");
+        mvwprintw(menu, 26, 43, "       |___/                 ");
 
         if(highlights == 1) wattroff(menu, A_REVERSE);
         if(highlights ==2)  wattron(menu, A_REVERSE);
 
-        mvwprintw(menu, 28, 43, " _____      _ _    ");
-        mvwprintw(menu, 29, 43, "| ____|_  _(_) |_  ");
-        mvwprintw(menu, 30, 43, "|  _| \\ \\/ / | __| ");
-        mvwprintw(menu, 31, 43, "| |___ >  <| | |_  ");
-        mvwprintw(menu, 31, 43, "|_____/_/\\_\\_|\\__| ");
+        mvwprintw(menu, 28, 43, " _____      _ _   ");
+        mvwprintw(menu, 29, 43, "| ____|_  _(_) |_ ");
+        mvwprintw(menu, 30, 43, "|  _| \\ \\/ / | __|");
+        mvwprintw(menu, 31, 43, "| |___ >  <| | |_ ");
+        mvwprintw(menu, 31, 43, "|_____/_/\\_\\_|\\__|");
 
         if(highlights ==2)  wattroff(menu, A_REVERSE);
 
