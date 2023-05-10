@@ -33,6 +33,7 @@ ptr_livelli new_level(ptr_livelli l, int n){
 	}
 	else {
 		ptr_livelli new_l = new livello;
+		l->next = new_l;
 		new_l->next = NULL;
 		new_l->prev = l;
 		new_l->partita = Game(n);
@@ -87,8 +88,9 @@ int main(){
 
 	//inizio game + messaggio iniziale (grafica)
 	int esito_partita = 0;
-	ptr_livelli gioco = new_level(gioco, Sessione->curr_level),
-				head = gioco;
+	ptr_livelli gioco = NULL, head;
+	gioco =new_level(gioco, Sessione->curr_level),
+	head = gioco;
 
 	do
 	{
