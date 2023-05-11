@@ -7,12 +7,12 @@
 
 Game::Game(int level) {
     this->map = Map(40, 80, level);
-    
+
     if(level <= 12)
         this->n_mostri = 2 + level*0.5;
-    else 
+    else
         this->n_mostri = 20;
-    
+
     (this->lista_mostri) = NULL;
 
     //generazione mostri //////////////////
@@ -46,7 +46,7 @@ int Game::run(p_session Sessione) {
 
 	game_win = newwin(42, 82, starty, startx);
     player_stats_win = newwin(20, 30, starty, startx+82);
-    game_over_win = newwin(3, 11, LINES/2, COLS/2 - 30);
+    game_over_win = newwin(3, 11, LINES/2 - 2, COLS/2 - 27);
 
 	refresh();
 	curs_set(0);
@@ -304,7 +304,7 @@ int Game::run(p_session Sessione) {
 
         if(esito != EXIT) {
             //se il protagonista muore
-            if(Sessione->p.hp <= 0)     esito = LOSE;
+            if(Sessione->p.hp <= 0.0)     esito = LOSE, Sessione->p.SetHp(0.0), drawStats(player_stats_win, startx, starty, Sessione);
 
             //se il protagonista raccoglie tutte le monete
             else if(this->map.getCoins() == 0)    esito = WIN;
@@ -317,14 +317,15 @@ int Game::run(p_session Sessione) {
         }
 	}
     this->map.clean();
-    //if(esito != EXIT){
-        if(esito == LOSE)
-            drawGameover(game_win, game_over_win), getch();
-        else if(esito == GO_TO_NEXT)
-            this->map.setMapChar(this->map.getHeight() - 3, this->map.getWidth() - 5, ' ');
-        else if(esito == GO_TO_PREV)
-            this->map.setMapChar(2, 4, ' ');
-    //}
+
+    if(esito == LOSE){
+        this->map.setMapChar(Sessione->p.getY(), Sessione->p.getX(), ' ');
+        drawGameover(game_win, game_over_win), getch();}
+    else if(esito == GO_TO_NEXT)
+        this->map.setMapChar(this->map.getHeight() - 3, this->map.getWidth() - 5, ' ');
+    else if(esito == GO_TO_PREV)
+        this->map.setMapChar(2, 4, ' ');
+
     delwin(game_win);refresh();
     delete lista_proiettili;
     return esito;
@@ -454,28 +455,26 @@ void Game::drawStats(WINDOW *win, int x, int y, p_session Sessione){
     if(this->n_mostri > 1)
         mvwprintw(win, 17, 2, "Mancano ancora %d mostri   ", this->n_mostri);
     else if(this->n_mostri == 1)
-        mvwprintw(win, 17, 2, "Dai, manca l'ultima mostro!", this->n_mostri);
+        mvwprintw(win, 17, 2, "Manca l'ultima mostro!     ", this->n_mostri);
     else if(this->n_mostri == 0)
         mvwprintw(win, 17, 2, " Mostri eliminati!       ");
 
     if(this->map.getCoins() > 1)
         mvwprintw(win, 18, 2, "Mancano ancora %d monete   ", this->map.getCoins());
     else if(this->map.getCoins() == 1)
-        mvwprintw(win, 18, 2, "Dai, manca l'ultima moneta!", this->map.getCoins());
+        mvwprintw(win, 18, 2, "Manca l'ultima moneta!     ", this->map.getCoins());
     else if(this->map.getCoins() == 0)
-        mvwprintw(win, 18, 2, " Livello %d superato!       ", Sessione->curr_level);
+        mvwprintw(win, 18, 2, "Livello %d superato!       ", Sessione->curr_level);
 
     wrefresh(win);
 }
 
 void Game::drawGameover(WINDOW* game_win, WINDOW* game_over_win){
-    //werase(game_win);
-    //wrefresh(game_win);
     box(game_over_win, 0, 0);
     mvwprintw(game_over_win, 1, 1, "Game Over");
     wrefresh(game_over_win);
     getchar();
-    game_exit();
+    //game_exit();
 }
 
 void Game::timed_print(char *text, int text_len, int micro_seconds_delay, int l, int c){
@@ -516,6 +515,26 @@ void Game::init_message(){
 
 Map Game::getMap(){
     return this->map;
+}
+
+void Game::setMap(Map mappa){
+    this->map = mappa;
+}
+
+pmon Game::getListaMostri(){
+    return this->lista_mostri;
+}
+
+void Game::setListaMostri(pmon l){
+    this->lista_mostri = l;
+}
+
+int Game::getNMostri(){
+    return this->n_mostri;
+}
+
+void Game::setNMostri(int n){
+    this->n_mostri = n;
 }
 
 void Game::game_exit(){

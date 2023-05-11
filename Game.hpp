@@ -47,6 +47,11 @@ class Game {
 		void init_message();
 		void game_exit();
 		Map getMap();
+		void setMap(Map mappa);
+		pmon getListaMostri();
+		void setListaMostri(pmon l);
+		int getNMostri();
+		void setNMostri(int n);
 		//void muovi_mostro(Map& mappa, Monster& m, Player& p);
 		//bool isOver();
 };

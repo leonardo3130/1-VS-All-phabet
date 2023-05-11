@@ -179,25 +179,35 @@ bool Player::signIn(char *user, char *psw){
 	bool isCorrect = false;
     char filename[50], mkdir[50];
 
-    strcpy(mkdir, "mkdir Archivio/");
-    system(strcat(mkdir, user));
-
     strcpy(filename, "Archivio/");
     strcat(filename, user);
     strcat(filename, "/credentials.txt");
+    ifstream input_file(filename);
 
-	//scrivo nel file delle credenziali le informazioni degli utenti
-	ofstream credenziali;
-	credenziali.open(filename);
-	credenziali << psw << endl;
+    if(!input_file.is_open()){
+        strcpy(mkdir, "mkdir Archivio/");
+        system(strcat(mkdir, user));
 
-	Character c = Character('1');
-	credenziali << c.getHp() << endl;
-	credenziali << c.getAtk() << endl;
-	credenziali << c.getDef() << endl;
-	credenziali << 100 << endl;		//default money
-	credenziali.close();
-	isCorrect = true;
+        //scrivo nel file delle credenziali le informazioni degli utenti
+        ofstream credenziali;
+        credenziali.open(filename);
+        credenziali << psw << endl;
+
+        Character c = Character('1');
+        credenziali << c.getHp() << endl;
+        credenziali << c.getAtk() << endl;
+        credenziali << c.getDef() << endl;
+        credenziali << 100 << endl;		//default money
+        credenziali.close();
+        isCorrect = true;
+    }else{
+        input_file.close();
+        attron(COLOR_PAIR(COLOR_RED));
+        mvprintw(LINES/2 + 3, COLS/2 - 14, "User already exists!");
+        attroff(COLOR_PAIR(COLOR_RED));
+    }
+
+
 
 	return isCorrect;
 }
@@ -231,7 +241,7 @@ bool Player::login(char *user, char *psw, int& curr_level){
 		}else {
 			//Password errata
             attron(COLOR_PAIR(COLOR_RED));
-            mvprintw(LINES/2 + 3, COLS/2 - 14, "Wrong password!");
+            mvprintw(LINES/2 + 3, COLS/2 - 14, "Wrong password!     ");
             attroff(COLOR_PAIR(COLOR_RED));
 			exists = false;
 		}
@@ -239,7 +249,7 @@ bool Player::login(char *user, char *psw, int& curr_level){
     } else {
         // Il file non esiste
         attron(COLOR_PAIR(COLOR_RED));
-        mvprintw(LINES/2 + 3, COLS/2 - 14, "Wrong username!");
+        mvprintw(LINES/2 + 3, COLS/2 - 14, "Wrong username!     ");
         attroff(COLOR_PAIR(COLOR_RED));
 		exists = false;
     }
