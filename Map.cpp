@@ -13,7 +13,7 @@ Map::Map(int h, int w, int l) {
     if(abs(w) > MAX_W) this->width = MAX_W;
     else this->width = abs(w);
 
-    this->coins = 0;//5 + (l/2);  
+    this->coins = 5 + (l/2);
 
     //caratteri per i bordi della mappa
     for(int i = 0 ; i < this->height ; i++)

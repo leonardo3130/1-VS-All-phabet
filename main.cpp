@@ -47,8 +47,7 @@ int main(){
 
 	// Inizializzazione della libreria ncurses
 	initscr();cbreak();noecho();
-
-
+	
 	Player protagonist;
 	bool correct_input = false;
 	int choice = protagonist.choice_menu();//0;		//significa che il player esiste già, quindi deve solo prendere le statistiche
@@ -94,7 +93,21 @@ int main(){
 
 	do
 	{
+		p_session sessione_backup = new Session;
+		sessione_backup->p = Sessione->p;
+		sessione_backup->curr_level = Sessione->curr_level;
+
+		ptr_livelli gioco_backup = new livello;
+		gioco_backup->n_liv = gioco->n_liv;
+		gioco_backup->partita = gioco->partita;
+		gioco_backup->next = gioco->next;
+		gioco_backup->prev = gioco->prev;
+
 		Sessione->p.setX_Y(3, 4);
+		Map mappa_backup = gioco->partita.getMap();
+		int n_mostri_backup = gioco->partita.getNMostri();
+		pmon lista_mostri_backup = gioco->partita.getListaMostri();
+
 		esito_partita = (gioco->partita).run(Sessione);
 
 		if(esito_partita == GO_TO_PREV){
@@ -108,6 +121,16 @@ int main(){
 				gioco = new_level(gioco, (Sessione->curr_level) + 1);
 			}
 			(Sessione->curr_level)++;
+		}else if(esito_partita == LOSE){
+			//in caso carico i backup
+			Sessione->p          = sessione_backup->p;
+			Sessione->curr_level = sessione_backup->curr_level;
+			Sessione->p.SetHp(20.0);
+
+			gioco->n_liv   =  gioco_backup->n_liv;
+			gioco->partita =  gioco_backup->partita;
+			gioco->next    =  gioco_backup->next;
+			gioco->prev    =  gioco_backup->prev;
 		}
 	}
 	while (esito_partita != EXIT);
