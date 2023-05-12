@@ -16,11 +16,11 @@ class Player : public Character{
     protected:
         char nick[20];  //nome del player
         char psw[20];   //psw del player
-
-    public:
         int money;     //numero di monete del giocatore
+        int level;
+    public:
         Player();
-        Player(char* nick, char* psw, char l);
+        Player(char* nick, char* psw, char look, int curr_l=1);
         int fight(int m_hp, int m_atk, int m_def);                //interazione tra mostro e player
         char* getNick();
         int getMoney();

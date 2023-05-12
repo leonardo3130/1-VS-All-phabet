@@ -6,14 +6,14 @@
 
 using namespace std;
 
-Map::Map(int h, int w, int l) {
+Map::Map(int h, int w, int level) {
     //controlli errori di input
     if(abs(h) > MAX_H) this->height = MAX_H;
     else this->height = abs(h);
     if(abs(w) > MAX_W) this->width = MAX_W;
     else this->width = abs(w);
 
-    this->coins = 5 + (l/2);
+    this->coins = 5 + (level/2);
 
     //caratteri per i bordi della mappa
     for(int i = 0 ; i < this->height ; i++)
@@ -156,6 +156,14 @@ Map::Map(int h, int w, int l) {
     this->matrix[this -> height - 3][this -> width - 4] = ']';
 }
 
+
+Map::Map(char *filename){
+    this->coins = 0;
+    //setto la matrice da file
+    this->readMap(filename);
+}
+
+
 char Map::getMapChar(int y, int x){
     return this->matrix[y][x];
 }
@@ -177,26 +185,26 @@ bool Map::protagonistInPrevPortal(){
     return this->matrix[2][4] == '1';
 }
 
-void Map::readMap(int level, char* nickPlayer){
-    char filePath[50] , str[10];
-    strcpy(filePath, "Archivio/");
-    sprintf(str, "%d", level);
 
-    //genera la path del file da aprire:
-    //Esempio Path nel caso giochi il player:"Andrea" e voglia leggere il livello n:
-    // filePath = "Archivio/Andrea/Leveln.txt"
-    strcat(filePath, nickPlayer);
-    strcat(filePath, "/Level");
-    strcat(filePath, str);
-    strcat(filePath, ".txt");
-
+void Map::readMap(char *filePath){
     // Apri il file in modalità lettura
     ifstream infile(filePath);
+    this->height = 40;
+    this->width = 80;
 
     // legge la matrice
     for (int i = 0; i < this->height; i++) {
         for (int j = 0; j < this->width; j++) {
+
+
             infile >> this->matrix[i][j];
+
+            if(this->matrix[i][j] == '#')
+                this->matrix[i][j] = ' ';
+
+            if(this->ismoney(j, i))    (this->coins)++;
+            if(this->ismonster(j, i))   this->matrix[i][j] = ' ';
+
         }
     }
 
@@ -223,6 +231,9 @@ void Map::writeMap(int level, char *nickPlayer){
     // Scrivi la matrice in filePath
     for (int i = 0; i < this->height; i++) {
         for (int j = 0; j < this->width; j++) {
+            if(this->matrix[i][j] == ' ' || this->matrix[i][j] == '1' || this->ismonster(j, i))
+                this->matrix[i][j] = '#';
+
             outfile << this->matrix[i][j];
         }
         outfile << '\n';

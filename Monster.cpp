@@ -55,7 +55,6 @@ void Monster::move(Map& mappa, int x_p, int y_p){
         }
     }
     else if(abs(this->x - x_p) > abs (this->y - y_p) && this->y != y_p){
-
         if(this->y < y_p){
             this->movedown(mappa);
         }
@@ -63,6 +62,16 @@ void Monster::move(Map& mappa, int x_p, int y_p){
             this->moveup(mappa);
         }
     }
+    else if(this->x == x_p && mappa.freeWay(this->x, x_p, this->y, y_p) == 0){
+        //condizioni
+        this->moveup(mappa);
+    }
+    else if(this->y == y_p && mappa.freeWay(this->x, x_p, this->y, y_p) == 0){
+        //condizioni
+        this->moveleft(mappa);
+    }
+
+
 
 
 
