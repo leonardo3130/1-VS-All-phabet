@@ -188,6 +188,9 @@ bool Player::signIn(char *user, char *psw){
         strcpy(mkdir, "mkdir Archivio/");
         system(strcat(mkdir, user));
 
+        strcpy(this->nick, user),
+        strcpy(this->psw, psw);
+
         //scrivo nel file delle credenziali le informazioni degli utenti
         ofstream credenziali;
         credenziali.open(filename);
