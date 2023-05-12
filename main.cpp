@@ -22,13 +22,13 @@ typedef struct livello{
 
 
 //crea un nuovo livello e ritorna il puntatore a quest'ultimo
-ptr_livelli new_level(ptr_livelli l, int n){
+ptr_livelli new_level(ptr_livelli l, p_session Sessione){
 	if(l == NULL) {
 		l = new livello;
 		l->next = NULL;
 		l->prev = NULL;
-		l->partita = Game(n);
-		l->n_liv = n;
+		l->partita = Game(Sessione);
+		l->n_liv = Sessione->curr_level;
 		return l;
 	}
 	else {
@@ -36,8 +36,8 @@ ptr_livelli new_level(ptr_livelli l, int n){
 		l->next = new_l;
 		new_l->next = NULL;
 		new_l->prev = l;
-		new_l->partita = Game(n);
-		new_l->n_liv = n;
+		new_l->partita = Game(Sessione);
+		new_l->n_liv = Sessione->curr_level;
 		return new_l;
 	}
 }
@@ -47,7 +47,7 @@ int main(){
 
 	// Inizializzazione della libreria ncurses
 	initscr();cbreak();noecho();
-	
+
 	Player protagonist;
 	bool correct_input = false;
 	int choice = protagonist.choice_menu();//0;		//significa che il player esiste già, quindi deve solo prendere le statistiche
@@ -64,7 +64,6 @@ int main(){
                 break;
             case 1:
                 //creo la cartella per salvare i file di gioco del giocatore (rinominata col suo nome)
-                //system(strcat(mkdir, username));
                 correct_input = protagonist.signIn(username, password);
 				curr_level = 1;
                 break;
@@ -85,10 +84,10 @@ int main(){
 	Sessione->curr_level = curr_level;
 
 
-	//inizio game + messaggio iniziale (grafica)
+	//inizio game
 	int esito_partita = 0;
 	ptr_livelli gioco = NULL, head;
-	gioco =new_level(gioco, Sessione->curr_level),
+	gioco = new_level(gioco, Sessione),
 	head = gioco;
 
 	do
@@ -106,21 +105,21 @@ int main(){
 		Sessione->p.setX_Y(3, 4);
 		Map mappa_backup = gioco->partita.getMap();
 		int n_mostri_backup = gioco->partita.getNMostri();
-		pmon lista_mostri_backup = gioco->partita.getListaMostri();
+		mlist lista_mostri_backup = *(gioco->partita.getListaMostri());
 
 		esito_partita = (gioco->partita).run(Sessione);
 
-		if(esito_partita == GO_TO_PREV){
+		if(esito_partita == GO_TO_PREV)
 			gioco = gioco->prev, (Sessione->curr_level)--;
-		}
+
 		else if(esito_partita == GO_TO_NEXT){
-			if(gioco->next != NULL){
-				gioco = gioco->next;
-			}
-			else{
-				gioco = new_level(gioco, (Sessione->curr_level) + 1);
-			}
 			(Sessione->curr_level)++;
+
+			if(gioco->next != NULL)
+				gioco = gioco->next;
+			else
+				gioco = new_level(gioco, Sessione);
+
 		}else if(esito_partita == LOSE){
 			//in caso carico i backup
 			Sessione->p          = sessione_backup->p;

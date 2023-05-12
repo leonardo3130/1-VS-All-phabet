@@ -1,5 +1,7 @@
 #pragma once
 #include <iostream>
+#include <ctime>
+#include <unistd.h>
 #include "Map.hpp"
 #include "Character.hpp"
 #include "Player.hpp"
@@ -41,7 +43,7 @@ class Game {
 		pmon lista_mostri;
 
 	public:
-		Game(int level=1);
+		Game(p_session Sessione = new Session);
 		int run(p_session Sessione);
 		void timed_print(char *text, int text_len, int micro_seconds_delay, int l, int c);
 		void init_message();
