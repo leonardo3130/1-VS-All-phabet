@@ -25,7 +25,7 @@ Game::Game(p_session Sessione) {
         this->n_mostri = 2 + Sessione->curr_level*0.5;
     else
         this->n_mostri = 20;
-
+    
     (this->lista_mostri) = NULL;
 
     //generazione mostri //////////////////
