@@ -31,7 +31,6 @@ class Player : public Character{
         bool signIn(char *user, char *psw);
         bool login(char *user, char *psw, int& curr_level);
         void saveStats(int curr_level);
-        void setCredentials(char *user, char *psw);
 };
 
 
