@@ -25,7 +25,7 @@ Game::Game(p_session Sessione) {
         this->n_mostri = 2 + Sessione->curr_level*0.5;
     else
         this->n_mostri = 20;
-    
+
     (this->lista_mostri) = NULL;
 
     //generazione mostri //////////////////
@@ -51,6 +51,7 @@ int Game::run(p_session Sessione) {
     keypad(stdscr, TRUE);
 	nodelay(stdscr, TRUE);
 
+
     //box mappa, statistiche e comandi
 	WINDOW *game_win, *commands_win, *player_stats_win, *game_over_win;
 
@@ -67,8 +68,10 @@ int Game::run(p_session Sessione) {
 
 	for(int i = 0 ; i < this->map.getHeight() ; i++){
 		for(int j = 0 ; j < this->map.getWidth() ; j++){
-			mvwprintw(game_win, i, j, "%c", this->map.getMapChar(i, j));
-			wrefresh(game_win);
+            if(this->map.getMapChar(i, j) == '@') attron(COLOR_PAIR(COLOR_RED));
+                mvwprintw(game_win, i, j, "%c", this->map.getMapChar(i, j));
+                wrefresh(game_win);
+            if(this->map.getMapChar(i, j) == '@') attroff(COLOR_PAIR(COLOR_RED));
 		}
 	}
 
