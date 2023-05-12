@@ -201,6 +201,7 @@ bool Player::signIn(char *user, char *psw){
         credenziali << c.getAtk() << endl;
         credenziali << c.getDef() << endl;
         credenziali << 100 << endl;		//default money
+        credenziali << 1 << endl;		//default level
         credenziali.close();
         isCorrect = true;
     }else{
@@ -209,9 +210,6 @@ bool Player::signIn(char *user, char *psw){
         mvprintw(LINES/2 + 3, COLS/2 - 14, "User already exists!");
         attroff(COLOR_PAIR(COLOR_RED));
     }
-
-
-
 	return isCorrect;
 }
 
