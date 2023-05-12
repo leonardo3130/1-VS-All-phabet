@@ -97,10 +97,10 @@ int Bullet::move_bul(Map& mappa){
         if(mappa.isempty((this->x) + 1, this->y) && !mappa.ismoney((this->x) + 1, this->y)){
             this->x+=1;
         }
-        else if((mappa.ismoney((this->x) + 1, this->y) || mappa.ismonster((this->x) + 1, this->y)) && mappa.isempty((this->x) + 2, this->y)){
+        else if((mappa.ismoney((this->x) + 1, this->y) || (mappa.ismonster((this->x) + 1, this->y) && this->from)) && mappa.isempty((this->x) + 2, this->y)){
             this->x+=2;
         }
-        else if((mappa.ismoney((this->x) + 1, this->y) || mappa.ismonster((this->x) + 1, this->y)) && !mappa.isempty((this->x) + 2, this->y)){
+        else if((mappa.ismoney((this->x) + 1, this->y) || (mappa.ismonster((this->x) + 1, this->y) && this->from)) && !mappa.isempty((this->x) + 2, this->y)){
             next_char = mappa.getMapChar(this->y, (this->x)+2);
         }
         else {
@@ -111,10 +111,10 @@ int Bullet::move_bul(Map& mappa){
         if(mappa.isempty(this->x, (this->y) + 1) && !mappa.ismoney(this->x, (this->y) + 1)){
             this->y += 1;
         }
-        else if((mappa.ismoney(this->x, (this->y) + 1) || mappa.ismonster(this->x, (this->y) + 1)) && mappa.isempty(this->x, (this->y) + 2)){
+        else if((mappa.ismoney(this->x, (this->y) + 1) || (mappa.ismonster(this->x, (this->y) + 1) && this->from)) && mappa.isempty(this->x, (this->y) + 2)){
             this->y += 2;
         }
-        else if((mappa.ismoney(this->x, (this->y) + 1) || mappa.ismonster(this->x, (this->y) + 1)) && !mappa.isempty(this->x, (this->y) + 2)){
+        else if((mappa.ismoney(this->x, (this->y) + 1) || (mappa.ismonster(this->x, (this->y) + 1) && this->from)) && !mappa.isempty(this->x, (this->y) + 2)){
             next_char = mappa.getMapChar((this->y) + 2, this->x);
         }
         else{
@@ -125,10 +125,10 @@ int Bullet::move_bul(Map& mappa){
         if(mappa.isempty((this->x) - 1, this->y) && !mappa.ismoney((this->x) - 1, this->y)){
             this->x -= 1;
         }
-        else if((mappa.ismoney((this->x) - 1, this->y) || mappa.ismonster((this->x) - 1, this->y)) && mappa.isempty((this->x) - 2, this->y)){
+        else if((mappa.ismoney((this->x) - 1, this->y) || (mappa.ismonster((this->x) - 1, this->y)) && this->from) && mappa.isempty((this->x) - 2, this->y)){
             this->x -= 2;
         }
-        else if((mappa.ismoney((this->x) - 1, this->y) || mappa.ismonster((this->x) - 1, this->y)) && !mappa.isempty((this->x) - 2, this->y)){
+        else if((mappa.ismoney((this->x) - 1, this->y) || (mappa.ismonster((this->x) - 1, this->y)) && this->from) && !mappa.isempty((this->x) - 2, this->y)){
             next_char = mappa.getMapChar(this->y, (this->x) - 2);
         }
         else {
@@ -139,10 +139,10 @@ int Bullet::move_bul(Map& mappa){
         if(mappa.isempty(this->x, (this->y) - 1) && !mappa.ismoney(this->x, (this->y) - 1)){
             this->y -= 1;
         }
-        else if((mappa.ismoney(this->x, (this->y)-1) || mappa.ismonster(this->x, (this->y)-1)) && mappa.isempty(this->x, (this->y) - 2)){
+        else if((mappa.ismoney(this->x, (this->y)-1) || (mappa.ismonster(this->x, (this->y)-1) && this->from)) && mappa.isempty(this->x, (this->y) - 2)){
             this->y -= 2;
         }
-        else if((mappa.ismoney(this->x, (this->y) - 1)|| mappa.ismonster(this->x, (this->y)-1)) && !mappa.isempty(this->x, (this->y) - 2)){
+        else if((mappa.ismoney(this->x, (this->y) - 1)|| (mappa.ismonster(this->x, (this->y)-1) && this->from)) && !mappa.isempty(this->x, (this->y) - 2)){
             next_char = mappa.getMapChar((this->y)-2, this->x);
         }
         else{
