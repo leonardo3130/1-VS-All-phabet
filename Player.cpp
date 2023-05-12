@@ -3,7 +3,7 @@
 Player::Player() : Character('1'){
 }
 
-Player::Player(char* nick, char* psw, char l='1') : Character(l){
+Player::Player(char* nick, char* psw, char look='1', int curr_l) : Character(look){
     strcpy(this->nick, nick);
     strcpy(this->psw, psw);
 }
