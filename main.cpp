@@ -48,6 +48,9 @@ int main(){
 	// Inizializzazione della libreria ncurses
 	initscr();cbreak();noecho();
 
+	// Impostazione dei colori
+	start_color(); for (int i = 1; i <= NUM_COLORS; i++) 	init_pair(i, i, COLOR_BLACK);
+
 	Player protagonist;
 	bool correct_input = false;
 	int choice = protagonist.choice_menu();//0;		//significa che il player esiste già, quindi deve solo prendere le statistiche
@@ -76,7 +79,6 @@ int main(){
         }
 	}
 
-	protagonist.setCredentials(username, password);
 	p_session Sessione = new Session;
 	Sessione->p = protagonist;
 	Sessione->curr_level = curr_level;
@@ -104,7 +106,6 @@ int main(){
 			strcat(filePath, "/Level");
 			strcat(filePath, str);
 			strcat(filePath, ".txt");
-			//file.open(filePath, ios::in);
 			ifstream file(filePath);
 
 			//se il file è aperto correttamente
