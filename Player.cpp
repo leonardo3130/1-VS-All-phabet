@@ -229,6 +229,8 @@ bool Player::login(char *user, char *psw, int& curr_level){
 
 		//se la psw è giusta prendo le informazioni del player
 		if(strcmp(line, psw) == 0)	{
+            strcpy(this->nick, user),
+            strcpy(this->psw, psw);
 			input_file >> this->hp;
 			input_file >> this->atk;
 			input_file >> this->def;
@@ -256,9 +258,6 @@ bool Player::login(char *user, char *psw, int& curr_level){
 	return exists;
 }
 
-
-
-
 void Player::saveStats(int curr_level){
     char filename[50];
     strcpy(filename, "Archivio/");
@@ -277,7 +276,3 @@ void Player::saveStats(int curr_level){
 	credenziali.close();
 }
 
-void Player::setCredentials(char *user, char *psw){
-    strcpy(this->nick, user), strcpy(this->psw, psw);
-
-}
