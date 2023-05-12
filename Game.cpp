@@ -158,7 +158,7 @@ int Game::run(p_session Sessione) {
         }
 
 
-        // sparo mostri ///////////////////////////////////////////////////////
+        /* sparo mostri ///////////////////////////////////////////////////////
         if(e == m_shot_fr){
             int b_mode;
             tmp_m = this->lista_mostri;
@@ -183,7 +183,7 @@ int Game::run(p_session Sessione) {
                 tmp_m = tmp_m->next;
             }
         }
-
+*/
 
         // update monster look ///////////////////////////////////////
         if(f == 20){
