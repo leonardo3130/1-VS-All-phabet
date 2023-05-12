@@ -55,9 +55,7 @@ int main(){
 	int curr_level;
 
 	while(!correct_input){
-		if(choice <= 1){
-			protagonist.getCredentials(username, password);
-		}
+		if(choice <= 1)		protagonist.getCredentials(username, password);
 		switch(choice){
 			case 0:
                 correct_input = protagonist.login(username, password, curr_level);
@@ -83,12 +81,60 @@ int main(){
 	Sessione->p = protagonist;
 	Sessione->curr_level = curr_level;
 
-
 	//inizio game
 	int esito_partita = 0;
 	ptr_livelli gioco = NULL, head;
-	gioco = new_level(gioco, Sessione),
-	head = gioco;
+
+	if(choice == 0){
+		ifstream file;
+		gioco = NULL;
+		bool open = true;
+		int level_counter = 1;
+		int backup_level = Sessione->curr_level;
+
+		do{
+			char filePath[50] , str[10];
+			strcpy(filePath, "Archivio/");
+			sprintf(str, "%d", level_counter);
+
+			//genera la path del file da aprire:
+			//Esempio Path nel caso giochi il player:"Andrea" e voglia salvare il livello n:
+			// filePath = "Archivio/Andrea/Leveln.txt"
+			strcat(filePath, Sessione->p.getNick());
+			strcat(filePath, "/Level");
+			strcat(filePath, str);
+			strcat(filePath, ".txt");
+			//file.open(filePath, ios::in);
+			ifstream file(filePath);
+
+			//se il file è aperto correttamente
+			if(file) {
+				Sessione->curr_level = level_counter;
+				gioco = new_level(gioco, Sessione);
+				file.close();
+			} else	open = false;
+
+			if(Sessione->curr_level == 1)	head = gioco;
+
+			level_counter++;
+
+		}while(open);
+
+		Sessione->curr_level = backup_level;
+		int i = 1;
+		ptr_livelli tmp = head;
+
+		//ciclo per cercare il livello corrente
+		while(i < Sessione->curr_level){
+			tmp = tmp -> next;
+			i++;
+		}
+
+		gioco = tmp;
+	}else{
+		gioco = new_level(gioco, Sessione);
+		head = gioco;
+	}
 
 	do
 	{
@@ -107,6 +153,7 @@ int main(){
 		int n_mostri_backup = gioco->partita.getNMostri();
 		mlist lista_mostri_backup = *(gioco->partita.getListaMostri());
 
+		//inzio del game
 		esito_partita = (gioco->partita).run(Sessione);
 
 		if(esito_partita == GO_TO_PREV)
