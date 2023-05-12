@@ -1,22 +1,35 @@
-#include <iostream>
-#include <ctime>
-#include <curses.h>
 #include "Game.hpp"
-#include "Map.hpp"
-#include <unistd.h>
 
-Game::Game(int level) {
-    this->map = Map(40, 80, level);
+Game::Game(p_session Sessione) {
+    char filePath[50] , str[10];
+    strcpy(filePath, "Archivio/");
+    sprintf(str, "%d", Sessione->curr_level);
 
-    if(level <= 12)
-        this->n_mostri = 2 + level*0.5;
+    //genera la path del file da aprire:
+    //Esempio Path nel caso giochi il player:"Andrea" e voglia salvare il livello n:
+    // filePath = "Archivio/Andrea/Leveln.txt"
+    strcat(filePath, Sessione->p.getNick());
+    strcat(filePath, "/Level");
+    strcat(filePath, str);
+    strcat(filePath, ".txt");
+
+    ifstream file(filePath);
+
+    if(file)
+        this->map = Map(filePath);
+    else
+        this->map = Map(40, 80, Sessione->curr_level);
+
+
+    if(Sessione->curr_level <= 12)
+        this->n_mostri = 2 + Sessione->curr_level*0.5;
     else
         this->n_mostri = 20;
 
     (this->lista_mostri) = NULL;
 
     //generazione mostri //////////////////
-    int m_x, m_y, m_atk, m_def, m_mode, m_hp = 150 + (10 * level);
+    int m_x, m_y, m_atk, m_def, m_mode, m_hp = 150 + (10 * Sessione->curr_level);
     char m_look;
     for(int i=0; i<n_mostri; i++){
         m_x = rand()%(map.getWidth()-4)+2;
@@ -339,7 +352,7 @@ pbul Game::handleInput(int c, Map& map, Player& giocatore, pbul bullet_list, arn
 			case KEY_UP:
                 if(around.above == 2)
                 {
-                    giocatore.money += 1;
+                    giocatore.takeMoney(1);
                     map.setCoins(map.getCoins() - 1);
                 }
 				giocatore.moveup(map);
@@ -348,7 +361,7 @@ pbul Game::handleInput(int c, Map& map, Player& giocatore, pbul bullet_list, arn
 			case KEY_DOWN:
                 if(around.under == 2)
                 {
-                    giocatore.money += 1;
+                    giocatore.takeMoney(1);
                     map.setCoins(map.getCoins() - 1);
                 }
 				giocatore.movedown(map);
@@ -357,7 +370,7 @@ pbul Game::handleInput(int c, Map& map, Player& giocatore, pbul bullet_list, arn
 			case KEY_LEFT:
                 if(around.left == 2)
                 {
-                    giocatore.money += 1;
+                    giocatore.takeMoney(1);
                     map.setCoins(map.getCoins() - 1);
                 }
 				giocatore.moveleft(map);
@@ -366,7 +379,7 @@ pbul Game::handleInput(int c, Map& map, Player& giocatore, pbul bullet_list, arn
 
                 if(around.right == 2)
                 {
-                    giocatore.money += 1;
+                    giocatore.takeMoney(1);
                     map.setCoins(map.getCoins() - 1);
                 }
 				giocatore.moveright(map);
