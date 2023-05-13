@@ -28,8 +28,11 @@ class Character{
     pbul fire(pbul ls_proiettili, Map& map, int dir, bool from);   //funzione spara
     void SetHp(double hp);
     double getHp();
+    void incHP(double n);
     int getDef();
+    void incDef(int n);
     int getAtk();
+    void incAtk(int n);
     int getX();
     int getY();
     char getLook();

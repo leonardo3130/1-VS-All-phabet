@@ -3,32 +3,53 @@
 Game::Game(char *filePath, int level) {
     ifstream file(filePath);
 
-    if(file)
+    int m_x, m_y, m_atk, m_def, m_mode, m_hp = 50 + (10 * (level-1));
+    char m_look;
+
+    if(file){
         this->map = Map(filePath);
-    else
+        for(int i = 0 ; i < this->map.getHeight() ; i++){
+            for(int j = 0 ; j < this->map.getWidth() ; j++){
+                if(this->map.ismonster(j, i)){
+
+                    //inserire Calcolo per la vita dei mostri
+                    m_hp = 50;
+
+                    Monster mostro(j, i, m_hp, 10, 1, rand()%4, this->map.getMapChar(i, j), 5, 4, i);
+                    this->lista_mostri = new_monster(this->lista_mostri, mostro);
+                    this->map.setMapChar(i, j, ' ');
+                    this->n_mostri++;
+		        }
+	        }
+        }
+        file.close();
+    }else{
+
+        if(level <= 12)
+            this->n_mostri = 2 +(level)*0.5;
+        else
+            this->n_mostri = 20;
+
+        (this->lista_mostri) = NULL;
         this->map = Map(40, 80, level);
 
+        //generazione mostri non da file //////////////////
+        for(int i=0; i< this->n_mostri; i++){
+            m_x = rand()%(map.getWidth()-4)+2;
+            m_y = rand()%(map.getHeight()-2)+1;
 
-    if(level <= 12)
-        this->n_mostri = 2 +(level)*0.5;
-    else
-        this->n_mostri = 20;
-
-    (this->lista_mostri) = NULL;
-
-    //generazione mostri //////////////////
-    int m_x, m_y, m_atk, m_def, m_mode, m_hp = 50 + (10 * (level));
-    char m_look;
-    for(int i=0; i<n_mostri; i++){
-        m_x = rand()%(map.getWidth()-4)+2;
-        m_y = rand()%(map.getHeight()-2)+1;
-
-        if(map.isempty(m_x, m_y) && !map.ismoney(m_x, m_y) && !map.ismonster(m_x, m_y)) {
-            Monster mostro(m_x, m_y, m_hp, 10, 1, rand()%4, 'A', 5, 4, i);
-            this->lista_mostri = new_monster(this->lista_mostri, mostro);
+            if(map.isempty(m_x, m_y) && !map.ismoney(m_x, m_y) && !map.ismonster(m_x, m_y)) {
+                Monster mostro(m_x, m_y, m_hp, 10, 1, rand()%4, 'A', 5, 4, i);
+                this->lista_mostri = new_monster(this->lista_mostri, mostro);
+            }
+            else i--;
         }
-        else i--;
     }
+
+
+
+
+
 };
 
 int Game::run(Player &p) {
@@ -54,10 +75,11 @@ int Game::run(Player &p) {
 	curs_set(0);
 	refresh();
 
+
 	for(int i = 0 ; i < this->map.getHeight() ; i++){
 		for(int j = 0 ; j < this->map.getWidth() ; j++){
-                mvwprintw(game_win, i, j, "%c", this->map.getMapChar(i, j));
-                wrefresh(game_win);
+            mvwprintw(game_win, i, j, "%c", this->map.getMapChar(i, j));
+            wrefresh(game_win);
 		}
 	}
 
@@ -117,6 +139,8 @@ int Game::run(Player &p) {
                 tmp_m->mon.move(map, p.x, p.y); //movimento
 
                 if(tmp_m->mon.hp <= 0){    //controllo hp
+                    p.takeMoney(3); // quando si uccide un mostro si prendono 3 monete
+
                     this -> n_mostri--;
                     map.setMapChar(tmp_m->mon.y, tmp_m->mon.x, ' ');
                     mvwprintw(game_win, tmp_m->prev_y, tmp_m->prev_x, " ");
@@ -193,7 +217,7 @@ int Game::run(Player &p) {
                 if(collision != 0){
 
                     if(collision == 2){
-                        p.hp -= 1;
+                        p.hp -= (lista_mostri->mon.getAtk() / p.getDef());
                     }
 
                     else if(collision == 3){
@@ -327,6 +351,8 @@ int Game::run(Player &p) {
         this->map.setMapChar(this->map.getHeight() - 3, this->map.getWidth() - 5, ' ');
     else if(esito == GO_TO_PREV)
         this->map.setMapChar(2, 4, ' ');
+    else if(esito == GO_TO_SHOP)
+        this->map.setMapChar(p.getY(), p.getX(), ' ');
 
     delwin(game_win);refresh();
     delete lista_proiettili;
@@ -387,6 +413,10 @@ pbul Game::handleInput(int c, Map& map, Player& giocatore, pbul bullet_list, arn
                 break;
             case 'q':
                 e = EXIT;
+                break;
+            case '1':
+                e = GO_TO_SHOP;
+                break;
 			default:
 				break;
 		}

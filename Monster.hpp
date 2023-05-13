@@ -31,10 +31,13 @@ typedef struct mlist{
 }* pmon;
 
 
+//insert
 pmon new_monster(pmon lista, Monster m);
 
+//delete
 pmon delete_monster(pmon p, int val_id);
 
+//serch
 pmon search_monster_by_xy(pmon lista_mostri, int x, int y);
 
 

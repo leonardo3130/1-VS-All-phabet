@@ -42,54 +42,73 @@ void Monster::movedown(Map mappa){
 }
 
 
+
 void Monster::move(Map& mappa, int x_p, int y_p){
 //m_mode determina la direzione di spostamento: come per l'attributo mode di Character 0=right  1=down  2=left  3=up
     int mode;
 
     if(abs(this->x - x_p) < abs (this->y - y_p) && this->x != x_p){
         if(this->x < x_p ){
-            this->moveright(mappa);
+            mode = 0;
         }
         else {
-            this->moveleft(mappa);
+            mode = 2;
         }
     }
     else if(abs(this->x - x_p) > abs (this->y - y_p) && this->y != y_p){
         if(this->y < y_p){
-            this->movedown(mappa);
+            mode = 1;
         }
         else{
-            this->moveup(mappa);
+            mode = 3;
         }
     }
-    else if(this->x == x_p && mappa.freeWay(this->x, x_p, this->y, y_p) == 0){
-        //condizioni
-        this->moveup(mappa);
+    else if(this->x == x_p){
+        if(this->y < y_p){
+            mode = 1;
+        }
+        else{
+            mode = 3;
+        }
+
     }
-    else if(this->y == y_p && mappa.freeWay(this->x, x_p, this->y, y_p) == 0){
-        //condizioni
-        this->moveleft(mappa);
+    else if(this->y == y_p){
+        if(this-> x < x_p){
+            mode = 0;
+        }
+        else{
+            mode = 2;
+        }
+
     }
-
-
-
-
 
     if(mode == 0){
         if(mappa.isempty(this->x + 1, this->y)==true){
             this->moveright(mappa);
         }
+        else{
+            this->moveup(mappa);
+        }
     }else if(mode == 1){
         if(mappa.isempty(this->x, this->y + 1)==true){
             this->movedown(mappa);
+        }
+        else{
+            this->moveright(mappa);
         }
     }else if(mode == 2){
         if(mappa.isempty(this->x - 1, this->y)==true){
             this->moveleft(mappa);
         }
+        else{
+            this->movedown(mappa);
+        }
     }else if(mode == 3){
         if(mappa.isempty(this->x, this->y - 1)==true){
             this->moveup(mappa);
+        }
+        else{
+            this->moveleft(mappa);
         }
     }
 }

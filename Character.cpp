@@ -82,6 +82,18 @@ void Character::SetHp(double hp){
     this->hp = hp;
 }
 
+void Character::incHP(double n){
+    this->hp += n;
+}
+
+void Character::incAtk(int n){
+    this->atk += n;
+}
+
+void Character::incDef(int n){
+    this->def += n;
+}
+
 double Character::getHp (){
     return this->hp;
 };
