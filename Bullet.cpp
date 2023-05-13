@@ -10,7 +10,7 @@ Bullet::Bullet(int x, int y, int dir, char look, bool from){
     }
 
 
-
+/*
 int Bullet::move_bul(Map& mappa){
     int collision = 0;
     char next_char = ' ';
@@ -88,8 +88,8 @@ int Bullet::move_bul(Map& mappa){
     }
 
     return(collision);
-}/*
-
+}
+*/
 int Bullet::move_bul(Map& mappa){
     int collision = 0;
     char next_char = ' ';
@@ -168,7 +168,7 @@ int Bullet::move_bul(Map& mappa){
 
     return(collision);
 }
-*/
+
 //codice lista proiettile
 pbul new_bullet(pbul lista, Bullet b){
   pbul tmp = new blist;
