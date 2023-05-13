@@ -163,7 +163,6 @@ Map::Map(char *filename){
     this->readMap(filename);
 }
 
-
 char Map::getMapChar(int y, int x){
     return this->matrix[y][x];
 }
@@ -175,16 +174,18 @@ void Map::setMapChar(int y, int x, char c){
 int Map::getWidth(){
     return this->width;
 }
+
 int Map::getHeight(){
     return this->height;
 }
+
 bool Map::protagonistInNextPortal(){
     return this->matrix[this -> height - 3][this -> width - 5] == '1';
 }
+
 bool Map::protagonistInPrevPortal(){
     return this->matrix[2][4] == '1';
 }
-
 
 void Map::readMap(char *filePath){
     // Apri il file in modalità lettura
@@ -202,8 +203,8 @@ void Map::readMap(char *filePath){
             if(this->matrix[i][j] == '#')
                 this->matrix[i][j] = ' ';
 
-            if(this->ismoney(j, i))    (this->coins)++;
-            if(this->ismonster(j, i))   this->matrix[i][j] = ' ';
+            else if(this->ismoney(j, i))
+                (this->coins)++;
 
         }
     }
@@ -231,7 +232,7 @@ void Map::writeMap(int level, char *nickPlayer){
     // Scrivi la matrice in filePath
     for (int i = 0; i < this->height; i++) {
         for (int j = 0; j < this->width; j++) {
-            if(this->matrix[i][j] == ' ' || this->matrix[i][j] == '1' || this->ismonster(j, i))
+            if(this->matrix[i][j] == ' ' || this->matrix[i][j] == '1')
                 this->matrix[i][j] = '#';
 
             outfile << this->matrix[i][j];
@@ -325,4 +326,30 @@ void Map::clean() {
             if(this->matrix[i][j] == '*')   this->matrix[i][j] = ' ';
         }
     }
+}
+
+
+int Map::wallCheck(int x, int y, int dir, bool way){
+    int i=0;
+    int k, l;
+
+    if(way == 0)        k = 1;
+    else if(way == 1)   k = -1;
+
+    if(dir == 0 || dir == 1)        l = 1;
+    else if (dir == 2 || dir == 3)  l =-1;
+
+    if(dir == 0 || dir == 2){
+        while(this->matrix[x + l][y + (i * k)] == '/'){
+            i++;
+        }
+    }
+
+    else if(dir == 1 || dir == 3){
+        while(this->matrix[x + (i * k)][y + l] == '/'){
+            i++;
+        }
+    }
+
+    return i;
 }

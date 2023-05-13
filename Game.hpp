@@ -16,6 +16,7 @@
 #define LOSE -1
 #define GO_TO_NEXT 2
 #define GO_TO_PREV -2
+#define GO_TO_SHOP 3
 
 using namespace std;
 

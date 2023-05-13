@@ -2,6 +2,7 @@
 #include <cmath>
 #include <ctime>
 #include <fstream>
+
 #define MAX_H 40
 #define MAX_W 80
 
@@ -32,5 +33,8 @@ class Map {
                 void clean();
                 bool protagonistInNextPortal();
                 bool protagonistInPrevPortal();
+                int wallCheck(int x, int y, int dir, bool way); //dice di quante celle bisogna muoversi da una posizione x,y
+                                                                //per aggirare un muro che si trova in direzione dir,
+                                                                //andando su (way = 0) / giu (way = 1) o dx (way = 0) / sx (way = 1)
 };
 
