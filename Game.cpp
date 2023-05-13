@@ -1,35 +1,23 @@
 #include "Game.hpp"
 
-Game::Game(p_session Sessione) {
-    char filePath[50] , str[10];
-    strcpy(filePath, "Archivio/");
-    sprintf(str, "%d", Sessione->curr_level);
-
-    //genera la path del file da aprire:
-    //Esempio Path nel caso giochi il player:"Andrea" e voglia salvare il livello n:
-    // filePath = "Archivio/Andrea/Leveln.txt"
-    strcat(filePath, Sessione->p.getNick());
-    strcat(filePath, "/Level");
-    strcat(filePath, str);
-    strcat(filePath, ".txt");
-
+Game::Game(char *filePath, int level) {
     ifstream file(filePath);
 
     if(file)
         this->map = Map(filePath);
     else
-        this->map = Map(40, 80, Sessione->curr_level);
+        this->map = Map(40, 80, level);
 
 
-    if(Sessione->curr_level <= 12)
-        this->n_mostri = 2 + Sessione->curr_level*0.5;
+    if(level <= 12)
+        this->n_mostri = 2 +(level)*0.5;
     else
         this->n_mostri = 20;
 
     (this->lista_mostri) = NULL;
 
     //generazione mostri //////////////////
-    int m_x, m_y, m_atk, m_def, m_mode, m_hp = 150 + (10 * Sessione->curr_level);
+    int m_x, m_y, m_atk, m_def, m_mode, m_hp = 150 + (10 * (level));
     char m_look;
     for(int i=0; i<n_mostri; i++){
         m_x = rand()%(map.getWidth()-4)+2;
@@ -43,7 +31,7 @@ Game::Game(p_session Sessione) {
     }
 };
 
-int Game::run(p_session Sessione) {
+int Game::run(Player &p) {
     srand(time(NULL));
     int esito = IN_GAME;
 
@@ -68,10 +56,8 @@ int Game::run(p_session Sessione) {
 
 	for(int i = 0 ; i < this->map.getHeight() ; i++){
 		for(int j = 0 ; j < this->map.getWidth() ; j++){
-            if(this->map.getMapChar(i, j) == '@') attron(COLOR_PAIR(COLOR_RED));
                 mvwprintw(game_win, i, j, "%c", this->map.getMapChar(i, j));
                 wrefresh(game_win);
-            if(this->map.getMapChar(i, j) == '@') attroff(COLOR_PAIR(COLOR_RED));
 		}
 	}
 
@@ -86,16 +72,16 @@ int Game::run(p_session Sessione) {
     pbul tmp_b = NULL, tmp_b2 = NULL;
     pmon tmp_m = NULL;
 
-    Sessione->p.setX_Y(3, 4);
+    p.setX_Y(3, 4);
 	while(esito == IN_GAME || esito == WIN)
     {
         napms(5);
 
         //funzione per disegnare la window delle statistiche
-        drawStats(player_stats_win, startx, starty, Sessione);
+        drawStats(player_stats_win, startx, starty, p);
 
-        prev_x = Sessione->p.getX();
-		prev_y = Sessione->p.getY();
+        prev_x = p.getX();
+		prev_y = p.getY();
 
         tmp_m = this->lista_mostri;
         while(tmp_m != NULL){
@@ -119,7 +105,7 @@ int Game::run(p_session Sessione) {
         // Input ///////////////////////////////////////////////////////////
 		int ch = getch();
 
-        lista_proiettili = handleInput(ch, map, Sessione->p, lista_proiettili, around, esito);
+        lista_proiettili = handleInput(ch, map, p, lista_proiettili, around, esito);
 
         int monster_mode = 0;
 
@@ -128,7 +114,7 @@ int Game::run(p_session Sessione) {
             pmon before = NULL;
             tmp_m = this->lista_mostri;
             while(tmp_m != NULL){
-                tmp_m->mon.move(map, Sessione->p.x, Sessione->p.y); //movimento
+                tmp_m->mon.move(map, p.x, p.y); //movimento
 
                 if(tmp_m->mon.hp <= 0){    //controllo hp
                     this -> n_mostri--;
@@ -158,21 +144,21 @@ int Game::run(p_session Sessione) {
         }
 
 
-        /* sparo mostri ///////////////////////////////////////////////////////
+        /*sparo mostri ///////////////////////////////////////////////////////
         if(e == m_shot_fr){
             int b_mode;
             tmp_m = this->lista_mostri;
             while(tmp_m != NULL){
-                if(Sessione->p.x == tmp_m->mon.x){
-                    if(Sessione->p.y < tmp_m->mon.y){
+                if(p.x == tmp_m->mon.x){
+                    if(p.y < tmp_m->mon.y){
                         b_mode = 3;
                     }
                     else{
                         b_mode = 1;
                     }
                 }
-                else if(Sessione->p.y == tmp_m->mon.y){
-                    if(Sessione->p.x < tmp_m->mon.x){
+                else if(p.y == tmp_m->mon.y){
+                    if(p.x < tmp_m->mon.x){
                         b_mode = 2;
                     }
                     else{
@@ -182,8 +168,8 @@ int Game::run(p_session Sessione) {
                 lista_proiettili = tmp_m->mon.fire(lista_proiettili, map, b_mode, 1);
                 tmp_m = tmp_m->next;
             }
-        }
-*/
+        }*/
+
 
         // update monster look ///////////////////////////////////////
         if(f == 20){
@@ -207,7 +193,7 @@ int Game::run(p_session Sessione) {
                 if(collision != 0){
 
                     if(collision == 2){
-                        Sessione->p.hp -= 1;
+                        p.hp -= 1;
                     }
 
                     else if(collision == 3){
@@ -261,47 +247,47 @@ int Game::run(p_session Sessione) {
 
         if(d = 400){
             //controllo intorno a player
-            around = Sessione->p.check_around(map);
+            around = p.check_around(map);
 
             // fight /////////////////////////////////////////////////////////////////////////////
             //ho provato a mettere tutto in un metodo di player ma non si riesce per via di errori di inclusion
             pmon x = this->lista_mostri;
             if(around.right == 1){
-                x = search_monster_by_xy(this->lista_mostri, (Sessione->p.x) + 1, (Sessione->p.y));
+                x = search_monster_by_xy(this->lista_mostri, (p.x) + 1, (p.y));
                 if(x!=NULL){
-                    x->mon.hp = Sessione->p.fight(x->mon.hp, x->mon.atk, x->mon.def);
+                    x->mon.hp = p.fight(x->mon.hp, x->mon.atk, x->mon.def);
                 }
             }
             x = this->lista_mostri;
             if(around.under == 1){
-                x = search_monster_by_xy(this->lista_mostri, (Sessione->p.x), (Sessione->p.y) + 1);
+                x = search_monster_by_xy(this->lista_mostri, (p.x), (p.y) + 1);
                 if(x!=NULL){
-                    x->mon.hp = Sessione->p.fight(x->mon.hp, x->mon.atk, x->mon.def);
+                    x->mon.hp = p.fight(x->mon.hp, x->mon.atk, x->mon.def);
                 }
             }
             x = this->lista_mostri;
             if(around.left == 1){
-                x = search_monster_by_xy(this->lista_mostri, (Sessione->p.x) - 1, (Sessione->p.y));
+                x = search_monster_by_xy(this->lista_mostri, (p.x) - 1, (p.y));
                 if(x!=NULL){
-                    x->mon.hp = Sessione->p.fight(x->mon.hp, x->mon.atk, x->mon.def);
+                    x->mon.hp = p.fight(x->mon.hp, x->mon.atk, x->mon.def);
                 }
             }
             x = this->lista_mostri;
             if(around.above == 1){
-                x = search_monster_by_xy(this->lista_mostri, (Sessione->p.x), (Sessione->p.y) - 1);
+                x = search_monster_by_xy(this->lista_mostri, (p.x), (p.y) - 1);
                 if(x!=NULL){
-                    x->mon.hp = Sessione->p.fight(x->mon.hp, x->mon.atk, x->mon.def);
+                    x->mon.hp = p.fight(x->mon.hp, x->mon.atk, x->mon.def);
                 }
             }
         }
 
         //update
-        if(prev_y != Sessione->p.getY() || prev_x != Sessione->p.getX())
-			update(map, Sessione->p, prev_y, prev_x);
+        if(prev_y != p.getY() || prev_x != p.getX())
+			update(map, p, prev_y, prev_x);
         monsterUpdate(map, this->lista_mostri); bulletUpdate(map, lista_proiettili);
 
         // Draw  //////////////////////////////////////////////////////////
-        draw(game_win, map, Sessione->p, prev_x, prev_y);wrefresh(game_win);
+        draw(game_win, map, p, prev_x, prev_y);wrefresh(game_win);
 
         if(c == mon_speed) {
             drawMonster(game_win, map, this->lista_mostri);
@@ -320,7 +306,7 @@ int Game::run(p_session Sessione) {
 
         if(esito != EXIT) {
             //se il protagonista muore
-            if(Sessione->p.hp <= 0.0)     esito = LOSE, Sessione->p.SetHp(0.0), drawStats(player_stats_win, startx, starty, Sessione);
+            if(p.hp <= 0.0)     esito = LOSE, p.SetHp(0.0), drawStats(player_stats_win, startx, starty, p);
 
             //se il protagonista raccoglie tutte le monete
             else if(this->map.getCoins() == 0)    esito = WIN;
@@ -329,13 +315,13 @@ int Game::run(p_session Sessione) {
             if(this->map.getCoins() == 0 && (this->map).protagonistInNextPortal())    esito = GO_TO_NEXT;
 
             //il protagonista va al livello precedente
-            if((this->map).protagonistInPrevPortal() && Sessione->curr_level != 1)   esito = GO_TO_PREV;
+            if((this->map).protagonistInPrevPortal() && p.getCurrentLevel() != 1)   esito = GO_TO_PREV;
         }
 	}
     this->map.clean();
 
     if(esito == LOSE){
-        this->map.setMapChar(Sessione->p.getY(), Sessione->p.getX(), ' ');
+        this->map.setMapChar(p.getY(), p.getX(), ' ');
         drawGameover(game_win, game_over_win), getch();}
     else if(esito == GO_TO_NEXT)
         this->map.setMapChar(this->map.getHeight() - 3, this->map.getWidth() - 5, ' ');
@@ -460,13 +446,13 @@ void Game::drawBullet(WINDOW* win, Map& map, pbul bul_list) {
     }
 }
 
-void Game::drawStats(WINDOW *win, int x, int y, p_session Sessione){
+void Game::drawStats(WINDOW *win, int x, int y, Player p){
     box(win, 0, 0);
-    mvwprintw(win, 0, 7, "Stats di %s", Sessione->p.getNick());
-    mvwprintw(win, 2, 3, " Monete : %d     ", Sessione->p.getMoney());
-    mvwprintw(win, 4, 3, "   Vita : %f     ", Sessione->p.getHp());
-    mvwprintw(win, 6, 3, "Attacco : %d     ", Sessione->p.getAtk());
-    mvwprintw(win, 8, 3, " Difesa : %d     ", Sessione->p.getDef());
+    mvwprintw(win, 0, 7, "Stats di %s", p.getNick());
+    mvwprintw(win, 2, 3, " Monete : %d     ", p.getMoney());
+    mvwprintw(win, 4, 3, "   Vita : %.*f     ", p.getHp(), 2);
+    mvwprintw(win, 6, 3, "Attacco : %d     ", p.getAtk());
+    mvwprintw(win, 8, 3, " Difesa : %d     ", p.getDef());
 
     if(this->n_mostri > 1)
         mvwprintw(win, 17, 2, "Mancano ancora %d mostri   ", this->n_mostri);
@@ -480,7 +466,7 @@ void Game::drawStats(WINDOW *win, int x, int y, p_session Sessione){
     else if(this->map.getCoins() == 1)
         mvwprintw(win, 18, 2, "Manca l'ultima moneta!     ", this->map.getCoins());
     else if(this->map.getCoins() == 0)
-        mvwprintw(win, 18, 2, "Livello %d superato!       ", Sessione->curr_level);
+        mvwprintw(win, 18, 2, "Livello %d superato!       ", p.getCurrentLevel());
 
     wrefresh(win);
 }
