@@ -8,6 +8,8 @@ Game::Game(char *filePath, int level) {
 
     if(file){
         this->map = Map(filePath);
+        this->n_mostri = 0;
+        this->lista_mostri = NULL;
         for(int i = 0 ; i < this->map.getHeight() ; i++){
             for(int j = 0 ; j < this->map.getWidth() ; j++){
                 if(this->map.ismonster(j, i)){
