@@ -1,9 +1,8 @@
 #include "Player.hpp"
 
-Player::Player() : Character('1'){
-}
+Player::Player() : Character('1'){}
 
-Player::Player(char* nick, char* psw, char look='1', int curr_l) : Character(look){
+Player::Player(char* nick, char* psw, char look='1') : Character(look){
     strcpy(this->nick, nick);
     strcpy(this->psw, psw);
 }
@@ -190,18 +189,19 @@ bool Player::signIn(char *user, char *psw){
 
         strcpy(this->nick, user),
         strcpy(this->psw, psw);
-
+        this->current_level = 1;
+        this->money = 20;
         //scrivo nel file delle credenziali le informazioni degli utenti
         ofstream credenziali;
         credenziali.open(filename);
         credenziali << psw << endl;
 
-        Character c = Character('1');
-        credenziali << c.getHp() << endl;
-        credenziali << c.getAtk() << endl;
-        credenziali << c.getDef() << endl;
-        credenziali << 100 << endl;		//default money
-        credenziali << 1 << endl;		//default level
+        credenziali << getHp() << endl;
+        credenziali << getAtk() << endl;
+        credenziali << getDef() << endl;
+        credenziali << getMoney() << endl;		//default money
+        credenziali << this->current_level << endl;		//default level
+
         credenziali.close();
         isCorrect = true;
     }else{
@@ -214,7 +214,7 @@ bool Player::signIn(char *user, char *psw){
 }
 
 //funzione per effettuare il login ad un account esistente
-bool Player::login(char *user, char *psw, int& curr_level){
+bool Player::login(char *user, char *psw){
     char filename[50];
     strcpy(filename, "Archivio/");
     strcat(filename, user);
@@ -236,11 +236,9 @@ bool Player::login(char *user, char *psw, int& curr_level){
 			input_file >> this->atk;
 			input_file >> this->def;
 			input_file >> this->money;
-            input_file >> curr_level;
+            input_file >> this->current_level;
 			exists = true;
 
-			//Character c = Character(100, 100, '1', hp, atk, def);
-			//Player p = Player(user, psw, money, c);
 		}else {
 			//Password errata
             attron(COLOR_PAIR(COLOR_RED));
@@ -259,7 +257,7 @@ bool Player::login(char *user, char *psw, int& curr_level){
 	return exists;
 }
 
-void Player::saveStats(int curr_level){
+void Player::saveStats(){
     char filename[50];
     strcpy(filename, "Archivio/");
     strcat(filename, this->nick);
@@ -273,7 +271,14 @@ void Player::saveStats(int curr_level){
 	credenziali << this->atk << endl;
 	credenziali << this->def << endl;
 	credenziali << this->money << endl;
-    credenziali << curr_level << endl;
+    credenziali << this->current_level << endl;
 	credenziali.close();
 }
 
+void Player::setCurrentLevel(int l){
+    this->current_level = l;
+}
+
+int Player::getCurrentLevel(){
+    return this->current_level;
+}
