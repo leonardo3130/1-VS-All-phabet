@@ -17,7 +17,7 @@ Game::Game(char *filePath, int level) {
     (this->lista_mostri) = NULL;
 
     //generazione mostri //////////////////
-    int m_x, m_y, m_atk, m_def, m_mode, m_hp = 150 + (10 * (level));
+    int m_x, m_y, m_atk, m_def, m_mode, m_hp = 50 + (10 * (level));
     char m_look;
     for(int i=0; i<n_mostri; i++){
         m_x = rand()%(map.getWidth()-4)+2;
@@ -144,7 +144,7 @@ int Game::run(Player &p) {
         }
 
 
-        /*sparo mostri ///////////////////////////////////////////////////////
+        //paro mostri ///////////////////////////////////////////////////////
         if(e == m_shot_fr){
             int b_mode;
             tmp_m = this->lista_mostri;
@@ -168,7 +168,7 @@ int Game::run(Player &p) {
                 lista_proiettili = tmp_m->mon.fire(lista_proiettili, map, b_mode, 1);
                 tmp_m = tmp_m->next;
             }
-        }*/
+        }
 
 
         // update monster look ///////////////////////////////////////
