@@ -7,6 +7,10 @@ Player::Player(char* nick, char* psw, char look='1') : Character(look){
     strcpy(this->psw, psw);
 }
 
+void Player::pay(int p){
+    this->money -= p;
+}
+
 
 int Player::fight(int m_hp, int m_atk, int m_def){
     this->hp -= 0.005;  //1*(m_atk)/(this->def);
@@ -71,9 +75,7 @@ void Player::takeMoney(int value){
 
 //menu per scegliere se effettuare login, sign in o uscire dal gioco
 int Player::choice_menu() {
-    int choice = 0;
-    string choices[3] = {"Login", "Sign in", "Exit"};
-    int highlights = 0;
+    int choice = 0, highlights = 0;
 
     WINDOW *menu = newwin(50, 110 , LINES/2 -25, COLS/2 -55);
     box(menu, 0, 0);
@@ -282,3 +284,4 @@ void Player::setCurrentLevel(int l){
 int Player::getCurrentLevel(){
     return this->current_level;
 }
+
