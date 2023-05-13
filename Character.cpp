@@ -1,5 +1,4 @@
 #include "Character.hpp"
-#include "Bullet.hpp"
 
 Character::Character(){} //costruttore di default
 
