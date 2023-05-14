@@ -184,13 +184,11 @@ int main(){
 
 	//inizio game
 	int esito_partita = 0;
-	ptr_livelli gioco = NULL, head;
+	ptr_livelli gioco = NULL, head = NULL;
 
 
 
 	if(choice == 0){
-		ifstream file;
-		gioco = NULL;
 		bool open = true;
 		int backup_level = protagonist.getCurrentLevel();
 		protagonist.setCurrentLevel(1);

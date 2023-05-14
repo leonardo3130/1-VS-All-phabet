@@ -1,6 +1,6 @@
 #include "Game.hpp"
 
-Game::Game(char *filePath, int level) {
+Game::Game(char filePath[], int level) {
     ifstream file(filePath);
 
     int m_x, m_y, m_atk, m_def, m_mode, m_hp = 50 + (10 * (level-1));
