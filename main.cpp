@@ -248,7 +248,6 @@ int main(){
 		protagonist.setX_Y(3, 4);
 		Map mappa_backup = gioco->partita.getMap();
 		int n_mostri_backup = gioco->partita.getNMostri();
-		mlist lista_mostri_backup = *(gioco->partita.getListaMostri());
 
 		//inzio del game
 		esito_partita = (gioco->partita).run(protagonist);
