@@ -144,8 +144,11 @@ int Game::run(Player &p) {
                     p.takeMoney(3); // quando si uccide un mostro si prendono 3 monete
 
                     this -> n_mostri--;
-                    map.setMapChar(tmp_m->mon.y, tmp_m->mon.x, ' ');
+                    map.setMapChar(tmp_m->prev_y, tmp_m->prev_x, ' ');
                     mvwprintw(game_win, tmp_m->prev_y, tmp_m->prev_x, " ");
+                    wrefresh(game_win);
+                    map.setMapChar(tmp_m->mon.y, tmp_m->mon.x, ' ');
+                    mvwprintw(game_win, tmp_m->mon.y, tmp_m->mon.x, " ");
 	                wrefresh(game_win);
 
                     if(tmp_m == this->lista_mostri)
@@ -170,7 +173,7 @@ int Game::run(Player &p) {
         }
 
 
-        //paro mostri ///////////////////////////////////////////////////////
+        //sparo mostri ///////////////////////////////////////////////////////
         if(e == m_shot_fr){
             int b_mode;
             tmp_m = this->lista_mostri;
@@ -219,11 +222,14 @@ int Game::run(Player &p) {
                 if(collision != 0){
 
                     if(collision == 2){
-                        p.hp -= (lista_mostri->mon.getAtk() / p.getDef());
+                        if(this->lista_mostri != NULL)
+                            p.hp -= (lista_mostri->mon.getAtk() / p.getDef());
+                        else p.hp -= 1;
                     }
 
                     else if(collision == 3){
                         pmon x = this->lista_mostri;
+
                         if(tmp_b->bul.dir == 0){
                             x = search_monster_by_xy(this->lista_mostri, (tmp_b->bul.x) + 1, (tmp_b->bul.y));
                         }
