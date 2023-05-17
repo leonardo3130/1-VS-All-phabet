@@ -3,8 +3,8 @@
 Game::Game(char filePath[], int level) {
     ifstream file(filePath);
 
-    int m_x, m_y, m_atk, m_def, m_mode, m_hp = 50 + (10 * (level-1));
-    char m_look;
+    int m_x, m_y, m_atk, m_def, m_mode, m_max_hp = 50 + (10 * (level-1));
+    double m_hp;
 
     if(file){
         this->map = Map(filePath);
@@ -14,8 +14,9 @@ Game::Game(char filePath[], int level) {
             for(int j = 0 ; j < this->map.getWidth() ; j++){
                 if(this->map.ismonster(j, i)){
 
-                    //inserire Calcolo per la vita dei mostri
-                    m_hp = 50;
+                    //Calcolo per la vita dei mostri
+                    int character = 91.0 - (this->map.getMapChar(i, j));
+                    m_hp = m_max_hp*( (double) character/26.0);
 
                     Monster mostro(j, i, m_hp, 10, 1, rand()%4, this->map.getMapChar(i, j), 5, 4, i);
                     this->lista_mostri = new_monster(this->lista_mostri, mostro);
@@ -41,7 +42,7 @@ Game::Game(char filePath[], int level) {
             m_y = rand()%(map.getHeight()-2)+1;
 
             if(map.isempty(m_x, m_y) && !map.ismoney(m_x, m_y) && !map.ismonster(m_x, m_y)) {
-                Monster mostro(m_x, m_y, m_hp, 10, 1, rand()%4, 'A', 5, 4, i);
+                Monster mostro(m_x, m_y, m_max_hp, 10, 1, rand()%4, 'A', 5, 4, i);
                 this->lista_mostri = new_monster(this->lista_mostri, mostro);
             }
             else i--;
@@ -56,7 +57,7 @@ Game::Game(char filePath[], int level) {
 
 int Game::run(Player &p) {
     srand(time(NULL));
-    int esito = IN_GAME;
+    int esito = IN_GAME, m_max_hp = 50 + (10 * (p.getCurrentLevel()-1));
 
     pbul lista_proiettili = NULL;
     keypad(stdscr, TRUE);
@@ -200,15 +201,17 @@ int Game::run(Player &p) {
         }
 
 
-        // update monster look ///////////////////////////////////////
+        /* update monster look ///////////////////////////////////////
         if(f == 20){
             tmp_m = this->lista_mostri;
             while(tmp_m != NULL){
-                tmp_m->mon.look = 90- ((25 * tmp_m->mon.hp) / 200);
+                tmp_m->mon.look = 91 - ( (int) ((tmp_m->mon.getHp() / m_max_hp) * 26.0));//90- ((25 * tmp_m->mon.hp) / 200);
+                if(tmp_m->mon.look > 'Z') tmp_m->mon.look = 'Z';
                 tmp_m = tmp_m->next;
             }
             monsterUpdate(map, this->lista_mostri);
         }
+        */
 
         // Proiettili ////////////////////////////////////////////////////
         if(b==bul_speed){
@@ -242,8 +245,10 @@ int Game::run(Player &p) {
                             x = search_monster_by_xy(this->lista_mostri, (tmp_b->bul.x), (tmp_b->bul.y) - 1);
                         }
                         if(x!=NULL){
-
-                            x->mon.hp -= 5;
+                            x->mon.hp -= p.getAtk()/x->mon.getDef();
+                            x->mon.look = 91 - ( (int) ((x->mon.getHp() / m_max_hp) * 26.0));//90- ((25 * tmp_m->mon.hp) / 200);
+                            if(x->mon.look > 'Z') x->mon.look = 'Z';
+                            x = x->next;
                         }
                     }
 
@@ -485,9 +490,9 @@ void Game::drawBullet(WINDOW* win, Map& map, pbul bul_list) {
 
 void Game::drawStats(WINDOW *win, int x, int y, Player p){
     box(win, 0, 0);
-    mvwprintw(win, 0, 7, "Stats di %s", p.getNick());
+    mvwprintw(win, 0, 4, "Stats di %s - Lv. %d", p.getNick(), p.getCurrentLevel());
     mvwprintw(win, 2, 3, " Monete : %d     ", p.getMoney());
-    mvwprintw(win, 4, 3, "   Vita : %.*f     ", p.getHp(), 2);
+    mvwprintw(win, 4, 3, "   Vita : %.2f     ", p.getHp());
     mvwprintw(win, 6, 3, "Attacco : %d     ", p.getAtk());
     mvwprintw(win, 8, 3, " Difesa : %d     ", p.getDef());
 
@@ -496,14 +501,14 @@ void Game::drawStats(WINDOW *win, int x, int y, Player p){
     else if(this->n_mostri == 1)
         mvwprintw(win, 17, 2, "Manca l'ultima mostro!     ", this->n_mostri);
     else if(this->n_mostri == 0)
-        mvwprintw(win, 17, 2, " Mostri eliminati!       ");
+        mvwprintw(win, 17, 2, "Mostri eliminati!          ");
 
     if(this->map.getCoins() > 1)
         mvwprintw(win, 18, 2, "Mancano ancora %d monete   ", this->map.getCoins());
     else if(this->map.getCoins() == 1)
         mvwprintw(win, 18, 2, "Manca l'ultima moneta!     ", this->map.getCoins());
     else if(this->map.getCoins() == 0)
-        mvwprintw(win, 18, 2, "Livello %d superato!       ", p.getCurrentLevel());
+        mvwprintw(win, 18, 2, "Livello superato!       ");
 
     wrefresh(win);
 }
