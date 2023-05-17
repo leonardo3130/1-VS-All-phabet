@@ -12,3 +12,6 @@ $(EXECUTABLE) : $(SOURCES)
 
 clear:
 	rm $(EXECUTABLE)
+
+reset:
+	rm -r Archivio/*

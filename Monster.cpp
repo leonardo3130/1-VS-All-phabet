@@ -22,26 +22,30 @@ Monster::Monster(int x, int y,int hp, int atk ,int def, int mode, char look, int
     this->shot_fr = shot_fr;
 };
 
-
 //contatto con player: i mostri perdono hp in base all' atk del player e al prorpio def, e viceversa
 void Monster::moveright(Map mappa){
-    if(!mappa.ismoney((this -> x) + 1, this -> y) && !mappa.ismonster((this -> x) + 2, this -> y))
+    if(!mappa.ismoney((this -> x) + 1, this -> y) && !mappa.ismonster((this -> x) + 2, this -> y) && !mappa.ismonster((this -> x) + 1, (this -> y) + 1)
+    && !mappa.ismonster((this -> x) + 1, (this -> y) - 1))
         Character::moveright(mappa);
 }
+
 void Monster::moveleft(Map mappa){
-    if(!mappa.ismoney((this -> x) - 1, this -> y) && !mappa.ismonster((this -> x) - 2, this -> y))
+    if(!mappa.ismoney((this -> x) - 1, this -> y) && !mappa.ismonster((this -> x) - 2, this -> y) && !mappa.ismonster((this -> x) - 1, (this -> y) + 1)
+    && !mappa.ismonster((this -> x) - 1, (this -> y) - 1))
         Character::moveleft(mappa);
 }
+
 void Monster::moveup(Map mappa){
-    if(!mappa.ismoney(this -> x, (this -> y) - 1) && !mappa.ismonster(this -> x, (this -> y) - 2))
+    if(!mappa.ismoney(this -> x, (this -> y) - 1) && !mappa.ismonster(this -> x, (this -> y) - 2) && !mappa.ismonster((this -> x) + 1, (this -> y) - 1)
+    && !mappa.ismonster((this -> x) - 1, (this -> y) - 1))
         Character::moveup(mappa);
 }
+
 void Monster::movedown(Map mappa){
-    if(!mappa.ismoney(this -> x, (this -> y) + 1) && !mappa.ismonster(this -> x, (this -> y) + 2))
+    if(!mappa.ismoney(this -> x, (this -> y) + 1) && !mappa.ismonster(this -> x, (this -> y) + 2) && !mappa.ismonster((this -> x) + 1, (this -> y) + 1)
+    && !mappa.ismonster((this -> x) - 1, (this -> y) + 1))
         Character::movedown(mappa);
 }
-
-
 
 void Monster::move(Map& mappa, int x_p, int y_p){
 //m_mode determina la direzione di spostamento: come per l'attributo mode di Character 0=right  1=down  2=left  3=up
