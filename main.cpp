@@ -4,6 +4,7 @@
 #include <ctime>
 #include <fstream>
 #include <unistd.h>
+#include <iomanip>
 
 #include "Character.hpp"
 #include "Map.hpp"
@@ -98,7 +99,7 @@ void shop(Player &p){
 	keypad(shop, true);
 	while (choice != 'q'){
 		mvwprintw(shop, 2, 60, " Monete : %d     ", p.getMoney());
-		mvwprintw(shop, 4, 60, "   Vita : %.*f     ", p.getHp(), 2);
+		mvwprintw(shop, 4, 60, "   Vita : %.2f     ", p.getHp());
 		mvwprintw(shop, 6, 60, "Attacco : %d     ", p.getAtk());
 		mvwprintw(shop, 8, 60, " Difesa : %d     ", p.getDef());
 
