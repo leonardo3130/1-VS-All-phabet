@@ -217,7 +217,6 @@ int Game::run(Player &p) {
 
             pbul p_before = NULL;
             while(tmp_b != NULL){
-
                 int collision = tmp_b->bul.move_bul(map);
                 if(collision != 0){
 
