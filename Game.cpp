@@ -129,6 +129,7 @@ int Game::run(Player &p) {
 
         // Input ///////////////////////////////////////////////////////////
 		int ch = getch();
+        fflush(stdin);
 
         lista_proiettili = handleInput(ch, map, p, lista_proiettili, around, esito);
 
@@ -517,8 +518,11 @@ void Game::drawGameover(WINDOW* game_win, WINDOW* game_over_win){
     box(game_over_win, 0, 0);
     mvwprintw(game_over_win, 1, 1, "Game Over");
     wrefresh(game_over_win);
-    fflush(stdin);
-    getchar();
+    while(getchar() != 'r')
+    {
+        mvwprintw(game_over_win, 1, 1, "Game Over");
+        wrefresh(game_over_win);
+    }
     //game_exit();
 }
 
