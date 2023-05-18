@@ -122,5 +122,11 @@ char Character::getLook(){
     return this->look;
 }
 
+int Character::getMode(){
+    return this->mode;
+}
+void Character::setLook(char look){
+    this->look = look;
+}
 
 
