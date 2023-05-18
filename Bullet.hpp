@@ -5,16 +5,21 @@
 
 class Bullet{
     protected:
+        int x;          //posizione di partenza 
+        int y;          //
         char look;
+        int dir;        //direzioen proiettile
+        bool from;      //0 sparato da player, 1 sparato da mostro
 
     public:
-        int x;          //posizione di partenza del poriettile
-        int y;          //
-        int dir;        //direzioen proiettile (corriponde alla mode del personaggio da cui viene sparato)
-        bool from;      //0 sparato da player, 1 sparato da mostro
         Bullet(int x = 0, int y = 0, int dir = 0, char look = '.', bool from = 0);
         //void delete_bullet();
         int move_bul(Map& mappa); 
+        int getX();
+        int getY();
+        char getLook();
+        int getDir();
+        bool getFrom();
 };
 
 //codice per lista proiettili
