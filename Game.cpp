@@ -91,7 +91,7 @@ int Game::run(Player &p) {
 
     int bul_speed = 10;     //abbassare i valori per aumentare le velocità
     int mon_speed = 130;
-    int m_shot_fr = 100;
+    int m_shot_fr = 200;
 
     arnd around;
     pbul tmp_b = NULL, tmp_b2 = NULL;
@@ -517,6 +517,7 @@ void Game::drawGameover(WINDOW* game_win, WINDOW* game_over_win){
     box(game_over_win, 0, 0);
     mvwprintw(game_over_win, 1, 1, "Game Over");
     wrefresh(game_over_win);
+    fflush(stdin);
     getchar();
     //game_exit();
 }
