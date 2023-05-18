@@ -248,10 +248,10 @@ int main(){
 
 		protagonist.setX_Y(3, 4);
 		Map mappa_backup = gioco->partita.getMap();
-		int n_mostri_backup = gioco->partita.getNMostri();
 
 		//inzio del game
 		esito_partita = (gioco->partita).run(protagonist);
+		int n_mostri_backup = gioco->partita.getNMostri();
 
 		if(esito_partita == GO_TO_PREV)
 			gioco = gioco->prev, protagonist.setCurrentLevel(protagonist.getCurrentLevel() - 1);
@@ -273,6 +273,7 @@ int main(){
 
 			gioco->n_liv   =  gioco_backup->n_liv;
 			gioco->partita =  gioco_backup->partita;
+			gioco->partita.setNMostri(n_mostri_backup);
 			gioco->next    =  gioco_backup->next;
 			gioco->prev    =  gioco_backup->prev;
 		}
