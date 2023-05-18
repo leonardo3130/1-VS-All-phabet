@@ -89,9 +89,11 @@ int Game::run(Player &p) {
     // game loop
 	int prev_x, prev_y, c=0, b=0, d=0, e=0, f = 0;
 
+    int tmp_x, tmp_y, tmp_dir, tmp_ar;
+
     int bul_speed = 10;     //abbassare i valori per aumentare le velocità
     int mon_speed = 130;
-    int m_shot_fr = 200;
+    int m_shot_fr = 400;
 
     arnd around;
     pbul tmp_b = NULL, tmp_b2 = NULL;
@@ -110,15 +112,15 @@ int Game::run(Player &p) {
 
         tmp_m = this->lista_mostri;
         while(tmp_m != NULL){
-            tmp_m->prev_x = tmp_m->mon.x;
-            tmp_m->prev_y = tmp_m->mon.y;
+            tmp_m->prev_x = tmp_m->mon.getX();
+            tmp_m->prev_y = tmp_m->mon.getY();
             tmp_m = tmp_m->next;
         }
 
         tmp_b = lista_proiettili;
         while(tmp_b != NULL){
-            tmp_b->prev_x = tmp_b->bul.x;
-            tmp_b->prev_y = tmp_b->bul.y;
+            tmp_b->prev_x = tmp_b->bul.getX();
+            tmp_b->prev_y = tmp_b->bul.getY();
             tmp_b = tmp_b->next;
         }
 
@@ -140,17 +142,17 @@ int Game::run(Player &p) {
             pmon before = NULL;
             tmp_m = this->lista_mostri;
             while(tmp_m != NULL){
-                tmp_m->mon.move(map, p.x, p.y); //movimento
+                tmp_m->mon.move(map, p.getX(), p.getY()); //movimento
 
-                if(tmp_m->mon.hp <= 0){    //controllo hp
+                if(tmp_m->mon.getHp() <= 0){    //controllo hp
                     p.takeMoney(3); // quando si uccide un mostro si prendono 3 monete
 
                     this -> n_mostri--;
                     map.setMapChar(tmp_m->prev_y, tmp_m->prev_x, ' ');
                     mvwprintw(game_win, tmp_m->prev_y, tmp_m->prev_x, " ");
                     wrefresh(game_win);
-                    map.setMapChar(tmp_m->mon.y, tmp_m->mon.x, ' ');
-                    mvwprintw(game_win, tmp_m->mon.y, tmp_m->mon.x, " ");
+                    map.setMapChar(tmp_m->mon.getY(), tmp_m->mon.getX(), ' ');
+                    mvwprintw(game_win, tmp_m->mon.getY(), tmp_m->mon.getX(), " ");
 	                wrefresh(game_win);
 
                     if(tmp_m == this->lista_mostri)
@@ -180,16 +182,16 @@ int Game::run(Player &p) {
             int b_mode;
             tmp_m = this->lista_mostri;
             while(tmp_m != NULL){
-                if(p.x == tmp_m->mon.x){
-                    if(p.y < tmp_m->mon.y){
+                if(p.getX() == tmp_m->mon.getX()){
+                    if(p.getY() < tmp_m->mon.getY()){
                         b_mode = 3;
                     }
                     else{
                         b_mode = 1;
                     }
                 }
-                else if(p.y == tmp_m->mon.y){
-                    if(p.x < tmp_m->mon.x){
+                else if(p.getY() == tmp_m->mon.getY()){
+                    if(p.getX() < tmp_m->mon.getX()){
                         b_mode = 2;
                     }
                     else{
@@ -226,35 +228,33 @@ int Game::run(Player &p) {
 
                     if(collision == 2){
                         if(this->lista_mostri != NULL)
-                            p.hp -= (lista_mostri->mon.getAtk() / p.getDef());
-                        else p.hp -= 1;
+                            p.incHP( -(lista_mostri->mon.getAtk() / p.getDef()) );
+                        else p.incHP(-1);
                     }
 
                     else if(collision == 3){
                         pmon x = this->lista_mostri;
+                        
+                        tmp_dir = tmp_b->bul.getDir();
 
-                        if(tmp_b->bul.dir == 0){
-                            x = search_monster_by_xy(this->lista_mostri, (tmp_b->bul.x) + 1, (tmp_b->bul.y));
-                        }
-                        else if(tmp_b->bul.dir == 1){
-                            x = search_monster_by_xy(this->lista_mostri, (tmp_b->bul.x), (tmp_b->bul.y) + 1);
-                        }
-                        else if(tmp_b->bul.dir == 2){
-                            x = search_monster_by_xy(this->lista_mostri, (tmp_b->bul.x) - 1, (tmp_b->bul.y));
-                        }
-                        else if(tmp_b->bul.dir == 3){
-                            x = search_monster_by_xy(this->lista_mostri, (tmp_b->bul.x), (tmp_b->bul.y) - 1);
-                        }
+                        if(tmp_dir == 0)        {  tmp_x = 1; tmp_y = 0;  }
+                        else if(tmp_dir == 1)   {  tmp_x = 0; tmp_y = 1;  }
+                        else if(tmp_dir == 2)   {  tmp_x = -1; tmp_y = 0; }
+                        else if(tmp_dir == 3)   {  tmp_x = 0; tmp_y = -1; }
+                
+                        x = search_monster_by_xy(this->lista_mostri, (tmp_b->bul.getX()) + tmp_x, (tmp_b->bul.getY()) + tmp_y);
+                        //delete &tmp_x, &tmp_y, &tmp_dir;
+                        
                         if(x!=NULL){
-                            x->mon.hp -= p.getAtk()/x->mon.getDef();
-                            x->mon.look = 91 - ( (int) ((x->mon.getHp() / m_max_hp) * 26.0));//90- ((25 * tmp_m->mon.hp) / 200);
-                            if(x->mon.look > 'Z') x->mon.look = 'Z';
+                            x->mon.incHP( -(p.getAtk()/x->mon.getDef()));
+                            x->mon.setLook(91 - (int) ((x->mon.getHp() / m_max_hp) * 26.0));
+                            if(x->mon.getLook() > 'Z') x->mon.setLook('Z');
                             x = x->next;
                         }
                     }
 
-                    map.setMapChar(tmp_b->bul.y, tmp_b->bul.x, ' ');
-                    mvwprintw(game_win, tmp_b->bul.y, tmp_b->bul.x, " ");
+                    map.setMapChar(tmp_b->bul.getY(), tmp_b->bul.getX(), ' ');
+                    mvwprintw(game_win, tmp_b->bul.getY(), tmp_b->bul.getX(), " ");
 	                wrefresh(game_win);
 
                     //eliminazione proiettile
@@ -287,13 +287,31 @@ int Game::run(Player &p) {
             around = p.check_around(map);
 
             // fight /////////////////////////////////////////////////////////////////////////////
-            //ho provato a mettere tutto in un metodo di player ma non si riesce per via di errori di inclusion
             pmon x = this->lista_mostri;
+            
+            for (int i = 0; i < 4; i++)
+            {
+                if(i == 0) {tmp_ar = around.right;  tmp_x = 1; tmp_y = 0;}
+                else if(i == 1) {tmp_ar = around.under;  tmp_x = 0; tmp_y = 1;}
+                else if(i == 2) {tmp_ar = around.left;   tmp_x = -1; tmp_y = 0;}
+                else if(i == 3) {tmp_ar = around.above;  tmp_x = 0; tmp_y = -1;}
+
+                if(tmp_ar == 1){    //se nella posizione intorno al player c'è un mostro
+                    x = search_monster_by_xy(this->lista_mostri, (p.getX()) + tmp_x, (p.getY() + tmp_y));
+                    if(x!=NULL){
+                        x->mon.SetHp(p.fight(x->mon.getHp(), x->mon.getAtk(), x->mon.getDef()));
+                    }
+                }
+            }
+            //delete &ar, &tmp_x, &tmp_y;
+        }
+            /*
             if(around.right == 1){
-                x = search_monster_by_xy(this->lista_mostri, (p.x) + 1, (p.y));
+                x = search_monster_by_xy(this->lista_mostri, (p.x) +1, (p.y));
                 if(x!=NULL){
                     x->mon.hp = p.fight(x->mon.hp, x->mon.atk, x->mon.def);
                 }
+                
             }
             x = this->lista_mostri;
             if(around.under == 1){
@@ -316,7 +334,7 @@ int Game::run(Player &p) {
                     x->mon.hp = p.fight(x->mon.hp, x->mon.atk, x->mon.def);
                 }
             }
-        }
+        }*/
 
         //update
         if(prev_y != p.getY() || prev_x != p.getX())
@@ -343,7 +361,7 @@ int Game::run(Player &p) {
 
         if(esito != EXIT) {
             //se il protagonista muore
-            if(p.hp <= 0.0)     esito = LOSE, p.SetHp(0.0), drawStats(player_stats_win, startx, starty, p);
+            if(p.getHp() <= 0.0)     esito = LOSE, p.SetHp(0.0), drawStats(player_stats_win, startx, starty, p);
 
             //se il protagonista raccoglie tutte le monete
             else if(this->map.getCoins() == 0)    esito = WIN;
@@ -455,7 +473,7 @@ void Game::bulletUpdate(Map &map, pbul bul_list){
     pbul tmp3 = bul_list;
     while(tmp3 != NULL){
         map.setMapChar(tmp3->prev_y, tmp3->prev_x, ' ');
-        map.setMapChar(tmp3->bul.y, tmp3->bul.x, '*');
+        map.setMapChar(tmp3->bul.getY(), tmp3->bul.getX(), '*');
         tmp3 = tmp3->next;
     }
 }
@@ -483,7 +501,7 @@ void Game::drawBullet(WINDOW* win, Map& map, pbul bul_list) {
     while(tmp3 != NULL){
         mvwprintw(win, tmp3->prev_y, tmp3->prev_x, " ");
 	    wrefresh(win);
-	    mvwprintw(win, tmp3->bul.y, tmp3->bul.x, "%c", '*');
+	    mvwprintw(win, tmp3->bul.getY(), tmp3->bul.getX(), "%c", '*');
         wrefresh(win);
         tmp3 = tmp3->next;
     }
