@@ -25,16 +25,12 @@ class Map {
 		void readMap(char *filePath);
 		void writeMap(int level, char *nickPlayer);
                 bool is_inside(int x, int y);   //dice se la cella (x,y) e' nella mappa
-                bool isempty(int x, int y);     //dice se la cella (x,y) e' vuota
-                bool ismoney(int x, int y);
-                bool ismonster(int x, int y);
-                bool isportale(int x, int y);
+                bool isEmpty(int x, int y);     //dice se la cella (x,y) e' vuota
+                bool isMoney(int x, int y);
+                bool isMonster(int x, int y);
+                bool isPortal(int x, int y);
                 bool freeWay(int x1, int y1, int x2, int y2);
                 void clean();
                 bool protagonistInNextPortal();
                 bool protagonistInPrevPortal();
-                int wallCheck(int x, int y, int dir, bool way); //dice di quante celle bisogna muoversi da una posizione x,y
-                                                                //per aggirare un muro che si trova in direzione dir,
-                                                                //andando su (way = 0) / giu (way = 1) o dx (way = 0) / sx (way = 1)
 };
-
