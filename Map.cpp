@@ -203,7 +203,7 @@ void Map::readMap(char *filePath){
             if(this->matrix[i][j] == '#')
                 this->matrix[i][j] = ' ';
 
-            else if(this->ismoney(j, i))
+            else if(this->isMoney(j, i))
                 (this->coins)++;
 
         }
@@ -252,19 +252,19 @@ bool Map::is_inside(int x, int y){
     return false;
 }
 
-bool Map::isempty(int x, int y){
+bool Map::isEmpty(int x, int y){
   return (this->matrix[y][x] ==' ' || this->matrix[y][x] =='@' || this->matrix[y][x]  =='*' );
 }
 
-bool Map::ismoney(int x, int y){
+bool Map::isMoney(int x, int y){
     return (this->matrix[y][x] =='@');
 }
 
-bool Map::ismonster(int x, int y){
+bool Map::isMonster(int x, int y){
     return (int(this->matrix[y][x]) >= int('A') && int(this->matrix[y][x]) <= int('Z'));
 }
 
-bool Map::isportale(int x, int y){
+bool Map::isPortal(int x, int y){
     if(this->matrix[y][x] =='[' || this->matrix[y][x] ==']')
         return true;
     else
@@ -326,30 +326,4 @@ void Map::clean() {
             if(this->matrix[i][j] == '*')   this->matrix[i][j] = ' ';
         }
     }
-}
-
-
-int Map::wallCheck(int x, int y, int dir, bool way){
-    int i=0;
-    int k, l;
-
-    if(way == 0)        k = 1;
-    else if(way == 1)   k = -1;
-
-    if(dir == 0 || dir == 1)        l = 1;
-    else if (dir == 2 || dir == 3)  l =-1;
-
-    if(dir == 0 || dir == 2){
-        while(this->matrix[x + l][y + (i * k)] == '/'){
-            i++;
-        }
-    }
-
-    else if(dir == 1 || dir == 3){
-        while(this->matrix[x + (i * k)][y + l] == '/'){
-            i++;
-        }
-    }
-
-    return i;
 }
