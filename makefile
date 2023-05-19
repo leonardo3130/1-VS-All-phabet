@@ -10,7 +10,7 @@ $(EXECUTABLE) : $(SOURCES)
 	./$(EXECUTABLE)
 	rm $(EXECUTABLE)
 
-clear:
+clean:
 	rm $(EXECUTABLE)
 
 reset:

@@ -23,32 +23,32 @@ Character::Character(int x, int y, double hp, int atk, int def, int mode, char l
 };
 
 void Character::moveright(Map mappa){
-    if(mappa.isempty((this->x)+1, this->y)==true && mappa.is_inside(this->x+1, this->y)==true){
+    if(mappa.isEmpty((this->x)+1, this->y)==true && mappa.is_inside(this->x+1, this->y)==true){
         this->x += 1;
         this->mode = 0;
     }
 }
 void Character::moveleft(Map mappa){
-    if(mappa.isempty((this->x)-1, this->y)==true && mappa.is_inside((this->x)-1, this->y)==true){
+    if(mappa.isEmpty((this->x)-1, this->y)==true && mappa.is_inside((this->x)-1, this->y)==true){
         this->x -= 1;
         this->mode = 2;
     }
 }
 void Character::moveup(Map mappa){
-    if(mappa.isempty(this->x, (this->y)-1)==true && mappa.is_inside(this->x, (this->y)-1)==true){
+    if(mappa.isEmpty(this->x, (this->y)-1)==true && mappa.is_inside(this->x, (this->y)-1)==true){
         this->y -= 1;
         this->mode = 3;
     }
 }
 void Character::movedown(Map mappa){
-    if(mappa.isempty(this->x, (this->y)+1)==true && mappa.is_inside(this->x, (this->y)+1)==true){
+    if(mappa.isEmpty(this->x, (this->y)+1)==true && mappa.is_inside(this->x, (this->y)+1)==true){
         this->y += 1;
         this->mode = 1;
     }
 }
 
 void Character::move_to(Map mappa, int new_x, int new_y){
-    if(mappa.isempty(new_x, new_y)==true){
+    if(mappa.isEmpty(new_x, new_y)==true){
         this->x = new_x;
         this->y = new_y;
         this->mode = 0;
@@ -60,16 +60,16 @@ pbul lista_proiettili = NULL;        //  "   "
 
 pbul Character::fire(pbul ls_proiettili, Map& map, int dir, bool from){
   Bullet nuovo_proiettile;
-  if (dir == 0 && map.isempty(this-> x + 1, this->y)){
+  if (dir == 0 && map.isEmpty(this-> x + 1, this->y)){
     nuovo_proiettile = Bullet(this->x + 1, this->y, dir, '*', from);
   }
-  else if (dir == 1  && map.isempty(this-> x, this->y + 1)){
+  else if (dir == 1  && map.isEmpty(this-> x, this->y + 1)){
     nuovo_proiettile = Bullet(this->x, this->y + 1, dir, '*', from);
   }
-  else if (dir == 2  && map.isempty(this-> x - 1, this->y)){
+  else if (dir == 2  && map.isEmpty(this-> x - 1, this->y)){
     nuovo_proiettile = Bullet(this->x - 1, this->y, dir, '*', from);
   }
-  else if (dir == 3  && map.isempty(this-> x, this->y-1)){
+  else if (dir == 3  && map.isEmpty(this-> x, this->y-1)){
     nuovo_proiettile = Bullet(this->x , this->y - 1, dir, '*', from);
   }
 
