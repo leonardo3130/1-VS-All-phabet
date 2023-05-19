@@ -3,47 +3,31 @@
 #include "Monster.hpp"
 #include <unistd.h>
 
-//costruttore
-//Monster::Monster(int x, int y, float hp, int atk, int def, int mode, char look, int speed = 5, int shot_fr = 4, int id = 0):Character(x, y, mode, hp, atk, def, look) {
-//    this->speed = speed;
-//    this->shot_fr = shot_fr;
-//    this->id = id;
-//};
-Monster::Monster(int x, int y,int hp, int atk ,int def, int mode, char look, int id, int speed, int shot_fr) {
-    this->x = x;
-    this->y = y;
-    this->mode = mode;
-    this->look = look;
-    this->hp = hp;
-    this->atk = atk;
-    this->def = def;
-    this->id = id;
-    this->speed = speed;
-    this->shot_fr = shot_fr;
-};
+
+Monster::Monster(int x, int y,int hp, int atk ,int def, int mode, char look): Character(x, y, hp, atk, def, mode, look) {};
 
 //contatto con player: i mostri perdono hp in base all' atk del player e al prorpio def, e viceversa
 void Monster::moveright(Map mappa){
-    if(!mappa.ismoney((this -> x) + 1, this -> y) && !mappa.ismonster((this -> x) + 2, this -> y) && !mappa.ismonster((this -> x) + 1, (this -> y) + 1)
-    && !mappa.ismonster((this -> x) + 1, (this -> y) - 1))
+    if(!mappa.isMoney((this -> x) + 1, this -> y) && !mappa.isMonster((this -> x) + 2, this -> y) && !mappa.isMonster((this -> x) + 1, (this -> y) + 1)
+    && !mappa.isMonster((this -> x) + 1, (this -> y) - 1))
         Character::moveright(mappa);
 }
 
 void Monster::moveleft(Map mappa){
-    if(!mappa.ismoney((this -> x) - 1, this -> y) && !mappa.ismonster((this -> x) - 2, this -> y) && !mappa.ismonster((this -> x) - 1, (this -> y) + 1)
-    && !mappa.ismonster((this -> x) - 1, (this -> y) - 1))
+    if(!mappa.isMoney((this -> x) - 1, this -> y) && !mappa.isMonster((this -> x) - 2, this -> y) && !mappa.isMonster((this -> x) - 1, (this -> y) + 1)
+    && !mappa.isMonster((this -> x) - 1, (this -> y) - 1))
         Character::moveleft(mappa);
 }
 
 void Monster::moveup(Map mappa){
-    if(!mappa.ismoney(this -> x, (this -> y) - 1) && !mappa.ismonster(this -> x, (this -> y) - 2) && !mappa.ismonster((this -> x) + 1, (this -> y) - 1)
-    && !mappa.ismonster((this -> x) - 1, (this -> y) - 1))
+    if(!mappa.isMoney(this -> x, (this -> y) - 1) && !mappa.isMonster(this -> x, (this -> y) - 2) && !mappa.isMonster((this -> x) + 1, (this -> y) - 1)
+    && !mappa.isMonster((this -> x) - 1, (this -> y) - 1))
         Character::moveup(mappa);
 }
 
 void Monster::movedown(Map mappa){
-    if(!mappa.ismoney(this -> x, (this -> y) + 1) && !mappa.ismonster(this -> x, (this -> y) + 2) && !mappa.ismonster((this -> x) + 1, (this -> y) + 1)
-    && !mappa.ismonster((this -> x) - 1, (this -> y) + 1))
+    if(!mappa.isMoney(this -> x, (this -> y) + 1) && !mappa.isMonster(this -> x, (this -> y) + 2) && !mappa.isMonster((this -> x) + 1, (this -> y) + 1)
+    && !mappa.isMonster((this -> x) - 1, (this -> y) + 1))
         Character::movedown(mappa);
 }
 
@@ -52,68 +36,50 @@ void Monster::move(Map& mappa, int x_p, int y_p){
     int mode;
 
     if(abs(this->x - x_p) < abs (this->y - y_p) && this->x != x_p){
-        if(this->x < x_p ){
+        if(this->x < x_p )
             mode = 0;
-        }
-        else {
+        else
             mode = 2;
-        }
     }
     else if(abs(this->x - x_p) > abs (this->y - y_p) && this->y != y_p){
-        if(this->y < y_p){
+        if(this->y < y_p)
             mode = 1;
-        }
-        else{
+        else
             mode = 3;
-        }
     }
     else if(this->x == x_p){
-        if(this->y < y_p){
+        if(this->y < y_p)
             mode = 1;
-        }
-        else{
+        else
             mode = 3;
-        }
-
     }
     else if(this->y == y_p){
-        if(this-> x < x_p){
+        if(this-> x < x_p)
             mode = 0;
-        }
-        else{
+        else
             mode = 2;
-        }
-
     }
 
     if(mode == 0){
-        if(mappa.isempty(this->x + 1, this->y)==true){
+        if(mappa.isEmpty(this->x + 1, this->y)==true)
             this->moveright(mappa);
-        }
-        else{
+        else
             this->moveup(mappa);
-        }
     }else if(mode == 1){
-        if(mappa.isempty(this->x, this->y + 1)==true){
+        if(mappa.isEmpty(this->x, this->y + 1)==true)
             this->movedown(mappa);
-        }
-        else{
+        else
             this->moveright(mappa);
-        }
     }else if(mode == 2){
-        if(mappa.isempty(this->x - 1, this->y)==true){
+        if(mappa.isEmpty(this->x - 1, this->y)==true)
             this->moveleft(mappa);
-        }
-        else{
+        else
             this->movedown(mappa);
-        }
     }else if(mode == 3){
-        if(mappa.isempty(this->x, this->y - 1)==true){
+        if(mappa.isEmpty(this->x, this->y - 1)==true)
             this->moveup(mappa);
-        }
-        else{
+        else
             this->moveleft(mappa);
-        }
     }
 }
 
@@ -123,30 +89,6 @@ pmon new_monster(pmon lista, Monster m){
     tmp->next = lista;
     lista = tmp;
     return lista;
-}
-
-pmon delete_monster(pmon p, int val_id){
-	if (p == NULL)
-        return(p);
-	else if (p->mon.id == val_id)
-        return(p->next);
-	else{
-		pmon p_before, head;
-		bool found = false;
-		head = p;
-		while((p != NULL) && !found){
-			if(p->mon.id == val_id)
-        found = true;
-			else{
-				p_before = p;
-				p = p->next;
-			}
-		}
-		if(found){
-			p_before->next = p->next;
-		}
-		return(head);
-	}
 }
 
 pmon search_monster_by_xy(pmon lista_mostri, int x, int y){

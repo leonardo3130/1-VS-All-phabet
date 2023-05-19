@@ -13,13 +13,13 @@ int Bullet::move_bul(Map& mappa){
     int collision = 0;
     char next_char = ' ';
     if(this->dir == 0 ){
-        if(mappa.isempty((this->x) + 1, this->y) && !mappa.ismoney((this->x) + 1, this->y)){
+        if(mappa.isEmpty((this->x) + 1, this->y) && !mappa.isMoney((this->x) + 1, this->y)){
             this->x+=1;
         }
-        else if((mappa.ismoney((this->x) + 1, this->y) || (mappa.ismonster((this->x) + 1, this->y) && this->from)) && mappa.isempty((this->x) + 2, this->y)){
+        else if((mappa.isMoney((this->x) + 1, this->y) || (mappa.isMonster((this->x) + 1, this->y) && this->from)) && mappa.isEmpty((this->x) + 2, this->y)){
             this->x+=2;
         }
-        else if((mappa.ismoney((this->x) + 1, this->y) || (mappa.ismonster((this->x) + 1, this->y) && this->from)) && !mappa.isempty((this->x) + 2, this->y)){
+        else if((mappa.isMoney((this->x) + 1, this->y) || (mappa.isMonster((this->x) + 1, this->y) && this->from)) && !mappa.isEmpty((this->x) + 2, this->y)){
             next_char = mappa.getMapChar(this->y, (this->x)+2);
         }
         else {
@@ -27,13 +27,13 @@ int Bullet::move_bul(Map& mappa){
         }
     }
     else if(this->dir == 1 ){
-        if(mappa.isempty(this->x, (this->y) + 1) && !mappa.ismoney(this->x, (this->y) + 1)){
+        if(mappa.isEmpty(this->x, (this->y) + 1) && !mappa.isMoney(this->x, (this->y) + 1)){
             this->y += 1;
         }
-        else if((mappa.ismoney(this->x, (this->y) + 1) || (mappa.ismonster(this->x, (this->y) + 1) && this->from)) && mappa.isempty(this->x, (this->y) + 2)){
+        else if((mappa.isMoney(this->x, (this->y) + 1) || (mappa.isMonster(this->x, (this->y) + 1) && this->from)) && mappa.isEmpty(this->x, (this->y) + 2)){
             this->y += 2;
         }
-        else if((mappa.ismoney(this->x, (this->y) + 1) || (mappa.ismonster(this->x, (this->y) + 1) && this->from)) && !mappa.isempty(this->x, (this->y) + 2)){
+        else if((mappa.isMoney(this->x, (this->y) + 1) || (mappa.isMonster(this->x, (this->y) + 1) && this->from)) && !mappa.isEmpty(this->x, (this->y) + 2)){
             next_char = mappa.getMapChar((this->y) + 2, this->x);
         }
         else{
@@ -41,13 +41,13 @@ int Bullet::move_bul(Map& mappa){
         }
     }
     else if(this->dir == 2 ){
-        if(mappa.isempty((this->x) - 1, this->y) && !mappa.ismoney((this->x) - 1, this->y)){
+        if(mappa.isEmpty((this->x) - 1, this->y) && !mappa.isMoney((this->x) - 1, this->y)){
             this->x -= 1;
         }
-        else if((mappa.ismoney((this->x) - 1, this->y) || (mappa.ismonster((this->x) - 1, this->y)) && this->from) && mappa.isempty((this->x) - 2, this->y)){
+        else if((mappa.isMoney((this->x) - 1, this->y) || (mappa.isMonster((this->x) - 1, this->y)) && this->from) && mappa.isEmpty((this->x) - 2, this->y)){
             this->x -= 2;
         }
-        else if((mappa.ismoney((this->x) - 1, this->y) || (mappa.ismonster((this->x) - 1, this->y)) && this->from) && !mappa.isempty((this->x) - 2, this->y)){
+        else if((mappa.isMoney((this->x) - 1, this->y) || (mappa.isMonster((this->x) - 1, this->y)) && this->from) && !mappa.isEmpty((this->x) - 2, this->y)){
             next_char = mappa.getMapChar(this->y, (this->x) - 2);
         }
         else {
@@ -55,13 +55,13 @@ int Bullet::move_bul(Map& mappa){
         }
     }
     else if(this->dir == 3 ){
-        if(mappa.isempty(this->x, (this->y) - 1) && !mappa.ismoney(this->x, (this->y) - 1)){
+        if(mappa.isEmpty(this->x, (this->y) - 1) && !mappa.isMoney(this->x, (this->y) - 1)){
             this->y -= 1;
         }
-        else if((mappa.ismoney(this->x, (this->y)-1) || (mappa.ismonster(this->x, (this->y)-1) && this->from)) && mappa.isempty(this->x, (this->y) - 2)){
+        else if((mappa.isMoney(this->x, (this->y)-1) || (mappa.isMonster(this->x, (this->y)-1) && this->from)) && mappa.isEmpty(this->x, (this->y) - 2)){
             this->y -= 2;
         }
-        else if((mappa.ismoney(this->x, (this->y) - 1)|| (mappa.ismonster(this->x, (this->y)-1) && this->from)) && !mappa.isempty(this->x, (this->y) - 2)){
+        else if((mappa.isMoney(this->x, (this->y) - 1)|| (mappa.isMonster(this->x, (this->y)-1) && this->from)) && !mappa.isEmpty(this->x, (this->y) - 2)){
             next_char = mappa.getMapChar((this->y)-2, this->x);
         }
         else{
@@ -69,21 +69,17 @@ int Bullet::move_bul(Map& mappa){
         }
     }
 
-    if(next_char == '/' || next_char == '[' || next_char == ']'){
+    if(next_char == '/' || next_char == '[' || next_char == ']')
         collision = 1;
-    }
-    else if(next_char >= 'A' && next_char <= 'Z'){
-        if(this->from == 0){
-            collision = 3;
-        }
-        else{
-            collision = 1;
-        }
 
+    else if(next_char >= 'A' && next_char <= 'Z'){
+        if(this->from == 0)
+            collision = 3;
+        else
+            collision = 1;
     }
-    else if(next_char == '1'){
+    else if(next_char == '1')
         collision = 2;
-    }
 
     return(collision);
 }
@@ -112,21 +108,6 @@ pbul new_bullet(pbul lista, Bullet b){
   lista = tmp;
   return lista;
 }
-
-///////////////////////////////////////////////         da cancellare
-pbul remove_bullet(pbul p, pbul p_before, pbul bul_list){
-
-    if(p == bul_list){
-        bul_list = bul_list->next;
-        p = bul_list;
-    }
-    else{
-        p_before->next = p->next;
-        p = p->next;
-    }
-    return bul_list;
-}
-////////////////////////////////////////////////////////////////
 
 pbul search_bullet_by_xy(pbul lista_proiettili, int x, int y){
         pbul tmp = lista_proiettili;
