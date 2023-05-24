@@ -4,7 +4,9 @@
 #include <unistd.h>
 
 
-Monster::Monster(int x, int y,int hp, int atk ,int def, int mode, char look): Character(x, y, hp, atk, def, mode, look) {};
+Monster::Monster(int x, int y,int hp, int atk ,int def, int mode, char look, bool tur): Character(x, y, hp, atk, def, mode, look) {
+    this->turret = tur;
+};
 
 //contatto con player: i mostri perdono hp in base all' atk del player e al prorpio def, e viceversa
 void Monster::moveright(Map mappa){
@@ -81,6 +83,12 @@ void Monster::move(Map& mappa, int x_p, int y_p){
         else
             this->moveleft(mappa);
     }
+
+
+}
+
+bool Monster::getTur(){
+    return this->turret;
 }
 
 pmon new_monster(pmon lista, Monster m){
