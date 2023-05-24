@@ -34,7 +34,7 @@ class Game {
 		void drawGameover(WINDOW *win, WINDOW *game_over_win);
 
 		Map map;
-		int n_mostri;
+		int n_mostri, n_torri;
 		pmon lista_mostri;
 
 	public:
