@@ -14,17 +14,26 @@ Game::Game(char filePath[], int level) {
         this->lista_mostri = NULL;
         for(int i = 0 ; i < this->map.getHeight() ; i++){
             for(int j = 0 ; j < this->map.getWidth() ; j++){
+                //mostri
                 if(this->map.isMonster(j, i)){
 
                     //Calcolo per la vita dei mostri
                     int character = 91.0 - (this->map.getMapChar(i, j));
                     m_hp = m_max_hp*( (double) character/26.0);
 
-                    Monster mostro(j, i, m_hp, 10, 1, rand()%4, this->map.getMapChar(i, j));
+                    Monster mostro(j, i, m_hp, 10, 1, rand()%4, this->map.getMapChar(i, j), 0);
                     this->lista_mostri = new_monster(this->lista_mostri, mostro);
                     this->map.setMapChar(i, j, ' ');
                     this->n_mostri++;
+
 		        }
+                //torre
+                else if(this->map.getMapChar(j, i) == '7'){
+                    Monster mostro(j, i, m_hp, 10, 1, rand()%4, this->map.getMapChar(i, j), 1);
+                    this->lista_mostri = new_monster(this->lista_mostri, mostro);
+                    this->map.setMapChar(i, j, ' ');
+                    this->n_torri++;
+                }
 	        }
         }
         file.close();
@@ -39,16 +48,25 @@ Game::Game(char filePath[], int level) {
         this->map = Map(40, 80, level);
 
         //generazione mostri non da file //////////////////
+        //mostri
         for(int i=0; i< this->n_mostri; i++){
             m_x = rand()%(map.getWidth()-4)+2;
             m_y = rand()%(map.getHeight()-2)+1;
 
             if(map.isEmpty(m_x, m_y) && !map.isMoney(m_x, m_y) && !map.isMonster(m_x, m_y)) {
-                Monster mostro(m_x, m_y, m_max_hp, 10, 1, rand()%4, 'A');
+                Monster mostro(m_x, m_y, m_max_hp, 10, 1, rand()%4, 'A', 0);
                 this->lista_mostri = new_monster(this->lista_mostri, mostro);
             }
             else i--;
         }
+        //torre
+        m_x = rand()%(map.getWidth()-4)+2;
+        m_y = rand()%(map.getHeight()-2)+1;
+        if(map.isEmpty(m_x, m_y) && !map.isMoney(m_x, m_y) && !map.isMonster(m_x, m_y)) {
+            Monster mostro(m_x, m_y, m_max_hp, 10, 1, rand()%4, '7', 1);
+            this->lista_mostri = new_monster(this->lista_mostri, mostro);
+        }
+
     }
 };
 
@@ -130,7 +148,9 @@ int Game::run(Player &p) {
             pmon before = NULL;
             tmp_m = this->lista_mostri;
             while(tmp_m != NULL){
-                tmp_m->mon.move(map, p.getX(), p.getY()); //movimento
+                if(tmp_m->mon.getTur()== 0){
+                    tmp_m->mon.move(map, p.getX(), p.getY()); //movimento
+                }
 
                 if(tmp_m->mon.getHp() <= 0){    //controllo hp
                     p.takeMoney(3); // quando si uccide un mostro si prendono 3 monete
