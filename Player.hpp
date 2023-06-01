@@ -35,6 +35,3 @@ class Player : public Character{
         void setCurrentLevel(int l);
         int getCurrentLevel();
 };
-
-
-

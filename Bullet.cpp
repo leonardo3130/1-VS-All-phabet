@@ -72,7 +72,7 @@ int Bullet::move_bul(Map& mappa){
     if(next_char == '/' || next_char == '[' || next_char == ']')
         collision = 1;
 
-    else if(next_char >= 'A' && next_char <= 'Z'){
+    else if(next_char >= 'A' && next_char <= 'Z' || next_char >= 'a' && next_char <= 'z'){
         if(this->from == 0)
             collision = 3;
         else

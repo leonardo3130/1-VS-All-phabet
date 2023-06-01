@@ -297,4 +297,3 @@ void Player::setCurrentLevel(int l){
 int Player::getCurrentLevel(){
     return this->current_level;
 }
-
