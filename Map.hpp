@@ -28,6 +28,7 @@ class Map {
                 bool isEmpty(int x, int y);     //dice se la cella (x,y) e' vuota
                 bool isMoney(int x, int y);
                 bool isMonster(int x, int y);
+                bool isTurret(int x, int y);
                 bool isPortal(int x, int y);
                 bool freeWay(int x1, int y1, int x2, int y2);
                 void clean();
