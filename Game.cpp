@@ -4,6 +4,7 @@ Game::Game(char filePath[], int level) {
     ifstream file(filePath);
 
     int m_x, m_y, m_atk, m_def, m_mode, m_max_hp = 50 + (10 * (level-1));
+    int t_max_hp = m_max_hp*5, t_hp;
     double m_hp;
 
     // a = 97
@@ -11,12 +12,12 @@ Game::Game(char filePath[], int level) {
     if(file){
         this->map = Map(filePath);
         this->n_mostri = 0;
+        this->n_torri = 0;
         this->lista_mostri = NULL;
         for(int i = 0 ; i < this->map.getHeight() ; i++){
             for(int j = 0 ; j < this->map.getWidth() ; j++){
                 //mostri
-                if(this->map.isMonster(j, i)){
-
+                if(this->map.isMonster(j, i) && !this->map.isTurret(j,i)){
                     //Calcolo per la vita dei mostri
                     int character = 91.0 - (this->map.getMapChar(i, j));
                     m_hp = m_max_hp*( (double) character/26.0);
@@ -28,8 +29,13 @@ Game::Game(char filePath[], int level) {
 
 		        }
                 //torre
-                else if(this->map.getMapChar(j, i) == '7'){
-                    Monster mostro(j, i, m_hp, 10, 1, rand()%4, this->map.getMapChar(i, j), 1);
+                else if(this->map.isTurret(j,i)){
+
+                    //calcolo vita torri
+                    int character = 123.0 - (this->map.getMapChar(i, j));
+                    t_hp = t_max_hp*( (double) character/26.0);
+
+                    Monster mostro(j, i, t_hp, 10, 1, rand()%4, this->map.getMapChar(i, j), 1);
                     this->lista_mostri = new_monster(this->lista_mostri, mostro);
                     this->map.setMapChar(i, j, ' ');
                     this->n_torri++;
@@ -43,6 +49,13 @@ Game::Game(char filePath[], int level) {
             this->n_mostri = 2 +(level)*0.5;
         else
             this->n_mostri = 20;
+
+        if(level <5)
+            this->n_torri = 1;
+        else if(level < 10)
+            this->n_torri = 2;
+        else
+            this->n_torri = 3;
 
         (this->lista_mostri) = NULL;
         this->map = Map(40, 80, level);
@@ -60,19 +73,31 @@ Game::Game(char filePath[], int level) {
             else i--;
         }
         //torre
-        m_x = rand()%(map.getWidth()-4)+2;
-        m_y = rand()%(map.getHeight()-2)+1;
-        if(map.isEmpty(m_x, m_y) && !map.isMoney(m_x, m_y) && !map.isMonster(m_x, m_y)) {
-            Monster mostro(m_x, m_y, m_max_hp, 10, 1, rand()%4, '7', 1);
-            this->lista_mostri = new_monster(this->lista_mostri, mostro);
-        }
+        for(int i=0;i< this->n_torri;i++){
+            if(i == 0) {
+                m_x = this->map.getWidth() / 2;
+                m_y = this->map.getHeight() - 3;
+            } else if(i == 1) {
+                m_x = this->map.getWidth() / 2;
+                m_y = 2;
+            }
+            else {
+                m_x = this->map.getWidth() - 5;
+                m_y = this->map.getHeight() / 2;
+            }
 
+            if(map.isEmpty(m_x, m_y) && !map.isMoney(m_x, m_y) && !map.isMonster(m_x, m_y)) {
+                Monster mostro(m_x, m_y, t_max_hp, 10, 1, rand()%4, 'a', 1);
+                this->lista_mostri = new_monster(this->lista_mostri, mostro);
+            }
+        }
     }
 };
 
 int Game::run(Player &p) {
     srand(time(NULL));
-    int esito = IN_GAME, m_max_hp = 50 + (10 * (p.getCurrentLevel()-1));
+    int esito = IN_GAME, m_max_hp = 50 + (10 * (p.getCurrentLevel()-1)),
+                t_max_hp = m_max_hp*5;
 
     pbul lista_proiettili = NULL;
     keypad(stdscr, TRUE);
@@ -194,14 +219,17 @@ int Game::run(Player &p) {
                         b_mode = 3;
                     else
                         b_mode = 1;
+
+                    lista_proiettili = tmp_m->mon.fire(lista_proiettili, map, b_mode, 1);
                 }
                 else if(p.getY() == tmp_m->mon.getY()){
                     if(p.getX() < tmp_m->mon.getX())
                         b_mode = 2;
                     else
                         b_mode = 0;
+
+                    lista_proiettili = tmp_m->mon.fire(lista_proiettili, map, b_mode, 1);
                 }
-                lista_proiettili = tmp_m->mon.fire(lista_proiettili, map, b_mode, 1);
                 tmp_m = tmp_m->next;
             }
         }
@@ -234,10 +262,17 @@ int Game::run(Player &p) {
                         x = search_monster_by_xy(this->lista_mostri, (tmp_b->bul.getX()) + tmp_x, (tmp_b->bul.getY()) + tmp_y);
 
                         if(x!=NULL){
-                            x->mon.incHP(- (p.getAtk()/x->mon.getDef()));
-                            x->mon.setLook(91 - (int) ((x->mon.getHp() / m_max_hp) * 26.0));
-                            if(x->mon.getLook() > 'Z') x->mon.setLook('Z');
-                            x = x->next;
+                            if(!this->map.isTurret(x->mon.getX(), x->mon.getY())){
+                                x->mon.SetHp(p.fight(x->mon.getHp(), x->mon.getAtk(), x->mon.getDef()));
+                                x->mon.setLook(91 - (int) ((x->mon.getHp() / m_max_hp) * 26.0));
+                                if(x->mon.getLook() > 'Z') x->mon.setLook('Z');
+                                x = x->next;
+                            }else{
+                                x->mon.SetHp(p.fight(x->mon.getHp(), x->mon.getAtk(), x->mon.getDef()));
+                                x->mon.setLook(123 - (int) ((x->mon.getHp() / t_max_hp) * 26.0));
+                                if(x->mon.getLook() > 'z') x->mon.setLook('z');
+                                x = x->next;
+                            }
                         }
                     }
 
@@ -286,10 +321,17 @@ int Game::run(Player &p) {
                 if(tmp_ar == 1){    //se nella posizione intorno al player c'è un mostro
                     x = search_monster_by_xy(this->lista_mostri, (p.getX()) + tmp_x, (p.getY() + tmp_y));
                     if(x!=NULL){
-                        x->mon.SetHp(p.fight(x->mon.getHp(), x->mon.getAtk(), x->mon.getDef()));
-                        x->mon.setLook(91 - (int) ((x->mon.getHp() / m_max_hp) * 26.0));
-                        if(x->mon.getLook() > 'Z') x->mon.setLook('Z');
-                        x = x->next;
+                        if(!this->map.isTurret(x->mon.getX(), x->mon.getY())){
+                            x->mon.SetHp(p.fight(x->mon.getHp(), x->mon.getAtk(), x->mon.getDef()));
+                            x->mon.setLook(91 - (int) ((x->mon.getHp() / m_max_hp) * 26.0));
+                            if(x->mon.getLook() > 'Z') x->mon.setLook('Z');
+                            x = x->next;
+                        }else{
+                            x->mon.SetHp(p.fight(x->mon.getHp(), x->mon.getAtk(), x->mon.getDef()));
+                            x->mon.setLook(123 - (int) ((x->mon.getHp() / t_max_hp) * 26.0));
+                            if(x->mon.getLook() > 'z') x->mon.setLook('z');
+                            x = x->next;
+                        }
                     }
                 }
             }

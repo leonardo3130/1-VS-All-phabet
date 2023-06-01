@@ -261,7 +261,11 @@ bool Map::isMoney(int x, int y){
 }
 
 bool Map::isMonster(int x, int y){
-    return (int(this->matrix[y][x]) >= int('A') && int(this->matrix[y][x]) <= int('Z'));
+    return (int(this->matrix[y][x]) >= int('A') && int(this->matrix[y][x]) <= int('Z')) || (int(this->matrix[y][x]) >= int('a') && int(this->matrix[y][x]) <= int('z'));
+}
+
+bool Map::isTurret(int x, int y){
+    return (int(this->matrix[y][x]) >= int('a') && int(this->matrix[y][x]) <= int('z'));
 }
 
 bool Map::isPortal(int x, int y){

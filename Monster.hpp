@@ -38,5 +38,3 @@ pmon new_monster(pmon lista, Monster m);
 
 //serch
 pmon search_monster_by_xy(pmon lista_mostri, int x, int y);
-
-
