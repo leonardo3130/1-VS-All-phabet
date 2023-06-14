@@ -1,14 +1,15 @@
 #include "Game.hpp"
 
-Game::Game(char filePath[], int level) {
+Game::Game(char filePath[], Player &p) { //oltre al filePath del livello bisognerà passare quello del file credentials con i suoi valori di hp, atk, def e numero di mostri (questo si vedrà) 
+                                         //a inizio del livello in cui è morto 
+                                         //all'inizio di ogni livello servirà quindi aggiornare il file credentials.txt
     ifstream file(filePath);
-
-    int m_x, m_y, m_atk, m_def, m_mode, m_max_hp = 50 + (10 * (level-1));
+    int m_x, m_y, m_atk = 2 + (p.getCurrentLevel()), m_def = 2 + (p.getCurrentLevel()), m_mode, m_max_hp = 50 + (10 * (p.getCurrentLevel()-1));
     int t_max_hp = m_max_hp*5, t_hp;
     double m_hp;
-
-    // a = 97
-    // z = 122
+    if (p.getCurrentLevel() == 1)
+        m_atk += p.getAtk(), m_def += p.getDef();
+    
     if(file){
         this->map = Map(filePath);
         this->n_mostri = 0;
@@ -22,7 +23,7 @@ Game::Game(char filePath[], int level) {
                     int character = 91.0 - (this->map.getMapChar(i, j));
                     m_hp = m_max_hp*( (double) character/26.0);
 
-                    Monster mostro(j, i, m_hp, 10, 1, rand()%4, this->map.getMapChar(i, j), 0);
+                    Monster mostro(j, i, m_hp, m_atk, m_def, rand()%4, this->map.getMapChar(i, j), 0);
                     this->lista_mostri = new_monster(this->lista_mostri, mostro);
                     this->map.setMapChar(i, j, ' ');
                     this->n_mostri++;
@@ -35,7 +36,7 @@ Game::Game(char filePath[], int level) {
                     int character = 123.0 - (this->map.getMapChar(i, j));
                     t_hp = t_max_hp*( (double) character/26.0);
 
-                    Monster mostro(j, i, t_hp, 10, 1, rand()%4, this->map.getMapChar(i, j), 1);
+                    Monster mostro(j, i, t_hp, m_atk+5, m_def+5, rand()%4, this->map.getMapChar(i, j), 1);
                     this->lista_mostri = new_monster(this->lista_mostri, mostro);
                     this->map.setMapChar(i, j, ' ');
                     this->n_torri++;
@@ -44,21 +45,23 @@ Game::Game(char filePath[], int level) {
         }
         file.close();
     }else{
-
-        if(level <= 12)
-            this->n_mostri = 2 +(level)*0.5;
+        //possibili cambiamenti nel numero di mostri --> numero di mostri = numero di mostri nell'ultimo livello corrente (prima della morte)
+        //qui verranno calcolati i valori di hp, atk, def del mostro in base ai valori del player
+        if(p.getCurrentLevel() <= 12)
+            this->n_mostri = 2 +(p.getCurrentLevel())*0.5;
         else
             this->n_mostri = 20;
-
-        if(level <5)
+        //stessa cosa del numero di mostri vale per le torri
+        if(p.getCurrentLevel() <5)
             this->n_torri = 1;
-        else if(level < 10)
+        else if(p.getCurrentLevel() < 10)
             this->n_torri = 2;
         else
             this->n_torri = 3;
 
         (this->lista_mostri) = NULL;
-        this->map = Map(40, 80, level);
+        //eventuali cambiamenti per il numero di monete 
+        this->map = Map(40, 80, p.getCurrentLevel());
 
         //generazione mostri non da file //////////////////
         //mostri
@@ -67,7 +70,7 @@ Game::Game(char filePath[], int level) {
             m_y = rand()%(map.getHeight()-2)+1;
 
             if(map.isEmpty(m_x, m_y) && !map.isMoney(m_x, m_y) && !map.isMonster(m_x, m_y)) {
-                Monster mostro(m_x, m_y, m_max_hp, 10, 1, rand()%4, 'A', 0);
+                Monster mostro(m_x, m_y, m_max_hp, m_atk, m_def, rand()%4, 'A', 0);
                 this->lista_mostri = new_monster(this->lista_mostri, mostro);
             }
             else i--;
@@ -87,7 +90,7 @@ Game::Game(char filePath[], int level) {
             }
 
             if(map.isEmpty(m_x, m_y) && !map.isMoney(m_x, m_y) && !map.isMonster(m_x, m_y)) {
-                Monster mostro(m_x, m_y, t_max_hp, 10, 1, rand()%4, 'a', 1);
+                Monster mostro(m_x, m_y, t_max_hp, m_atk+5, m_def+5, rand()%4, 'a', 1);
                 this->lista_mostri = new_monster(this->lista_mostri, mostro);
             }
         }
@@ -95,6 +98,7 @@ Game::Game(char filePath[], int level) {
 };
 
 int Game::run(Player &p) {
+    //aggiorno credentials.txt (all'inizio per il numero dei mostri)
     srand(time(NULL));
     int esito = IN_GAME, m_max_hp = 50 + (10 * (p.getCurrentLevel()-1)),
                 t_max_hp = m_max_hp*5;
@@ -377,10 +381,12 @@ int Game::run(Player &p) {
         }
 	}
     this->map.clean();
-
+    
     if(esito == LOSE){
         this->map.setMapChar(p.getY(), p.getX(), ' ');
-        drawGameover(game_win, game_over_win), getch();}
+        drawGameover(game_win, game_over_win), getch();
+        //aggiorno credentials.txt 
+    }
     else if(esito == GO_TO_NEXT)
         this->map.setMapChar(this->map.getHeight() - 3, this->map.getWidth() - 5, ' ');
     else if(esito == GO_TO_PREV)
