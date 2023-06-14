@@ -40,8 +40,7 @@ ptr_livelli new_level(ptr_livelli l, Player p){
 		l = new livello;
 		l->next = NULL;
 		l->prev = NULL;
-		l->partita = Game(filePath, p.getCurrentLevel());
-
+		l->partita = Game(filePath, p); 
 		l->n_liv = p.getCurrentLevel();
 		return l;
 	}
@@ -50,7 +49,7 @@ ptr_livelli new_level(ptr_livelli l, Player p){
 		l->next = new_l;
 		new_l->next = NULL;
 		new_l->prev = l;
-		new_l->partita = Game(filePath, p.getCurrentLevel());
+		new_l->partita = Game(filePath, p); 
 		new_l->n_liv = p.getCurrentLevel();
 		return new_l;
 	}
@@ -147,6 +146,13 @@ void shop(Player &p){
 
 }
 
+void delete_game(ptr_livelli gioco){
+	if(gioco != NULL) {
+		delete_game(gioco->next);
+		delete gioco;
+	}
+}
+
 int main(){
 	srand(time(NULL));
 
@@ -238,20 +244,20 @@ int main(){
 
 	do
 	{
-		Player backup_p = protagonist;
+		//Player backup_p = protagonist;
 
-		ptr_livelli gioco_backup = new livello;
+		/*ptr_livelli gioco_backup = new livello;
 		gioco_backup->n_liv = gioco->n_liv;
 		gioco_backup->partita = gioco->partita;
 		gioco_backup->next = gioco->next;
-		gioco_backup->prev = gioco->prev;
+		gioco_backup->prev = gioco->prev;*/
 
 		protagonist.setX_Y(3, 4);
-		Map mappa_backup = gioco->partita.getMap();
+		//Map mappa_backup = gioco->partita.getMap();
 
 		//inzio del game
 		esito_partita = (gioco->partita).run(protagonist);
-		int n_mostri_backup = gioco->partita.getNMostri();
+		//int n_mostri_backup = gioco->partita.getNMostri();
 
 		if(esito_partita == GO_TO_PREV)
 			gioco = gioco->prev, protagonist.setCurrentLevel(protagonist.getCurrentLevel() - 1);
@@ -261,38 +267,61 @@ int main(){
 
 			if(gioco->next != NULL)
 				gioco = gioco->next;
-			else
+			else {
 				gioco = new_level(gioco, protagonist);
+				//aumenta score
+			}
 
 		}else if(esito_partita == GO_TO_SHOP){
 			shop(protagonist);
 		}else if(esito_partita == LOSE){
 			//in caso carico i backup
-			protagonist = backup_p;
-			protagonist.SetHp(20.0);
-
-			gioco->n_liv   =  gioco_backup->n_liv;
+			//protagonist = backup_p;
+			
+			
+			/*gioco->n_liv   =  gioco_backup->n_liv;
 			gioco->partita =  gioco_backup->partita;
 			gioco->partita.setNMostri(n_mostri_backup);
 			gioco->next    =  gioco_backup->next;
-			gioco->prev    =  gioco_backup->prev;
-		}
+			gioco->prev    =  gioco_backup->prev;*/
+			//non serve più gran parte della lista backup
+			
+			//salvo statistiche player
+			protagonist.SetHp(25.0);
+			protagonist.setCurrentLevel(1);
+			protagonist.saveStats();
 
+			//rimozione dei file dei livelli precedenti
+			char comando[64] = "rm Archivio/";
+			strcat(comando, protagonist.getNick());
+			strcat(comando, "/Level*");
+			system(comando);
+			
+			//ricomincia il gioco da un livello proporzionato
+			delete_game(head);
+			//delete head, delete gioco;
+			gioco = NULL;
+			head = gioco;
+
+			gioco = new_level(gioco, protagonist);
+			head = gioco;
+
+			//settare lo score a 0
+
+		}
 	}
 	while (esito_partita != EXIT);
 
 	//inizio salvataggio livelli
 	ptr_livelli tmp = gioco;
 	while (tmp != NULL){
-		Map mappa = tmp->partita.getMap();
-		mappa.writeMap(tmp->n_liv, protagonist.getNick());
+		tmp->partita.getMap().writeMap(tmp->n_liv, protagonist.getNick());
 		tmp = tmp->prev;
 	}
 
 	tmp = gioco;
 	while (tmp != NULL){
-		Map mappa = tmp->partita.getMap();
-		mappa.writeMap(tmp->n_liv, protagonist.getNick());
+		tmp->partita.getMap().writeMap(tmp->n_liv, protagonist.getNick());
 		tmp = tmp->next;
 	}
 
@@ -303,3 +332,4 @@ int main(){
 	endwin();
 	return 0;
 }
+
