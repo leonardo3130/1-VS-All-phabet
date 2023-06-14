@@ -40,7 +40,7 @@ ptr_livelli new_level(ptr_livelli l, Player &p){
 		l = new livello;
 		l->next = NULL;
 		l->prev = NULL;
-		l->partita = Game(filePath, p); 
+		l->partita = Game(filePath, p.getAtk(), p.getDef(), p.getCurrentLevel()); 
 		l->n_liv = p.getCurrentLevel();
 		return l;
 	}
@@ -49,7 +49,7 @@ ptr_livelli new_level(ptr_livelli l, Player &p){
 		l->next = new_l;
 		new_l->next = NULL;
 		new_l->prev = l;
-		new_l->partita = Game(filePath, p); 
+		new_l->partita = Game(filePath, p.getAtk(), p.getDef(), p.getCurrentLevel()); 
 		new_l->n_liv = p.getCurrentLevel();
 		return new_l;
 	}
@@ -66,7 +66,6 @@ void shop(Player &p){
 	box(shop, 0, 0);
 	refresh();
     wrefresh(shop);
-
 
 	mvwprintw(shop, 16, 20, "  //\\\\");
 	mvwprintw(shop, 17, 20, "  |- |");
@@ -174,26 +173,18 @@ int main(){
                 correct_input = protagonist.login(username, password);
                 break;
             case 1:
-                //creo la cartella per salvare i file di gioco del giocatore (rinominata col suo nome)
                 correct_input = protagonist.signIn(username, password);
                 break;
             case 2:
-                clear();
-				endwin();
-				exit(0);
+                clear();endwin();exit(0);
                 break;
-            default:
-                break;
-
+            default:	break;
         }
 	}
-
 
 	//inizio game
 	int esito_partita = 0;
 	ptr_livelli gioco = NULL, head = NULL;
-
-
 
 	if(choice == 0){
 		bool open = true;
@@ -244,14 +235,6 @@ int main(){
 
 	do
 	{
-		//Player backup_p = protagonist;
-
-		/*ptr_livelli gioco_backup = new livello;
-		gioco_backup->n_liv = gioco->n_liv;
-		gioco_backup->partita = gioco->partita;
-		gioco_backup->next = gioco->next;
-		gioco_backup->prev = gioco->prev;*/
-
 		protagonist.setX_Y(3, 4);
 		//Map mappa_backup = gioco->partita.getMap();
 
@@ -271,20 +254,9 @@ int main(){
 				gioco = new_level(gioco, protagonist);
 				//aumenta score
 			}
-
-		}else if(esito_partita == GO_TO_SHOP){
-			shop(protagonist);
-		}else if(esito_partita == LOSE){
-			//in caso carico i backup
-			//protagonist = backup_p;
-			
-			
-			/*gioco->n_liv   =  gioco_backup->n_liv;
-			gioco->partita =  gioco_backup->partita;
-			gioco->partita.setNMostri(n_mostri_backup);
-			gioco->next    =  gioco_backup->next;
-			gioco->prev    =  gioco_backup->prev;*/
-			//non serve più gran parte della lista backup
+		}
+		else if(esito_partita == GO_TO_SHOP)	shop(protagonist);
+		else if(esito_partita == LOSE){
 			
 			//salvo statistiche player
 			protagonist.SetHp(25.0);
@@ -298,7 +270,7 @@ int main(){
 
 			ifstream file(filePath);
 			if(file){
-				file.close();
+				//file.close();
 				char comando[64] = "rm Archivio/";
 				strcat(comando, protagonist.getNick());
 				strcat(comando, "/Level*");
@@ -335,8 +307,6 @@ int main(){
 	//salvo statistiche player
 	protagonist.saveStats();
 
-	clear();
-	endwin();
+	clear();endwin();
 	return 0;
 }
-
