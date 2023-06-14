@@ -1,14 +1,14 @@
 #include "Game.hpp"
 
-Game::Game(char filePath[], Player &p) { //oltre al filePath del livello bisognerà passare quello del file credentials con i suoi valori di hp, atk, def e numero di mostri (questo si vedrà) 
+Game::Game(char filePath[], int atk, int def, int livello) { //oltre al filePath del livello bisognerà passare quello del file credentials con i suoi valori di hp, atk, def e numero di mostri (questo si vedrà) 
                                          //a inizio del livello in cui è morto 
                                          //all'inizio di ogni livello servirà quindi aggiornare il file credentials.txt
     ifstream file(filePath);
-    int m_x, m_y, m_atk = 2 + (p.getCurrentLevel()), m_def = 2 + (p.getCurrentLevel()), m_mode, m_max_hp = 50 + (10 * (p.getCurrentLevel()-1));
+    int m_x, m_y, m_atk = 2 + (livello), m_def = 2 + (livello), m_mode, m_max_hp = 50 + (10 * (livello-1));
     int t_max_hp = m_max_hp*5, t_hp;
     double m_hp;
-    if (p.getCurrentLevel() == 1)
-        m_atk += p.getAtk(), m_def += p.getDef();
+    if (livello == 1)
+        m_atk += atk, m_def += def;
     
     if(file){
         this->map = Map(filePath);
@@ -45,21 +45,21 @@ Game::Game(char filePath[], Player &p) { //oltre al filePath del livello bisogne
         }
         file.close();
     }else{
-        if(p.getCurrentLevel() <= 12)
-            this->n_mostri = 2 +(p.getCurrentLevel())*0.5;
+        if(livello <= 12)
+            this->n_mostri = 2 +(livello)*0.5;
         else
             this->n_mostri = 20;
         //stessa cosa del numero di mostri vale per le torri
-        if(p.getCurrentLevel() <5)
+        if(livello <5)
             this->n_torri = 1;
-        else if(p.getCurrentLevel() < 10)
+        else if(livello < 10)
             this->n_torri = 2;
         else
             this->n_torri = 3;
 
         (this->lista_mostri) = NULL;
         //eventuali cambiamenti per il numero di monete 
-        this->map = Map(40, 80, p.getCurrentLevel());
+        this->map = Map(40, 80, livello);
 
         //generazione mostri non da file //////////////////
         //mostri

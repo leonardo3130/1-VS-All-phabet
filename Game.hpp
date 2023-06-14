@@ -38,7 +38,7 @@ class Game {
 		pmon lista_mostri;
 
 	public:
-		Game(char filePath[] = NULL, Player &p= *(new Player()));
+		Game(char filePath[] = NULL, int atk=0, int def=0 ,int livello=1);
 		int run(Player &p);
 		void timed_print(char *text, int text_len, int micro_seconds_delay, int l, int c);
 		void init_message();
