@@ -23,7 +23,7 @@ typedef struct livello{
 
 
 //crea un nuovo livello e ritorna il puntatore a quest'ultimo
-ptr_livelli new_level(ptr_livelli l, Player p){
+ptr_livelli new_level(ptr_livelli l, Player &p){
 	char filePath[50] , str[10];
 	strcpy(filePath, "Archivio/");
 	sprintf(str, "%d", p.getCurrentLevel() );
@@ -292,14 +292,21 @@ int main(){
 			protagonist.saveStats();
 
 			//rimozione dei file dei livelli precedenti
-			char comando[64] = "rm Archivio/";
-			strcat(comando, protagonist.getNick());
-			strcat(comando, "/Level*");
-			system(comando);
+			char filePath[64] = "Arhivio/";
+			strcat(filePath, protagonist.getNick());
+			strcat(filePath, "/Level1.txt");
+
+			ifstream file(filePath);
+			if(file){
+				file.close();
+				char comando[64] = "rm Archivio/";
+				strcat(comando, protagonist.getNick());
+				strcat(comando, "/Level*");
+				system(comando);
+			}
 			
 			//ricomincia il gioco da un livello proporzionato
 			delete_game(head);
-			//delete head, delete gioco;
 			gioco = NULL;
 			head = gioco;
 
