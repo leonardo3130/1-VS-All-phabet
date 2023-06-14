@@ -15,6 +15,8 @@ Game::Game(char filePath[], Player &p) { //oltre al filePath del livello bisogne
         this->n_mostri = 0;
         this->n_torri = 0;
         this->lista_mostri = NULL;
+
+        //leggo la mappa da file e carico mostri e monete
         for(int i = 0 ; i < this->map.getHeight() ; i++){
             for(int j = 0 ; j < this->map.getWidth() ; j++){
                 //mostri
@@ -27,11 +29,9 @@ Game::Game(char filePath[], Player &p) { //oltre al filePath del livello bisogne
                     this->lista_mostri = new_monster(this->lista_mostri, mostro);
                     this->map.setMapChar(i, j, ' ');
                     this->n_mostri++;
-
 		        }
                 //torre
                 else if(this->map.isTurret(j,i)){
-
                     //calcolo vita torri
                     int character = 123.0 - (this->map.getMapChar(i, j));
                     t_hp = t_max_hp*( (double) character/26.0);
@@ -45,8 +45,6 @@ Game::Game(char filePath[], Player &p) { //oltre al filePath del livello bisogne
         }
         file.close();
     }else{
-        //possibili cambiamenti nel numero di mostri --> numero di mostri = numero di mostri nell'ultimo livello corrente (prima della morte)
-        //qui verranno calcolati i valori di hp, atk, def del mostro in base ai valori del player
         if(p.getCurrentLevel() <= 12)
             this->n_mostri = 2 +(p.getCurrentLevel())*0.5;
         else
@@ -117,7 +115,6 @@ int Game::run(Player &p) {
     player_stats_win = newwin(20, 30, starty, startx+82);
     game_over_win = newwin(3, 11, LINES/2 - 2, COLS/2 - 27);
 
-	refresh();
 	curs_set(0);
 	refresh();
 
@@ -239,7 +236,7 @@ int Game::run(Player &p) {
         }
 
         // Proiettili ////////////////////////////////////////////////////
-        if(b==bul_speed){
+        if(b == bul_speed){
             tmp_b = lista_proiettili;
             tmp_b2 = lista_proiettili;
 
