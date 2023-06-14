@@ -264,7 +264,7 @@ int main(){
 			protagonist.saveStats();
 
 			//rimozione dei file dei livelli precedenti
-			char filePath[64] = "Arhivio/";
+			char filePath[64] = "Archivio/";
 			strcat(filePath, protagonist.getNick());
 			strcat(filePath, "/Level1.txt");
 
