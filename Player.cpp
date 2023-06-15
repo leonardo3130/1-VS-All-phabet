@@ -12,8 +12,10 @@ void Player::pay(int p){
     this->money -= p;
 }
 
-int Player::fight(int m_hp, int m_atk, int m_def){
-    this->hp -= 0.005;//(m_atk)/(this->def);
+int Player::fight(int m_hp, int m_atk, int m_def, bool tur){
+    if(tur == 0){
+        this->hp -= 0.005;//(m_atk)/(this->def);
+    }
     m_hp  -= 0.000005;//(this->def)/(m_def);
     return m_hp;
 }
@@ -41,7 +43,7 @@ arnd Player::check_around(Map& m){
     x = m.getMapChar(this->y, (this->x) + 1);
     if(x == ' ')
         around.right = 0;
-    else if(x >= 'A' && x <= 'Z')
+    else if((x >= 'A' && x <= 'Z') || (x >= 'a' && x <= 'z'))
         around.right = 1;
     else if(x == '@')
         around.right = 2;
@@ -50,7 +52,7 @@ arnd Player::check_around(Map& m){
     x =m.getMapChar((this->y) + 1, this->x);
     if(x == ' ')
         around.under = 0;
-    else if(x >= 'A' && x <= 'Z')
+    else if((x >= 'A' && x <= 'Z') || (x >= 'a' && x <= 'z'))
         around.under = 1;
     else if(x == '@')
         around.under = 2;
@@ -59,7 +61,7 @@ arnd Player::check_around(Map& m){
     x = m.getMapChar(this->y, (this->x) - 1);
     if(x == ' ')
         around.left = 0;
-    else if(x >= 'A' && x <= 'Z')
+    else if((x >= 'A' && x <= 'Z') || (x >= 'a' && x <= 'z'))
         around.left = 1;
     else if(x == '@')
         around.left = 2;
@@ -68,7 +70,7 @@ arnd Player::check_around(Map& m){
     x = m.getMapChar((this->y) - 1, this->x);
     if(x == ' ')
         around.above = 0;
-    else if(x >= 'A' && x <= 'Z')
+    else if((x >= 'A' && x <= 'Z') || (x >= 'a' && x <= 'z'))
         around.above = 1;
     else if(x == '@')
         around.above = 2;

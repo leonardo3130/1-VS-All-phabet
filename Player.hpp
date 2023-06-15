@@ -22,7 +22,7 @@ class Player : public Character{
     public:
         Player();
         Player(char* nick, char* psw, char look);
-        int fight(int m_hp, int m_atk, int m_def);                //interazione tra mostro e player
+        int fight(int m_hp, int m_atk, int m_def, bool tur);                //interazione tra mostro e player
         char* getNick();
         int getMoney();
         void pay(int p);
