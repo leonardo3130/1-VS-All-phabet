@@ -5,6 +5,7 @@ Player::Player() : Character('1'){}
 Player::Player(char* nick, char* psw, char look='1') : Character(look){
     strcpy(this->nick, nick);
     strcpy(this->psw, psw);
+    this->score = 0;
 }
 
 void Player::pay(int p){
@@ -86,6 +87,18 @@ void Player::takeMoney(int value){
     this->money = money + value;
 }
 
+void Player::incScore(int score){
+    this->score += score;
+}
+
+int Player::getScore(){
+    return this->score;
+}
+
+void Player::setScore(int score){
+    this->score = score;
+}
+
 //menu per scegliere se effettuare login, sign in o uscire dal gioco
 int Player::choice_menu() {
     int choice = 0, highlights = 0;
@@ -102,6 +115,7 @@ int Player::choice_menu() {
     mvwprintw(menu, 6, 6, " _|  |_     |  |  ||__ --|    |       ||  ||  ||______||  _  ||     ||  _  ||  _  ||  -__||   _|");
     mvwprintw(menu, 7, 6, "|______|     \\___/ |_____|    |___|___||__||__|        |   __||__|__||___._||_____||_____||____|");
     mvwprintw(menu, 8, 6, "                                                       |__|                                     ");
+
 
     while (choice != 10){
 
@@ -216,6 +230,7 @@ bool Player::signIn(char *user, char *psw){
         credenziali << getDef() << endl;
         credenziali << getMoney() << endl;		//default money
         credenziali << this->current_level << endl;		//default level
+        credenziali << this->score;
 
         credenziali.close();
         isCorrect = true;
@@ -252,6 +267,7 @@ bool Player::login(char *user, char *psw){
 			input_file >> this->def;
 			input_file >> this->money;
             input_file >> this->current_level;
+            input_file >> this->score;
 			exists = true;
 
 		}else {
@@ -287,6 +303,8 @@ void Player::saveStats(){
 	credenziali << this->def << endl;
 	credenziali << this->money << endl;
     credenziali << this->current_level << endl;
+    credenziali << this->score;
+
 	credenziali.close();
 }
 
