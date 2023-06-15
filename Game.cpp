@@ -1,15 +1,15 @@
 #include "Game.hpp"
 
-Game::Game(char filePath[], int atk, int def, int livello) { //oltre al filePath del livello bisognerà passare quello del file credentials con i suoi valori di hp, atk, def e numero di mostri (questo si vedrà) 
-                                         //a inizio del livello in cui è morto 
+Game::Game(char filePath[], int atk, int def, int livello) { //oltre al filePath del livello bisognerà passare quello del file credentials con i suoi valori di hp, atk, def e numero di mostri (questo si vedrà)
+                                         //a inizio del livello in cui è morto
                                          //all'inizio di ogni livello servirà quindi aggiornare il file credentials.txt
     ifstream file(filePath);
-    int m_x, m_y, m_atk = 2 + (livello), m_def = 2 + (livello), m_mode, m_max_hp = 50 + (10 * (livello-1));
+    int m_x, m_y, m_atk = 2 + (livello), m_def = 2 + (livello), m_mode, m_max_hp = 20 + (10 * (livello-1));
     int t_max_hp = m_max_hp*5, t_hp;
     double m_hp;
     if (livello == 1)
         m_atk += atk, m_def += def;
-    
+
     if(file){
         this->map = Map(filePath);
         this->n_mostri = 0;
@@ -58,7 +58,7 @@ Game::Game(char filePath[], int atk, int def, int livello) { //oltre al filePath
             this->n_torri = 3;
 
         (this->lista_mostri) = NULL;
-        //eventuali cambiamenti per il numero di monete 
+        //eventuali cambiamenti per il numero di monete
         this->map = Map(40, 80, livello);
 
         //generazione mostri non da file //////////////////
@@ -75,17 +75,12 @@ Game::Game(char filePath[], int atk, int def, int livello) { //oltre al filePath
         }
         //torre
         for(int i=0;i< this->n_torri;i++){
-            if(i == 0) {
-                m_x = this->map.getWidth() / 2;
-                m_y = this->map.getHeight() - 3;
-            } else if(i == 1) {
-                m_x = this->map.getWidth() / 2;
-                m_y = 2;
-            }
-            else {
-                m_x = this->map.getWidth() - 5;
-                m_y = this->map.getHeight() / 2;
-            }
+            if(i == 0)
+                m_x = this->map.getWidth() / 2, m_y = this->map.getHeight() - 3;
+            else if(i == 1)
+                m_x = this->map.getWidth() / 2, m_y = 2;
+            else
+                m_x = this->map.getWidth() - 5, m_y = this->map.getHeight() / 2;
 
             if(map.isEmpty(m_x, m_y) && !map.isMoney(m_x, m_y) && !map.isMonster(m_x, m_y)) {
                 Monster mostro(m_x, m_y, t_max_hp, m_atk+5, m_def+5, rand()%4, 'a', 1);
@@ -106,15 +101,16 @@ int Game::run(Player &p) {
 	nodelay(stdscr, TRUE);
 
     //box mappa, statistiche e comandi
-	WINDOW *game_win, *commands_win, *player_stats_win, *game_over_win;//, *prova;
+	WINDOW *game_win, *commands_win, *player_stats_win, *game_over_win;
 
 	int starty = (LINES - 42) / 2;
     int startx = (COLS - 82) / 3;
 
 	game_win = newwin(42, 82, starty, startx);
     player_stats_win = newwin(20, 30, starty, startx+82);
-    //prova = newwin(20, 30, starty + 31, startx + 82);
+    commands_win = newwin(20, 30, starty+20 , startx+82);
     game_over_win = newwin(3, 11, LINES/2 - 2, COLS/2 - 27);
+
 
 	curs_set(0);
 	refresh();
@@ -138,6 +134,8 @@ int Game::run(Player &p) {
     pmon tmp_m = NULL;
 
     p.setX_Y(3, 4);
+    drawCommands(commands_win);
+
 	while(esito == IN_GAME || esito == WIN)
     {
         napms(5);
@@ -181,6 +179,7 @@ int Game::run(Player &p) {
 
                 if(tmp_m->mon.getHp() <= 0){    //controllo hp
                     p.takeMoney(3); // quando si uccide un mostro si prendono 3 monete
+                    p.incScore(50); // quando si uccide un mostro si prendono 50 punti aggiuntivi
 
                     this -> n_mostri--;
                     map.setMapChar(tmp_m->prev_y, tmp_m->prev_x, ' ');
@@ -382,11 +381,11 @@ int Game::run(Player &p) {
         }
 	}
     this->map.clean();
-    
+
     if(esito == LOSE){
         this->map.setMapChar(p.getY(), p.getX(), ' ');
         drawGameover(game_win, game_over_win), getch();
-        //aggiorno credentials.txt 
+        //aggiorno credentials.txt
     }
     else if(esito == GO_TO_NEXT)
         this->map.setMapChar(this->map.getHeight() - 3, this->map.getWidth() - 5, ' ');
@@ -396,7 +395,11 @@ int Game::run(Player &p) {
         this->map.setMapChar(p.getY(), p.getX(), ' ');
 
     delwin(game_win);refresh();
-    delete lista_proiettili;
+    while(lista_proiettili != NULL) {
+        pbul tmp_lp = lista_proiettili -> next;
+        delete lista_proiettili;
+        lista_proiettili = tmp_lp;
+    }
     return esito;
 }
 
@@ -409,6 +412,7 @@ pbul Game::handleInput(int c, Map& map, Player& giocatore, pbul bullet_list, arn
                 if(around.above == 2)
                 {
                     giocatore.takeMoney(1);
+                    giocatore.incScore(5); //la raccolta di 1 moneta porta anche 5 punti aggiuntivi
                     map.setCoins(map.getCoins() - 1);
                 }
 				giocatore.moveup(map);
@@ -418,6 +422,7 @@ pbul Game::handleInput(int c, Map& map, Player& giocatore, pbul bullet_list, arn
                 if(around.under == 2)
                 {
                     giocatore.takeMoney(1);
+                    giocatore.incScore(5);
                     map.setCoins(map.getCoins() - 1);
                 }
 				giocatore.movedown(map);
@@ -427,6 +432,7 @@ pbul Game::handleInput(int c, Map& map, Player& giocatore, pbul bullet_list, arn
                 if(around.left == 2)
                 {
                     giocatore.takeMoney(1);
+                    giocatore.incScore(5);
                     map.setCoins(map.getCoins() - 1);
                 }
 				giocatore.moveleft(map);
@@ -436,6 +442,7 @@ pbul Game::handleInput(int c, Map& map, Player& giocatore, pbul bullet_list, arn
                 if(around.right == 2)
                 {
                     giocatore.takeMoney(1);
+                    giocatore.incScore(5);
                     map.setCoins(map.getCoins() - 1);
                 }
 				giocatore.moveright(map);
@@ -520,9 +527,10 @@ void Game::drawStats(WINDOW *win, int x, int y, Player p){
     box(win, 0, 0);
     mvwprintw(win, 0, 4, "Stats di %s - Lv. %d", p.getNick(), p.getCurrentLevel());
     mvwprintw(win, 2, 3, " Monete : %d     ", p.getMoney());
-    mvwprintw(win, 4, 3, "   Vita : %.2f     ", p.getHp());
-    mvwprintw(win, 6, 3, "Attacco : %d     ", p.getAtk());
-    mvwprintw(win, 8, 3, " Difesa : %d     ", p.getDef());
+    mvwprintw(win, 4, 3, "  Score : %d     ", p.getScore());
+    mvwprintw(win, 6, 3, "   Vita : %.2f     ", p.getHp());
+    mvwprintw(win, 8, 3, "Attacco : %d     ", p.getAtk());
+    mvwprintw(win, 10, 3, " Difesa : %d     ", p.getDef());
 
     if(this->n_mostri > 1)
         mvwprintw(win, 17, 2, "Mancano ancora %d mostri   ", this->n_mostri);
@@ -541,6 +549,20 @@ void Game::drawStats(WINDOW *win, int x, int y, Player p){
     wrefresh(win);
 }
 
+void Game::drawCommands(WINDOW *win) {
+    box(win, 0, 0);
+    mvwprintw(win, 0, 9, "Comandi");
+
+    mvwprintw(win, 2, 3, "Movimento: tasti freccia");
+    mvwprintw(win, 4, 3, "Sparo in alto: w");
+    mvwprintw(win, 6, 3, "Sparo in basso: s");
+    mvwprintw(win, 8, 3, "Sparo a destra: d");
+    mvwprintw(win, 10, 3, "Sparo a sinistra: a");
+    mvwprintw(win, 12, 3, "Exit: q");
+    mvwprintw(win, 14, 3, "Shop: 1");
+
+    wrefresh(win);
+}
 void Game::drawGameover(WINDOW* game_win, WINDOW* game_over_win){
     box(game_over_win, 0, 0);
     mvwprintw(game_over_win, 1, 1, "Game Over");
@@ -552,12 +574,6 @@ void Game::drawGameover(WINDOW* game_win, WINDOW* game_over_win){
     }
 }
 
-/*void Game::drawProva(WINDOW* prova){
-    box(prova, 0, 0);
-    mvwprintw(prova, 1, 1, "ciao");
-    wrefresh(prova);
-}
-*/
 void Game::timed_print(char *text, int text_len, int micro_seconds_delay, int l, int c){
     // Impostazione dei colori
     start_color();
