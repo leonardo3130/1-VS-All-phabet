@@ -326,12 +326,12 @@ int Game::run(Player &p) {
                     x = search_monster_by_xy(this->lista_mostri, (p.getX()) + tmp_x, (p.getY() + tmp_y));
                     if(x!=NULL){
                         if(!this->map.isTurret(x->mon.getX(), x->mon.getY())){
-                            x->mon.SetHp(p.fight(x->mon.getHp(), x->mon.getAtk(), x->mon.getDef()));
+                            x->mon.SetHp(p.fight(x->mon.getHp(), x->mon.getAtk(), x->mon.getDef(), 0));
                             x->mon.setLook(91 - (int) ((x->mon.getHp() / m_max_hp) * 26.0));
                             if(x->mon.getLook() > 'Z') x->mon.setLook('Z');
                             x = x->next;
                         }else{
-                            x->mon.SetHp(p.fight(x->mon.getHp(), x->mon.getAtk(), x->mon.getDef()));
+                            x->mon.SetHp(p.fight(x->mon.getHp(), x->mon.getAtk(), x->mon.getDef(), 1));
                             x->mon.setLook(123 - (int) ((x->mon.getHp() / t_max_hp) * 26.0));
                             if(x->mon.getLook() > 'z') x->mon.setLook('z');
                             x = x->next;
