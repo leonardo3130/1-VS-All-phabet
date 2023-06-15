@@ -93,7 +93,7 @@ Game::Game(char filePath[], int atk, int def, int livello) { //oltre al filePath
 int Game::run(Player &p) {
     //aggiorno credentials.txt (all'inizio per il numero dei mostri)
     srand(time(NULL));
-    int esito = IN_GAME, m_max_hp = 50 + (10 * (p.getCurrentLevel()-1)),
+    int esito = IN_GAME, m_max_hp = 20 + (10 * (p.getCurrentLevel()-1)),
                 t_max_hp = m_max_hp*5;
 
     pbul lista_proiettili = NULL;
@@ -531,6 +531,7 @@ void Game::drawStats(WINDOW *win, int x, int y, Player p){
     mvwprintw(win, 6, 3, "   Vita : %.2f     ", p.getHp());
     mvwprintw(win, 8, 3, "Attacco : %d     ", p.getAtk());
     mvwprintw(win, 10, 3, " Difesa : %d     ", p.getDef());
+    pmon tmp = this->lista_mostri;
 
     if(this->n_mostri > 1)
         mvwprintw(win, 17, 2, "Mancano ancora %d mostri   ", this->n_mostri);
