@@ -106,13 +106,14 @@ int Game::run(Player &p) {
 	nodelay(stdscr, TRUE);
 
     //box mappa, statistiche e comandi
-	WINDOW *game_win, *commands_win, *player_stats_win, *game_over_win;
+	WINDOW *game_win, *commands_win, *player_stats_win, *game_over_win;//, *prova;
 
 	int starty = (LINES - 42) / 2;
     int startx = (COLS - 82) / 3;
 
 	game_win = newwin(42, 82, starty, startx);
     player_stats_win = newwin(20, 30, starty, startx+82);
+    //prova = newwin(20, 30, starty + 31, startx + 82);
     game_over_win = newwin(3, 11, LINES/2 - 2, COLS/2 - 27);
 
 	curs_set(0);
@@ -247,7 +248,7 @@ int Game::run(Player &p) {
 
                     if(collision == 2){
                         if(this->lista_mostri != NULL)
-                            p.incHP( -(lista_mostri->mon.getAtk() / p.getDef()) );
+                            p.incHP( -(double(lista_mostri->mon.getAtk()) / double(p.getDef())) );
                         else p.incHP(-1);
                     }
 
@@ -264,12 +265,14 @@ int Game::run(Player &p) {
 
                         if(x!=NULL){
                             if(!this->map.isTurret(x->mon.getX(), x->mon.getY())){
-                                x->mon.SetHp(p.fight(x->mon.getHp(), x->mon.getAtk(), x->mon.getDef()));
+                                //x->mon.SetHp(p.fight(x->mon.getHp(), x->mon.getAtk(), x->mon.getDef()));
+                                x->mon.incHP( -(double(p.getAtk()) / double(x->mon.getDef())) );
                                 x->mon.setLook(91 - (int) ((x->mon.getHp() / m_max_hp) * 26.0));
                                 if(x->mon.getLook() > 'Z') x->mon.setLook('Z');
                                 x = x->next;
                             }else{
-                                x->mon.SetHp(p.fight(x->mon.getHp(), x->mon.getAtk(), x->mon.getDef()));
+                                //x->mon.SetHp(p.fight(x->mon.getHp(), x->mon.getAtk(), x->mon.getDef()));
+                                x->mon.incHP( -(double(p.getAtk()) / double(x->mon.getDef())) );
                                 x->mon.setLook(123 - (int) ((x->mon.getHp() / t_max_hp) * 26.0));
                                 if(x->mon.getLook() > 'z') x->mon.setLook('z');
                                 x = x->next;
@@ -301,6 +304,7 @@ int Game::run(Player &p) {
                 {
                     p_before = tmp_b;
                     tmp_b = tmp_b->next;
+                    //drawProva(prova);
                 }
             }
         }
@@ -548,6 +552,12 @@ void Game::drawGameover(WINDOW* game_win, WINDOW* game_over_win){
     }
 }
 
+/*void Game::drawProva(WINDOW* prova){
+    box(prova, 0, 0);
+    mvwprintw(prova, 1, 1, "ciao");
+    wrefresh(prova);
+}
+*/
 void Game::timed_print(char *text, int text_len, int micro_seconds_delay, int l, int c){
     // Impostazione dei colori
     start_color();
