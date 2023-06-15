@@ -40,7 +40,7 @@ ptr_livelli new_level(ptr_livelli l, Player &p){
 		l = new livello;
 		l->next = NULL;
 		l->prev = NULL;
-		l->partita = Game(filePath, p.getAtk(), p.getDef(), p.getCurrentLevel()); 
+		l->partita = Game(filePath, p.getAtk(), p.getDef(), p.getCurrentLevel());
 		l->n_liv = p.getCurrentLevel();
 		return l;
 	}
@@ -49,7 +49,7 @@ ptr_livelli new_level(ptr_livelli l, Player &p){
 		l->next = new_l;
 		new_l->next = NULL;
 		new_l->prev = l;
-		new_l->partita = Game(filePath, p.getAtk(), p.getDef(), p.getCurrentLevel()); 
+		new_l->partita = Game(filePath, p.getAtk(), p.getDef(), p.getCurrentLevel());
 		new_l->n_liv = p.getCurrentLevel();
 		return new_l;
 	}
@@ -66,6 +66,20 @@ void shop(Player &p){
 	box(shop, 0, 0);
 	refresh();
     wrefresh(shop);
+
+	mvwprintw(shop, 3, 12, " /$$$$$$  / $$");
+	mvwprintw(shop, 4, 12, "/$$__  $$ | $$");
+	mvwprintw(shop, 5, 12, "| $$  \\__/| $$$$$$$   /$$$$$$   /$$$$$$");
+	mvwprintw(shop, 6, 12, "|  $$$$$$ | $$__  $$ /$$__  $$ /$$__  $$");
+	mvwprintw(shop, 7, 12, " \\____  $$| $$  \\ $$| $$  \\ $$| $$  \\ $$");
+	mvwprintw(shop, 8, 12, " /$$  \\ $$| $$  | $$| $$  | $$| $$  | $$");
+	mvwprintw(shop, 9, 12, "| $$$$$$$/| $$  | $$| $$$$$$/ | $$$$$$$/");
+	mvwprintw(shop, 10, 12," \\______/ |__/  |__/\\______/  | $$____/");
+	mvwprintw(shop, 11, 12,"                              | $$");
+	mvwprintw(shop, 12, 12,"                              | $$");
+	mvwprintw(shop, 13, 12,"                              |__/");
+
+
 
 	mvwprintw(shop, 16, 20, "  //\\\\");
 	mvwprintw(shop, 17, 20, "  |- |");
@@ -94,12 +108,15 @@ void shop(Player &p){
 	mvwprintw(shop, 22, 55, "    \\  /");
 	mvwprintw(shop, 23, 55, "     \\/");
 
+	mvwprintw(shop, 36, 28, "Premi q per tornare al gico");
+
 	keypad(shop, true);
 	while (choice != 'q'){
 		mvwprintw(shop, 2, 60, " Monete : %d     ", p.getMoney());
-		mvwprintw(shop, 4, 60, "   Vita : %.2f     ", p.getHp());
-		mvwprintw(shop, 6, 60, "Attacco : %d     ", p.getAtk());
-		mvwprintw(shop, 8, 60, " Difesa : %d     ", p.getDef());
+		mvwprintw(shop, 4, 60, "  Score : %d     ", p.getScore());
+		mvwprintw(shop, 6, 60, "   Vita : %.2f     ", p.getHp());
+		mvwprintw(shop, 8, 60, "Attacco : %d     ", p.getAtk());
+		mvwprintw(shop, 10, 60, " Difesa : %d     ", p.getDef());
 
 		if(highlights == 0) wattron(shop, A_REVERSE);
 			mvwprintw(shop, 27, 21, "+2 ATK");
@@ -236,11 +253,9 @@ int main(){
 	do
 	{
 		protagonist.setX_Y(3, 4);
-		//Map mappa_backup = gioco->partita.getMap();
 
 		//inzio del game
 		esito_partita = (gioco->partita).run(protagonist);
-		//int n_mostri_backup = gioco->partita.getNMostri();
 
 		if(esito_partita == GO_TO_PREV)
 			gioco = gioco->prev, protagonist.setCurrentLevel(protagonist.getCurrentLevel() - 1);
@@ -252,14 +267,15 @@ int main(){
 				gioco = gioco->next;
 			else {
 				gioco = new_level(gioco, protagonist);
-				//aumenta score
+				protagonist.incScore(100);
 			}
 		}
 		else if(esito_partita == GO_TO_SHOP)	shop(protagonist);
 		else if(esito_partita == LOSE){
-			
+
 			//salvo statistiche player
 			protagonist.SetHp(25.0);
+			protagonist.setScore(0);
 			protagonist.setCurrentLevel(1);
 			protagonist.saveStats();
 
@@ -276,7 +292,7 @@ int main(){
 				strcat(comando, "/Level*");
 				system(comando);
 			}
-			
+
 			//ricomincia il gioco da un livello proporzionato
 			delete_game(head);
 			gioco = NULL;
@@ -284,9 +300,6 @@ int main(){
 
 			gioco = new_level(gioco, protagonist);
 			head = gioco;
-
-			//settare lo score a 0
-
 		}
 	}
 	while (esito_partita != EXIT);

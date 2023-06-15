@@ -49,5 +49,5 @@ class Game {
 		void setListaMostri(pmon l);
 		int getNMostri();
 		void setNMostri(int n);
-		void drawProva(WINDOW* prova);
+		void drawCommands(WINDOW *win);
 };
