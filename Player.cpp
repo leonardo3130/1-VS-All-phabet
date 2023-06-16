@@ -12,11 +12,11 @@ void Player::pay(int p){
     this->money -= p;
 }
 
-int Player::fight(int m_hp, int m_atk, int m_def, bool tur){
+double Player::fight(double m_hp, bool tur){
     if(tur == 0){
-        this->hp -= 0.005;//(m_atk)/(this->def);
+        this->hp -= 0.005;
     }
-    m_hp  -= 0.000005;//(this->def)/(m_def);
+    m_hp  -= 0.05;
     return m_hp;
 }
 
