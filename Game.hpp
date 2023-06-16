@@ -32,6 +32,7 @@ class Game {
 		void drawBullet(WINDOW *win, Map &map, pbul bul_list);
 		void drawStats(WINDOW *win, int x, int y, Player p);
 		void drawGameover(WINDOW *win, WINDOW *game_over_win);
+		void drawCommands(WINDOW *win);
 
 		Map map;
 		int n_mostri, n_torri;
@@ -49,5 +50,4 @@ class Game {
 		void setListaMostri(pmon l);
 		int getNMostri();
 		void setNMostri(int n);
-		void drawCommands(WINDOW *win);
 };
