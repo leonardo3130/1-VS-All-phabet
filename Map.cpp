@@ -20,11 +20,10 @@ Map::Map(int h, int w, int level) {
     {
         for(int j = 0 ; j < this->width - 1; j++)
         {
-            if((i == 0 && j == 0) || (i == 0 && j == this->width - 2) || (i == this->height - 1 && j == 0) || (i == this->height - 1 && j == this->width - 2)) {
-                    this->matrix[i][j] = '/'; //angoli della mappa
-                    this->matrix[i][j + 1] = '/'; //angoli della mappa
+            if(i == 0 || i == this->height - 1){
+                this->matrix[i][j] = '/';
+                this->matrix[i][j+1] = '/';
             }
-            else if(i == 0 || i == this->height - 1) this->matrix[i][j] = '/'; //bordi sopra e sotto
             else if(j == this->width - 2) {
                 this->matrix[i][j] = '/'; //bordi laterali
                 this->matrix[i][j + 1] = '/';

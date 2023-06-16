@@ -1,8 +1,6 @@
 #include "Game.hpp"
 
-Game::Game(char filePath[], int atk, int def, int livello) { //oltre al filePath del livello bisognerà passare quello del file credentials con i suoi valori di hp, atk, def e numero di mostri (questo si vedrà)
-                                         //a inizio del livello in cui è morto
-                                         //all'inizio di ogni livello servirà quindi aggiornare il file credentials.txt
+Game::Game(char filePath[], int atk, int def, int livello) {
     ifstream file(filePath);
     int m_x, m_y, m_atk = 2 + (livello), m_def = 2 + (livello), m_mode, m_max_hp = 20 + (10 * (livello-1));
     int t_max_hp = m_max_hp*5, t_hp;
@@ -45,11 +43,12 @@ Game::Game(char filePath[], int atk, int def, int livello) { //oltre al filePath
         }
         file.close();
     }else{
+        //numero di mostri
         if(livello <= 12)
             this->n_mostri = 2 +(livello)*0.5;
         else
             this->n_mostri = 20;
-        //stessa cosa del numero di mostri vale per le torri
+        //numero di torrette
         if(livello <5)
             this->n_torri = 1;
         else if(livello < 10)
@@ -58,7 +57,6 @@ Game::Game(char filePath[], int atk, int def, int livello) { //oltre al filePath
             this->n_torri = 3;
 
         (this->lista_mostri) = NULL;
-        //eventuali cambiamenti per il numero di monete
         this->map = Map(40, 80, livello);
 
         //generazione mostri non da file //////////////////
@@ -91,7 +89,6 @@ Game::Game(char filePath[], int atk, int def, int livello) { //oltre al filePath
 };
 
 int Game::run(Player &p) {
-    //aggiorno credentials.txt (all'inizio per il numero dei mostri)
     srand(time(NULL));
     int esito = IN_GAME, m_max_hp = 20 + (10 * (p.getCurrentLevel()-1)),
                 t_max_hp = m_max_hp*5;
@@ -100,7 +97,7 @@ int Game::run(Player &p) {
     keypad(stdscr, TRUE);
 	nodelay(stdscr, TRUE);
 
-    //box mappa, statistiche e comandi
+    //box mappa, statistiche e comandi e game over
 	WINDOW *game_win, *commands_win, *player_stats_win, *game_over_win;
 
 	int starty = (LINES - 42) / 2;
@@ -125,9 +122,9 @@ int Game::run(Player &p) {
     // game loop
 	int prev_x, prev_y, c = 0, b = 0, d = 0, e = 0, f = 0, tmp_x, tmp_y, tmp_dir, tmp_ar;
 
-    int bul_speed = 10;     //abbassare i valori per aumentare le velocità
-    int mon_speed = 130;
-    int m_shot_fr = 400;
+    const int bul_speed = 10;     //abbassare i valori per aumentare le velocità
+    const int mon_speed = 130;
+    const int m_shot_fr = 400;
 
     arnd around;
     pbul tmp_b = NULL, tmp_b2 = NULL;
@@ -264,13 +261,11 @@ int Game::run(Player &p) {
 
                         if(x!=NULL){
                             if(!this->map.isTurret(x->mon.getX(), x->mon.getY())){
-                                //x->mon.SetHp(p.fight(x->mon.getHp(), x->mon.getAtk(), x->mon.getDef()));
                                 x->mon.incHP( -(double(p.getAtk()) / double(x->mon.getDef())) );
                                 x->mon.setLook(91 - (int) ((x->mon.getHp() / m_max_hp) * 26.0));
                                 if(x->mon.getLook() > 'Z') x->mon.setLook('Z');
                                 x = x->next;
                             }else{
-                                //x->mon.SetHp(p.fight(x->mon.getHp(), x->mon.getAtk(), x->mon.getDef()));
                                 x->mon.incHP( -(double(p.getAtk()) / double(x->mon.getDef())) );
                                 x->mon.setLook(123 - (int) ((x->mon.getHp() / t_max_hp) * 26.0));
                                 if(x->mon.getLook() > 'z') x->mon.setLook('z');
