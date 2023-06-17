@@ -11,6 +11,10 @@ class Monster : public Character{
 
     public:
         Monster(int x = 2, int y = 3,int hp = 100, int atk = 10,int def = 10, int mode = 0, char look = 'A', bool tur = 0);
+        void moveright(Map mappa);
+        void moveleft(Map mappa);
+        void moveup(Map mappa);
+        void movedown(Map mappa);
         void move(Map& mappa, int x_p, int y_p);
         bool getTur();
 };

@@ -8,6 +8,31 @@ Monster::Monster(int x, int y,int hp, int atk ,int def, int mode, char look, boo
     this->turret = tur;
 };
 
+//metodi meovimento modificati in modo che non si sovrappongano due mostri e che i mostri non raccolgano le monete
+void Monster::moveright(Map mappa){
+    if(!mappa.isMoney((this -> x) + 1, this -> y) && !mappa.isMonster((this -> x) + 2, this -> y) && !mappa.isMonster((this -> x) + 1, (this -> y) + 1)
+    && !mappa.isMonster((this -> x) + 1, (this -> y) - 1))
+        Character::moveright(mappa);
+}
+
+void Monster::moveleft(Map mappa){
+    if(!mappa.isMoney((this -> x) - 1, this -> y) && !mappa.isMonster((this -> x) - 2, this -> y) && !mappa.isMonster((this -> x) - 1, (this -> y) + 1)
+    && !mappa.isMonster((this -> x) - 1, (this -> y) - 1))
+        Character::moveleft(mappa);
+}
+
+void Monster::moveup(Map mappa){
+    if(!mappa.isMoney(this -> x, (this -> y) - 1) && !mappa.isMonster(this -> x, (this -> y) - 2) && !mappa.isMonster((this -> x) + 1, (this -> y) - 1)
+    && !mappa.isMonster((this -> x) - 1, (this -> y) - 1))
+        Character::moveup(mappa);
+}
+
+void Monster::movedown(Map mappa){
+    if(!mappa.isMoney(this -> x, (this -> y) + 1) && !mappa.isMonster(this -> x, (this -> y) + 2) && !mappa.isMonster((this -> x) + 1, (this -> y) + 1)
+    && !mappa.isMonster((this -> x) - 1, (this -> y) + 1))
+        Character::movedown(mappa);
+}
+
 void Monster::move(Map& mappa, int x_p, int y_p){
     //mode determina la direzione di spostamento: 0=right  1=down  2=left  3=up
     int mode;
