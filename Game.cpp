@@ -298,7 +298,6 @@ int Game::run(Player &p) {
                 {
                     p_before = tmp_b;
                     tmp_b = tmp_b->next;
-                    //drawProva(prova);
                 }
             }
         }
@@ -380,7 +379,6 @@ int Game::run(Player &p) {
     if(esito == LOSE){
         this->map.setMapChar(p.getY(), p.getX(), ' ');
         drawGameover(game_win, game_over_win), getch();
-        //aggiorno credentials.txt
     }
     else if(esito == GO_TO_NEXT)
         this->map.setMapChar(this->map.getHeight() - 3, this->map.getWidth() - 5, ' ');
@@ -394,6 +392,11 @@ int Game::run(Player &p) {
         pbul tmp_lp = lista_proiettili -> next;
         delete lista_proiettili;
         lista_proiettili = tmp_lp;
+    }
+    while(lista_mostri != NULL) {
+        pmon tmp_lp = lista_mostri -> next;
+        delete lista_mostri;
+        lista_mostri = tmp_lp;
     }
     return esito;
 }
