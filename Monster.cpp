@@ -8,33 +8,8 @@ Monster::Monster(int x, int y,int hp, int atk ,int def, int mode, char look, boo
     this->turret = tur;
 };
 
-//contatto con player: i mostri perdono hp in base all' atk del player e al prorpio def, e viceversa
-void Monster::moveright(Map mappa){
-    if(!mappa.isMoney((this -> x) + 1, this -> y) && !mappa.isMonster((this -> x) + 2, this -> y) && !mappa.isMonster((this -> x) + 1, (this -> y) + 1)
-    && !mappa.isMonster((this -> x) + 1, (this -> y) - 1))
-        Character::moveright(mappa);
-}
-
-void Monster::moveleft(Map mappa){
-    if(!mappa.isMoney((this -> x) - 1, this -> y) && !mappa.isMonster((this -> x) - 2, this -> y) && !mappa.isMonster((this -> x) - 1, (this -> y) + 1)
-    && !mappa.isMonster((this -> x) - 1, (this -> y) - 1))
-        Character::moveleft(mappa);
-}
-
-void Monster::moveup(Map mappa){
-    if(!mappa.isMoney(this -> x, (this -> y) - 1) && !mappa.isMonster(this -> x, (this -> y) - 2) && !mappa.isMonster((this -> x) + 1, (this -> y) - 1)
-    && !mappa.isMonster((this -> x) - 1, (this -> y) - 1))
-        Character::moveup(mappa);
-}
-
-void Monster::movedown(Map mappa){
-    if(!mappa.isMoney(this -> x, (this -> y) + 1) && !mappa.isMonster(this -> x, (this -> y) + 2) && !mappa.isMonster((this -> x) + 1, (this -> y) + 1)
-    && !mappa.isMonster((this -> x) - 1, (this -> y) + 1))
-        Character::movedown(mappa);
-}
-
 void Monster::move(Map& mappa, int x_p, int y_p){
-//m_mode determina la direzione di spostamento: come per l'attributo mode di Character 0=right  1=down  2=left  3=up
+    //mode determina la direzione di spostamento: 0=right  1=down  2=left  3=up
     int mode;
 
     if(abs(this->x - x_p) < abs (this->y - y_p) && this->x != x_p){
@@ -83,8 +58,6 @@ void Monster::move(Map& mappa, int x_p, int y_p){
         else
             this->moveleft(mappa);
     }
-
-
 }
 
 bool Monster::getTur(){
