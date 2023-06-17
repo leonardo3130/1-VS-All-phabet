@@ -40,9 +40,6 @@ class Game {
 	public:
 		Game(char filePath[] = NULL, int atk=0, int def=0 ,int livello=1);
 		int run(Player &p);
-		void timed_print(char *text, int text_len, int micro_seconds_delay, int l, int c);
-		void init_message();
-		void game_exit();
 		Map getMap();
 		void setMap(Map mappa);
 		pmon getListaMostri();

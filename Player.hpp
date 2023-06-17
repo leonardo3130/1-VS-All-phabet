@@ -5,6 +5,8 @@
 #include "Monster.hpp"
 using namespace std;
 
+#define NUM_COLORS 8
+
 struct arnd{
     int right;
     int under;

@@ -231,7 +231,7 @@ void Map::writeMap(int level, char *nickPlayer){
     // Scrivi la matrice in filePath
     for (int i = 0; i < this->height; i++) {
         for (int j = 0; j < this->width; j++) {
-            if(this->matrix[i][j] == ' ' || this->matrix[i][j] == '1')
+            if(this->matrix[i][j] == ' ')
                 this->matrix[i][j] = '#';
 
             outfile << this->matrix[i][j];

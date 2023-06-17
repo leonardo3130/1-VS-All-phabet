@@ -246,23 +246,22 @@ int main(){
 
 		gioco = tmp;
 	}else{
+		protagonist.setX_Y(3, 4);
 		gioco = new_level(gioco, protagonist);
 		head = gioco;
 	}
 
 	do
 	{
-		protagonist.setX_Y(3, 4);
-
 		//inzio del game
 		esito_partita = (gioco->partita).run(protagonist);
 
 		if(esito_partita == GO_TO_PREV)
-			gioco = gioco->prev, protagonist.setCurrentLevel(protagonist.getCurrentLevel() - 1);
+			gioco = gioco->prev, protagonist.setCurrentLevel(protagonist.getCurrentLevel() - 1), protagonist.setX_Y(3, 4);
 
 		else if(esito_partita == GO_TO_NEXT){
 			protagonist.setCurrentLevel(protagonist.getCurrentLevel() + 1);
-
+			protagonist.setX_Y(3, 4);
 			if(gioco->next != NULL)
 				gioco = gioco->next;
 			else {
@@ -277,6 +276,7 @@ int main(){
 			protagonist.SetHp(25.0);
 			protagonist.setScore(0);
 			protagonist.setCurrentLevel(1);
+			protagonist.setX_Y(3, 4);
 			protagonist.saveStats();
 
 			//rimozione dei file dei livelli precedenti
