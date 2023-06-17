@@ -56,14 +56,14 @@ Map::Map(int h, int w, int level) {
             {
                 do
                 {
-                    y = rand() % (this->height - 8) + 4;
-                    x = rand() % (this->width - 8) + 4;
+                    y = rand() % (this->height - 10) + 5;
+                    x = rand() % (this->width - 10) + 5;
                 }while(this->matrix[y][x] != ' ');
             }
             else //generazione posizione mura successive
             {
                 int add_y, add_x;
-                int max = 12; // diminuire per avere ancora più sequenza di mura, ma più brevi e in posizioni random
+                int max = 8; // diminuire per avere ancora più sequenza di mura, ma più brevi e in posizioni random
                 int count = 0;
                 do
                 {
@@ -87,27 +87,24 @@ Map::Map(int h, int w, int level) {
                         //controlli per evitare di uscire dalla mappa o di andare sui bordi
                         if(y <= 5 || y >= this->height - 6)
                         {
-                            y = rand() % (this->height - 8) + 4;
-                            x = rand() % (this->width - 8) + 4;
+                            y = rand() % (this->height - 10) + 5;
+                            x = rand() % (this->width - 10) + 5;
                         }
                         else if(x <= 5 || x >= this->width - 6)
                         {
-                            y = rand() % (this->height - 8) + 4;
-                            x = rand() % (this->width - 8) + 4;
+                            y = rand() % (this->height - 10) + 5;
+                            x = rand() % (this->width - 10) + 5;
                         }
                         count++;
                     }
                     else
                     {
-                        y = rand() % (this->height - 8) + 4;
-                        x = rand() % (this->width - 8) + 4;
+                        y = rand() % (this->height - 10) + 5;
+                        x = rand() % (this->width - 10) + 5;
                     }
                 }while(this->matrix[y][x] != ' ');
             }
 
-            //controlli per decidere come orientare: | _
-            //if(orientation) this->matrix[y][x] = '_';
-            //else
             this->matrix[y][x] = '/';
             this->matrix[y][x + 1] = '/';
 
@@ -123,16 +120,24 @@ Map::Map(int h, int w, int level) {
     {
         for(int j = 2 ; j < this->width - 2; j++)
         {
-                if(this->matrix[i][j] == '/' && this->matrix[i][j+1] == '/' && this->matrix[i-1][j-2] == ' ' && this->matrix[i-1][j-1] == ' ' && this->matrix[i-1][j] == ' '
-                                && this->matrix[i-1][j+1] == ' ' && this->matrix[i-1][j+2] == ' ' && this->matrix[i-1][j+3] == ' ' && this->matrix[i][j-2] == ' ' && this->matrix[i][j-1] == ' '
-                                && this->matrix[i][j+2] == ' ' && this->matrix[i][j+3] == ' ' && this->matrix[i+1][j-2] == ' ' && this->matrix[i+1][j-1] == ' ' && this->matrix[i+1][j] == ' '
-                                && this->matrix[i+1][j+1] == ' ' && this->matrix[i+1][j+2] == ' ' && this->matrix[i+1][j+3] == ' ')
+                if(this->matrix[i][j] == '/' && this->matrix[i][j+1] == '/'  && this->matrix[i-1][j-1] == ' ' && this->matrix[i-1][j] == ' '
+                    && this->matrix[i-1][j+1] == ' ' && this->matrix[i-1][j+2] == ' '  && this->matrix[i][j-2] == ' ' && this->matrix[i][j-1] == ' '
+                    && this->matrix[i][j+2] == ' '   && this->matrix[i+1][j-1] == ' ' && this->matrix[i+1][j] == ' '
+                    && this->matrix[i+1][j+1] == ' ' && this->matrix[i+1][j+2] == ' ')
                 {
                     this->matrix[i][j] = ' ';
                     this->matrix[i][j+1] = ' ';
                 }
         }
     }
+
+    //aggiunta portale livello precedente
+    this->matrix[2][3] = '[';
+    this->matrix[2][5] = ']';
+    //aggiunta portale livello successvo
+    this->matrix[this -> height - 3][this -> width - 6] = '[';
+    this->matrix[this -> height - 3][this -> width - 4] = ']';
+
     //aggiunta monete alle mappa
     int tmp_coins = this->coins;
     int coin_x, coin_y;
@@ -141,18 +146,12 @@ Map::Map(int h, int w, int level) {
     {
         coin_y = rand() % (this->height - 2) + 1;
         coin_x = rand() % (this->width - 4) + 2;
-        if(this->matrix[coin_y][coin_x] == ' ')
+        if(this->matrix[coin_y][coin_x] == ' ' && this -> matrix[coin_y][coin_x - 1] != '[')
         {
             this->matrix[coin_y][coin_x] = '@';
             tmp_coins--;
         }
     }
-    //aggiunta portale livello precedente
-    this->matrix[2][3] = '[';
-    this->matrix[2][5] = ']';
-    //aggiunta portale livello successvo
-    this->matrix[this -> height - 3][this -> width - 6] = '[';
-    this->matrix[this -> height - 3][this -> width - 4] = ']';
 }
 
 
@@ -231,7 +230,7 @@ void Map::writeMap(int level, char *nickPlayer){
     // Scrivi la matrice in filePath
     for (int i = 0; i < this->height; i++) {
         for (int j = 0; j < this->width; j++) {
-            if(this->matrix[i][j] == ' ')
+            if(this->matrix[i][j] == ' ' || this->matrix[i][j] == '1')
                 this->matrix[i][j] = '#';
 
             outfile << this->matrix[i][j];
@@ -273,6 +272,7 @@ bool Map::isPortal(int x, int y){
     else
         return false;
 }
+
 int Map::getCoins() {
     return this->coins;
 }
