@@ -23,7 +23,7 @@ double Player::fight(double m_hp, bool tur){
 arnd Player::check_around(Map& m){
     arnd around;    //0 vuoto, 1 mostro, 2 moneta
     char x; //int tmp_x, tmp_y;
-    
+
     x = m.getMapChar(this->y, (this->x) + 1);
     if(x == ' ')
         around.right = 0;
@@ -96,12 +96,21 @@ int Player::choice_menu() {
 
     keypad(menu, true);
 
-    mvwprintw(menu, 4, 6, " ____                          _______  __  __                 __            __            __   ");
-    mvwprintw(menu, 5, 6, "|_   |      .--.--..-----.    |   _   ||  ||  | ______ .-----.|  |--..---.-.|  |--..-----.|  |_ ");
-    mvwprintw(menu, 6, 6, " _|  |_     |  |  ||__ --|    |       ||  ||  ||______||  _  ||     ||  _  ||  _  ||  -__||   _|");
-    mvwprintw(menu, 7, 6, "|______|     \\___/ |_____|    |___|___||__||__|        |   __||__|__||___._||_____||_____||____|");
-    mvwprintw(menu, 8, 6, "                                                       |__|                                     ");
+    char txt1[97] = " ____                          _______  __  __                 __            __            __   ";
+    char txt2[97] = "|_   |      .--.--..-----.    |   _   ||  ||  | ______ .-----.|  |--..---.-.|  |--..-----.|  |_ ";
+    char txt3[97] = " _|  |_     |  |  ||__ --|    |       ||  ||  ||______||  _  ||     ||  _  ||  _  ||  -__||   _|";
+    char txt4[97] = "|______|     \\___/ |_____|    |___|___||__||__|        |   __||__|__||___._||_____||_____||____|";
+    char txt5[97] = "                                                       |__|                                     ";
 
+    for (int i = 0; i < 97 - 1; i++) {
+        mvwprintw(menu, 4, 6 + i, "%c", txt1[i]);
+        mvwprintw(menu, 5, 6 + i, "%c", txt2[i]);
+        mvwprintw(menu, 6, 6 + i, "%c", txt3[i]);
+        mvwprintw(menu, 7, 6 + i, "%c", txt4[i]);
+        mvwprintw(menu, 8, 6 + i, "%c", txt5[i]);
+        wrefresh(menu);
+        usleep(30000);
+    }
 
     while (choice != 10){
 

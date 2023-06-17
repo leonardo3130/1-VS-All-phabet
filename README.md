@@ -14,21 +14,25 @@ Makefile compila il gioco
 ```sh
 make
 ```
+
 # Esecuzione tramite Makefile
 Makefile esegue il gioco mediante il seguente comando
 ```sh
 make run
 ```
+
 # Rimozione eseguibile
 Si utilizza il seguente comando del Makefile:
 ```sh
 make clean
 ```
+
 # Rimozione Partite Salvate
-Si utilizza il seguente comando del makefile:
+Si utilizza il seguente comando del Makefile:
 ```sh
 make reset
 ```
+
 # Come si gioca
 Il movimento avviene con le frecce direzioni, gli spari con i tasti w,a,s,d.
 Il tasto 1 è riservato all'apertura del livello market, q è il tasto per l'uscita dallo shop
