@@ -114,6 +114,8 @@ int Game::run(Player &p) {
 
 	for(int i = 0 ; i < this->map.getHeight() ; i++){
 		for(int j = 0 ; j < this->map.getWidth() ; j++){
+            if(this->map.getMapChar(i, j) == '1')
+                p.setX_Y(j, i);
             mvwprintw(game_win, i, j, "%c", this->map.getMapChar(i, j));
             wrefresh(game_win);
 		}
@@ -130,7 +132,7 @@ int Game::run(Player &p) {
     pbul tmp_b = NULL, tmp_b2 = NULL;
     pmon tmp_m = NULL;
 
-    p.setX_Y(3, 4);
+
     drawCommands(commands_win);
 
 	while(esito == IN_GAME || esito == WIN)
@@ -568,42 +570,6 @@ void Game::drawGameover(WINDOW* game_win, WINDOW* game_over_win){
     }
 }
 
-void Game::timed_print(char *text, int text_len, int micro_seconds_delay, int l, int c){
-    // Impostazione dei colori
-    start_color();
-
-    for (int i = 1; i <= NUM_COLORS; i++) {
-        init_pair(i, i, COLOR_BLACK);
-    }
-
-    // Impostazione dei colori per la scritta
-    attron(COLOR_PAIR(1));
-
-    for (int i = 0; i < text_len - 1; i++) {
-        attron(COLOR_PAIR(rand() % NUM_COLORS + 1)); // Imposta un colore casuale
-        mvprintw(l, c + i, "%c", text[i]);
-        refresh();
-        usleep(micro_seconds_delay); // Ritardo di 100 millisecondi
-    }
-
-    for (int i = 1; i <= NUM_COLORS; i++) {
-        attroff(COLOR_PAIR(i));
-    }
-}
-
-//messaggio iniziale
-void Game::init_message(){
-    // Animazioni
-    char text[] = "Welcome in 1 vs (All)phabet.";
-    timed_print(text, 29, 100000, LINES/3, COLS/2 - 14);
-
-    strcpy(text, "Press any key...");
-    timed_print(text, 17, 30000, LINES/3 + 1, COLS/2 - 8);
-
-    // Attende la pressione di un tasto per chiudere la finestra
-    getch();
-}
-
 Map Game::getMap(){
     return this->map;
 }
@@ -628,13 +594,3 @@ void Game::setNMostri(int n){
     this->n_mostri = n;
 }
 
-void Game::game_exit(){
-    char text[11];
-    strcpy(text, "Goodbye...");
-    clear();
-    timed_print(text, 11, 100000, LINES/3, COLS/2 - 5);
-
-    getch();
-    endwin();
-    exit(0);
-}
