@@ -393,11 +393,6 @@ int Game::run(Player &p) {
         delete lista_proiettili;
         lista_proiettili = tmp_lp;
     }
-    while(lista_mostri != NULL) {
-        pmon tmp_lp = lista_mostri -> next;
-        delete lista_mostri;
-        lista_mostri = tmp_lp;
-    }
     return esito;
 }
 
