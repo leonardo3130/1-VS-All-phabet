@@ -7,12 +7,13 @@ all: $(EXECUTABLE)
 
 $(EXECUTABLE) : $(SOURCES)
 	$(COMPILER) -o $(EXECUTABLE) $(SOURCES) $(FLAGS)
-	./$(EXECUTABLE)
-	rm $(EXECUTABLE)
 
 clean:
 	rm $(EXECUTABLE)
 
 reset:
 	rm -r Archivio/*
+
+run:
+	./$(EXECUTABLE)
 
