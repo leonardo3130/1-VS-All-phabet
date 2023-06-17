@@ -47,14 +47,6 @@ void Character::movedown(Map mappa){
     }
 }
 
-void Character::move_to(Map mappa, int new_x, int new_y){
-    if(mappa.isEmpty(new_x, new_y)==true){
-        this->x = new_x;
-        this->y = new_y;
-        this->mode = 0;
-    }
-}
-
 int global_blt_id = 0;               //da inizializzare nel main
 pbul lista_proiettili = NULL;        //  "   "
 
