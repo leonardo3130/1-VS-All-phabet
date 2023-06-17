@@ -23,23 +23,7 @@ double Player::fight(double m_hp, bool tur){
 arnd Player::check_around(Map& m){
     arnd around;    //0 vuoto, 1 mostro, 2 moneta
     char x; //int tmp_x, tmp_y;
-/*
-    for (int i = 0; i < 4; i++)
-    {
-        if(i==0)       {tmp_x = 1;  tmp_y = 0;  int &ar = around.right;}
-        else if(i==1)  {tmp_x = 0;  tmp_y = 1;  int &ar = around.under;}
-        else if(i==2)  {tmp_x = -1; tmp_y = 0;  int &ar = around.left;}
-        else if(i==3)  {tmp_x = 0;  tmp_y = -1; int &ar = around.above;}
-
-        x = m.getMapChar(this->y + tmp_y, this->x + tmp_x);
-
-        if(x == ' ')
-        ar = 0;
-            else if(x >= 'A' && x <= 'Z')
-        ar = 1;
-            else if(x == '@')
-        ar = 2;
-    }*/
+    
     x = m.getMapChar(this->y, (this->x) + 1);
     if(x == ' ')
         around.right = 0;

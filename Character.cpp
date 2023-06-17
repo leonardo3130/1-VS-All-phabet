@@ -60,16 +60,16 @@ pbul lista_proiettili = NULL;        //  "   "
 
 pbul Character::fire(pbul ls_proiettili, Map& map, int dir, bool from){
   Bullet nuovo_proiettile;
-  if (dir == 0 && map.isEmpty(this-> x + 1, this->y)){
+  if (dir == 0 && map.isEmpty(this-> x + 1, this->y) && !map.isMoney(this-> x + 1, this->y)){
     nuovo_proiettile = Bullet(this->x + 1, this->y, dir, '*', from);
   }
-  else if (dir == 1  && map.isEmpty(this-> x, this->y + 1)){
+  else if (dir == 1  && map.isEmpty(this-> x, this->y + 1) && !map.isMoney(this-> x, this->y + 1)){
     nuovo_proiettile = Bullet(this->x, this->y + 1, dir, '*', from);
   }
-  else if (dir == 2  && map.isEmpty(this-> x - 1, this->y)){
+  else if (dir == 2  && map.isEmpty(this-> x - 1, this->y) && !map.isMoney(this-> x - 1, this->y)){
     nuovo_proiettile = Bullet(this->x - 1, this->y, dir, '*', from);
   }
-  else if (dir == 3  && map.isEmpty(this-> x, this->y-1)){
+  else if (dir == 3  && map.isEmpty(this-> x, this->y-1) && !map.isMoney(this-> x, this->y-1)){
     nuovo_proiettile = Bullet(this->x , this->y - 1, dir, '*', from);
   }
 

@@ -22,7 +22,6 @@ using namespace std;
 
 class Game {
 	private:
-		//WINDOW *create_new_win(int h, int w, int y, int x);
 		pbul handleInput(int c, Map& map, Player& giocatore, pbul bul_list, arnd around, int& e);
 		void draw(WINDOW* win, Map& map, Character& protagonist, int prev_x, int prev_y);
 		void drawMonster(WINDOW* win, Map& map, pmon monster_list);
