@@ -8,8 +8,14 @@ all: $(EXECUTABLE)
 $(EXECUTABLE) : $(SOURCES)
 	$(COMPILER) -o $(EXECUTABLE) $(SOURCES) $(FLAGS)
 
+
 clean:
-	rm $(EXECUTABLE)
+	@if [ -f $(EXECUTABLE) ]; then	\
+		rm $(EXECUTABLE); \
+		echo "Eseguibile rimosso."; \
+	else \
+		echo "Eseguibile già rimosso."; \
+	fi
 
 reset:
 	rm -r Archivio/*
