@@ -1,7 +1,3 @@
-#include <ctime>
-#include <cmath>
-#include <cstring>
-#include <stdio.h>
 #include "Map.hpp"
 
 using namespace std;
@@ -146,7 +142,8 @@ Map::Map(int h, int w, int level) {
     {
         coin_y = rand() % (this->height - 2) + 1;
         coin_x = rand() % (this->width - 4) + 2;
-        if(this->matrix[coin_y][coin_x] == ' ' && this -> matrix[coin_y][coin_x - 1] != '[')
+        if(this->matrix[coin_y][coin_x] == ' ' && this -> matrix[coin_y][coin_x - 1] != '[' && coin_y != 2 && coin_y != this->height - 3 
+			&& coin_x != this->width - 5)
         {
             this->matrix[coin_y][coin_x] = '@';
             tmp_coins--;
