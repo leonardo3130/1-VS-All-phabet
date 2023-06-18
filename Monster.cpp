@@ -3,7 +3,6 @@
 #include "Monster.hpp"
 #include <unistd.h>
 
-
 Monster::Monster(int x, int y,int hp, int atk ,int def, int mode, char look, bool tur): Character(x, y, hp, atk, def, mode, look) {
     this->turret = tur;
 };
