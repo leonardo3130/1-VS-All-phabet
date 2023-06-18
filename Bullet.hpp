@@ -1,7 +1,4 @@
-#pragma once
 #include "Map.hpp"
-#include <ncurses.h>
-
 
 class Bullet{
     protected:

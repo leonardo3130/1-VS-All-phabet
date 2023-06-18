@@ -1,12 +1,4 @@
-#pragma once
-#include <iostream>
-#include <ctime>
-#include <unistd.h>
-#include "Map.hpp"
-#include "Character.hpp"
-#include "Player.hpp"
 #include "Monster.hpp"
-#include <ncurses.h>
 
 #define NUM_COLORS 8
 

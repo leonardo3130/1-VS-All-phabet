@@ -1,5 +1,3 @@
-#pragma once
-#include "Map.hpp"
 #include "Bullet.hpp"
 
 

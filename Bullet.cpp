@@ -1,4 +1,3 @@
-#include <ncurses.h>
 #include "Bullet.hpp"
 
 Bullet::Bullet(int x, int y, int dir, char look, bool from){
