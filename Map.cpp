@@ -166,7 +166,8 @@ char Map::getMapChar(int y, int x){
 }
 
 void Map::setMapChar(int y, int x, char c){
-    this->matrix[y][x] = c;
+    if((y >= 1 && y < this->height - 1) && (x >= 2 && x < this->width - 2))
+        this->matrix[y][x] = c;
 }
 
 int Map::getWidth(){
