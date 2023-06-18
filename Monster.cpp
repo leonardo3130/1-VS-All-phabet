@@ -8,27 +8,27 @@ Monster::Monster(int x, int y,int hp, int atk ,int def, int mode, char look, boo
     this->turret = tur;
 };
 
-//metodi meovimento modificati in modo che non si sovrappongano due mostri e che i mostri non raccolgano le monete
+//metodi movimento modificati in modo che non si sovrappongano due mostri
 void Monster::moveright(Map mappa){
-    if(!mappa.isMoney((this -> x) + 1, this -> y) && !mappa.isMonster((this -> x) + 2, this -> y) && !mappa.isMonster((this -> x) + 1, (this -> y) + 1)
+    if(!mappa.isMonster((this -> x) + 2, this -> y) && !mappa.isMonster((this -> x) + 1, (this -> y) + 1)
     && !mappa.isMonster((this -> x) + 1, (this -> y) - 1))
         Character::moveright(mappa);
 }
 
 void Monster::moveleft(Map mappa){
-    if(!mappa.isMoney((this -> x) - 1, this -> y) && !mappa.isMonster((this -> x) - 2, this -> y) && !mappa.isMonster((this -> x) - 1, (this -> y) + 1)
+    if(!mappa.isMonster((this -> x) - 2, this -> y) && !mappa.isMonster((this -> x) - 1, (this -> y) + 1)
     && !mappa.isMonster((this -> x) - 1, (this -> y) - 1))
         Character::moveleft(mappa);
 }
 
 void Monster::moveup(Map mappa){
-    if(!mappa.isMoney(this -> x, (this -> y) - 1) && !mappa.isMonster(this -> x, (this -> y) - 2) && !mappa.isMonster((this -> x) + 1, (this -> y) - 1)
+    if(!mappa.isMonster(this -> x, (this -> y) - 2) && !mappa.isMonster((this -> x) + 1, (this -> y) - 1)
     && !mappa.isMonster((this -> x) - 1, (this -> y) - 1))
         Character::moveup(mappa);
 }
 
 void Monster::movedown(Map mappa){
-    if(!mappa.isMoney(this -> x, (this -> y) + 1) && !mappa.isMonster(this -> x, (this -> y) + 2) && !mappa.isMonster((this -> x) + 1, (this -> y) + 1)
+    if(!mappa.isMonster(this -> x, (this -> y) + 2) && !mappa.isMonster((this -> x) + 1, (this -> y) + 1)
     && !mappa.isMonster((this -> x) - 1, (this -> y) + 1))
         Character::movedown(mappa);
 }
@@ -63,22 +63,22 @@ void Monster::move(Map& mappa, int x_p, int y_p){
     }
 
     if(mode == 0){
-        if(mappa.isEmpty(this->x + 1, this->y)==true)
+        if(mappa.isEmpty(this->x + 1, this->y) && !mappa.isMoney(this->x + 1, this->y))
             this->moveright(mappa);
         else
             this->moveup(mappa);
     }else if(mode == 1){
-        if(mappa.isEmpty(this->x, this->y + 1)==true)
+        if(mappa.isEmpty(this->x, this->y + 1)  && !mappa.isMoney(this->x, this->y + 1))
             this->movedown(mappa);
         else
             this->moveright(mappa);
     }else if(mode == 2){
-        if(mappa.isEmpty(this->x - 1, this->y)==true)
+        if(mappa.isEmpty(this->x - 1, this->y)  && !mappa.isMoney(this->x - 1, this->y))
             this->moveleft(mappa);
         else
             this->movedown(mappa);
     }else if(mode == 3){
-        if(mappa.isEmpty(this->x, this->y - 1)==true)
+        if(mappa.isEmpty(this->x, this->y - 1)  && !mappa.isMoney(this->x, this->y - 1))
             this->moveup(mappa);
         else
             this->moveleft(mappa);
