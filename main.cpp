@@ -1,14 +1,3 @@
-#include <ncurses.h>
-#include <iostream>
-#include <cstdlib>
-#include <ctime>
-#include <fstream>
-#include <unistd.h>
-#include <iomanip>
-
-#include "Character.hpp"
-#include "Map.hpp"
-#include "Player.hpp"
 #include "Game.hpp"
 
 #define NUM_COLORS 8
@@ -164,6 +153,12 @@ void shop(Player &p){
 
 void delete_game(ptr_livelli gioco){
 	if(gioco != NULL) {
+		pmon lista_mostri = gioco->partita.getListaMostri();
+		while(lista_mostri != NULL){
+			pmon tmp_lm = lista_mostri -> next;
+			delete lista_mostri;
+			lista_mostri = tmp_lm;
+		}
 		delete_game(gioco->next);
 		delete gioco;
 	}
@@ -293,11 +288,12 @@ int main(){
 				system(comando);
 			}
 
-			//ricomincia il gioco da un livello proporzionato
 			delete_game(head);
 			gioco = NULL;
 			head = gioco;
 
+
+			//ricomincia il gioco da un livello proporzionato
 			gioco = new_level(gioco, protagonist);
 			head = gioco;
 		}

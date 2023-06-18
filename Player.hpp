@@ -1,8 +1,6 @@
-#pragma once
-#include <iostream>
-#include <cstring>
 #include "Character.hpp"
-#include "Monster.hpp"
+#include <ncurses.h>
+#include <unistd.h>
 using namespace std;
 
 #define NUM_COLORS 8

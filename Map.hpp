@@ -1,6 +1,5 @@
-#pragma once
-#include <cmath>
 #include <ctime>
+#include <cstring>
 #include <fstream>
 
 #define MAX_H 40
