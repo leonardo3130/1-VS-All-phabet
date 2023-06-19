@@ -5,9 +5,8 @@ Character::Character(){} //costruttore di default
 Character::Character(char look){
     this->x = 3;
     this->y = 4;
-    this->mode = 0;
     this->look = look;
-    this->hp = 10;
+    this->hp = 10.0;
     this->atk = 5;
     this->def = 5;
 };
@@ -15,7 +14,6 @@ Character::Character(char look){
 Character::Character(int x, int y, double hp, int atk, int def, int mode, char look){
     this->x = x;
     this->y = y;
-    this->mode = mode;
     this->look = look;
     this->hp = hp;
     this->atk = atk;
@@ -23,27 +21,23 @@ Character::Character(int x, int y, double hp, int atk, int def, int mode, char l
 };
 
 void Character::moveright(Map mappa){
-    if(mappa.isEmpty((this->x)+1, this->y)==true && mappa.is_inside(this->x+1, this->y)==true){
+    if(mappa.isEmpty((this->x)+1, this->y)==true && mappa.isInside(this->x+1, this->y)==true){
         this->x += 1;
-        this->mode = 0;
     }
 }
 void Character::moveleft(Map mappa){
-    if(mappa.isEmpty((this->x)-1, this->y)==true && mappa.is_inside((this->x)-1, this->y)==true){
+    if(mappa.isEmpty((this->x)-1, this->y)==true && mappa.isInside((this->x)-1, this->y)==true){
         this->x -= 1;
-        this->mode = 2;
     }
 }
 void Character::moveup(Map mappa){
-    if(mappa.isEmpty(this->x, (this->y)-1)==true && mappa.is_inside(this->x, (this->y)-1)==true){
+    if(mappa.isEmpty(this->x, (this->y)-1)==true && mappa.isInside(this->x, (this->y)-1)==true){
         this->y -= 1;
-        this->mode = 3;
     }
 }
 void Character::movedown(Map mappa){
-    if(mappa.isEmpty(this->x, (this->y)+1)==true && mappa.is_inside(this->x, (this->y)+1)==true){
+    if(mappa.isEmpty(this->x, (this->y)+1)==true && mappa.isInside(this->x, (this->y)+1)==true){
         this->y += 1;
-        this->mode = 1;
     }
 }
 
@@ -114,9 +108,6 @@ char Character::getLook(){
     return this->look;
 }
 
-int Character::getMode(){
-    return this->mode;
-}
 void Character::setLook(char look){
     this->look = look;
 }

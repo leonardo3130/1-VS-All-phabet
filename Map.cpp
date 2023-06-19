@@ -151,7 +151,6 @@ Map::Map(int h, int w, int level) {
     }
 }
 
-
 Map::Map(char *filename){
     this->coins = 0;
     //setto la matrice da file
@@ -162,8 +161,13 @@ char Map::getMapChar(int y, int x){
     return this->matrix[y][x];
 }
 
+
+bool Map::isInside(int x, int y){
+  return (this->width - 3 >= x && x >= 2 && this->height - 2 >= y && y >= 1);
+}
+
 void Map::setMapChar(int y, int x, char c){
-    if((y >= 1 && y < this->height - 1) && (x >= 2 && x < this->width - 2))
+    if(isInside(x, y))
         this->matrix[y][x] = c;
 }
 
@@ -240,14 +244,6 @@ void Map::writeMap(int level, char *nickPlayer){
     outfile.close();
 }
 
-
-bool Map::is_inside(int x, int y){
-  if(this->width - 3 >= x && x >= 2 && this->height - 2 >= y && y >= 1)
-    return true;
-  else
-    return false;
-}
-
 bool Map::isEmpty(int x, int y){
   return (this->matrix[y][x] ==' ' || this->matrix[y][x] =='@' || this->matrix[y][x]  =='*' );
 }
@@ -277,45 +273,6 @@ int Map::getCoins() {
 
 void Map::setCoins(int coins) {
     this->coins = coins;
-}
-
-
-bool Map::freeWay(int x1, int y1, int x2, int y2){
-    bool empty = 1;
-    int a, b;
-    if(x1 == x2 && y1 != y2){
-        if(y1>y2){
-            a = y1;
-            b = y2;
-        }
-        else{
-            a = y2;
-            b = y1;
-        }
-        for(int i=a; i<b & empty; i++){
-            if(this->getMapChar(x1, i) == '/'){
-                empty = 0;
-            }
-        }
-        empty = 1;
-    }
-    else if(y1 = y2 && x1 != x2){
-        if(x1>x2){
-            a = x1;
-            b = x2;
-        }
-        else{
-            a = x2;
-            b = x1;
-        }
-        for(int i=a; i<b & empty; i++){
-            if(this->getMapChar(i, y1) == '/'){
-                empty = 0;
-            }
-        }
-        empty = 1;
-    }
-    return empty;
 }
 
 //rimozione dei proiettili prima del salvataggio

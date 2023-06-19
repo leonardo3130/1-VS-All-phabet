@@ -268,7 +268,7 @@ int main(){
 		else if(esito_partita == LOSE){
 
 			//salvo statistiche player
-			protagonist.SetHp(25.0);
+			protagonist.SetHp(10.0);
 			protagonist.setScore(0);
 			protagonist.setCurrentLevel(1);
 			protagonist.setX_Y(3, 4);

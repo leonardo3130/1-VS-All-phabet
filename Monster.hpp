@@ -5,13 +5,13 @@ class Monster : public Character{
         bool turret;
 
     public:
-        Monster(int x = 2, int y = 3,int hp = 100, int atk = 10,int def = 10, int mode = 0, char look = 'A', bool tur = 0);
-        void moveright(Map mappa);
+        Monster(int x = 2, int y = 3,int hp = 100, int atk = 10,int def = 10, int mode = 0, char look = 'A', bool tur = 0);     //costruttore
+        void moveright(Map mappa);      //funzioni di movimento
         void moveleft(Map mappa);
         void moveup(Map mappa);
         void movedown(Map mappa);
         void move(Map& mappa, int x_p, int y_p);
-        bool getTur();
+        bool getTur();                  //ritorna il valore di turret
 };
 
 //codice per lista mostri
@@ -22,8 +22,8 @@ typedef struct mlist{
     mlist *next;
 }* pmon;
 
-//insert
+//inserimento
 pmon new_monster(pmon lista, Monster m);
 
-//serch
+//ricerca
 pmon search_monster_by_xy(pmon lista_mostri, int x, int y);
