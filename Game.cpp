@@ -1,4 +1,4 @@
-#include "Game.hpp"
+#include "Game.hpp" 
 
 Game::Game(char filePath[], int atk, int def, int livello) {
     ifstream file(filePath);
@@ -59,8 +59,8 @@ Game::Game(char filePath[], int atk, int def, int livello) {
         (this->lista_mostri) = NULL;
         this->map = Map(40, 80, livello);
 
-        //generazione mostri non da file //////////////////
-        //mostri
+        //generazione mostri non da file
+        //mostri comuni
         for(int i=0; i< this->n_mostri; i++){
             m_x = rand()%(map.getWidth()-4)+2;
             m_y = rand()%(map.getHeight()-2)+1;
@@ -159,7 +159,7 @@ int Game::run(Player &p) {
             tmp_b = tmp_b->next;
         }
 
-        // Input ///////////////////////////////////////////////////////////
+        // Input
 		int ch = getch();
         fflush(stdin);
 
@@ -167,7 +167,7 @@ int Game::run(Player &p) {
 
         int monster_mode = 0;
 
-        // Mostri ///////////////////////////////////////////////////////////
+        // Mostri
         if(c == mon_speed ) {
             pmon before = NULL;
             tmp_m = this->lista_mostri;
@@ -188,6 +188,7 @@ int Game::run(Player &p) {
                     mvwprintw(game_win, tmp_m->mon.getY(), tmp_m->mon.getX(), " ");
 	                wrefresh(game_win);
 
+                    //rimozione mostri dalla lista
                     if(tmp_m == this->lista_mostri)
                     {
                         pmon to_del = this->lista_mostri;
@@ -209,7 +210,7 @@ int Game::run(Player &p) {
             }
         }
 
-        //sparo mostri ///////////////////////////////////////////////////////
+        //sparo mostri
         if(e == m_shot_fr){
             int b_mode;
             tmp_m = this->lista_mostri;
@@ -234,7 +235,7 @@ int Game::run(Player &p) {
             }
         }
 
-        // Proiettili ////////////////////////////////////////////////////
+        // Proiettili
         if(b == bul_speed){
             tmp_b = lista_proiettili;
             tmp_b2 = lista_proiettili;
@@ -244,13 +245,13 @@ int Game::run(Player &p) {
                 int collision = tmp_b->bul.move_bul(map);
                 if(collision != 0){
 
-                    if(collision == 2){
+                    if(collision == 2){     //se collision = 2 , il proiettile ha colpito il player
                         if(this->lista_mostri != NULL)
                             p.incHP( -(double(lista_mostri->mon.getAtk()) / double(p.getDef())) );
                         else p.incHP(-1);
                     }
 
-                    else if(collision == 3){
+                    else if(collision == 3){    //se collision = 3 , il proiettile ha colpito un mostro
                         pmon x = this->lista_mostri;
                         tmp_dir = tmp_b->bul.getDir();
 
@@ -280,7 +281,7 @@ int Game::run(Player &p) {
                     mvwprintw(game_win, tmp_b->bul.getY(), tmp_b->bul.getX(), " ");
 	                wrefresh(game_win);
 
-                    //eliminazione proiettile
+                    //rimozione proiettile dalla lista
                     if(tmp_b == lista_proiettili)
                     {
                         pbul to_del = lista_proiettili;
@@ -308,7 +309,7 @@ int Game::run(Player &p) {
             //controllo intorno a player
             around = p.check_around(map);
 
-            // fight /////////////////////////////////////////////////////////////////////////////
+            // fight 
             pmon x = this->lista_mostri;
 
             for (int i = 0; i < 4; i++)
@@ -342,8 +343,8 @@ int Game::run(Player &p) {
 			update(map, p, prev_y, prev_x);
         monsterUpdate(map, this->lista_mostri); bulletUpdate(map, lista_proiettili);
 
-        // Draw  //////////////////////////////////////////////////////////
-        draw(game_win, map, p, prev_x, prev_y);wrefresh(game_win);
+        // Draw 
+        drawPlayer(game_win, map, p, prev_x, prev_y);wrefresh(game_win);
 
         if(c == mon_speed) {
             drawMonster(game_win, map, this->lista_mostri);
@@ -467,7 +468,7 @@ pbul Game::handleInput(int c, Map& map, Player& giocatore, pbul bullet_list, arn
     return bullet_list;
 }
 
-void Game::update(Map& map, Character& protagonist, int prev_y, int prev_x) {
+void Game::update(Map& map, Player& protagonist, int prev_y, int prev_x) {
         map.setMapChar(prev_y, prev_x, ' ');
         map.setMapChar(protagonist.getY(), protagonist.getX(), protagonist.getLook());
 }
@@ -489,7 +490,7 @@ void Game::bulletUpdate(Map &map, pbul bul_list){
     }
 }
 
-void Game::draw(WINDOW* win, Map& map, Character& protagonist, int prev_x, int prev_y) {
+void Game::drawPlayer(WINDOW* win, Map& map, Player& protagonist, int prev_x, int prev_y) {
         mvwprintw(win, prev_y, prev_x, " ");
 	    wrefresh(win);
 	    mvwprintw(win, protagonist.getY(), protagonist.getX(), "%c",protagonist.getLook());
@@ -593,4 +594,3 @@ int Game::getNMostri(){
 void Game::setNMostri(int n){
     this->n_mostri = n;
 }
-
