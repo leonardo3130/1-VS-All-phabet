@@ -5,7 +5,7 @@ class Monster : public Character{
         bool turret;
 
     public:
-        Monster(int x = 2, int y = 3,int hp = 100, int atk = 10,int def = 10, int mode = 0, char look = 'A', bool tur = 0);     //costruttore
+        Monster(int x = 2, int y = 3,int hp = 100, int atk = 10, int def = 10, char look = 'A', bool tur = 0);     //costruttore
         void moveright(Map mappa);      //funzioni di movimento
         void moveleft(Map mappa);
         void moveup(Map mappa);
