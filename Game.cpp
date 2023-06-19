@@ -1,4 +1,4 @@
-#include "Game.hpp" 
+#include "Game.hpp"
 
 Game::Game(char filePath[], int atk, int def, int livello) {
     ifstream file(filePath);
@@ -23,7 +23,7 @@ Game::Game(char filePath[], int atk, int def, int livello) {
                     int character = 91.0 - (this->map.getMapChar(i, j));
                     m_hp = m_max_hp*( (double) character/26.0);
 
-                    Monster mostro(j, i, m_hp, m_atk, m_def, rand()%4, this->map.getMapChar(i, j), 0);
+                    Monster mostro(j, i, m_hp, m_atk, m_def, this->map.getMapChar(i, j), 0);
                     this->lista_mostri = new_monster(this->lista_mostri, mostro);
                     this->map.setMapChar(i, j, ' ');
                     this->n_mostri++;
@@ -34,7 +34,7 @@ Game::Game(char filePath[], int atk, int def, int livello) {
                     int character = 123.0 - (this->map.getMapChar(i, j));
                     t_hp = t_max_hp*( (double) character/26.0);
 
-                    Monster mostro(j, i, t_hp, m_atk+5, m_def+5, rand()%4, this->map.getMapChar(i, j), 1);
+                    Monster mostro(j, i, t_hp, m_atk+5, m_def+5, this->map.getMapChar(i, j), 1);
                     this->lista_mostri = new_monster(this->lista_mostri, mostro);
                     this->map.setMapChar(i, j, ' ');
                     this->n_torri++;
@@ -66,7 +66,7 @@ Game::Game(char filePath[], int atk, int def, int livello) {
             m_y = rand()%(map.getHeight()-2)+1;
 
             if(map.isEmpty(m_x, m_y) && !map.isMoney(m_x, m_y) && !map.isMonster(m_x, m_y)) {
-                Monster mostro(m_x, m_y, m_max_hp, m_atk, m_def, rand()%4, 'A', 0);
+                Monster mostro(m_x, m_y, m_max_hp, m_atk, m_def, 'A', 0);
                 this->lista_mostri = new_monster(this->lista_mostri, mostro);
             }
             else i--;
@@ -81,7 +81,7 @@ Game::Game(char filePath[], int atk, int def, int livello) {
                 m_x = this->map.getWidth() - 5, m_y = this->map.getHeight() / 2;
 
             if(map.isEmpty(m_x, m_y) && !map.isMoney(m_x, m_y) && !map.isMonster(m_x, m_y)) {
-                Monster mostro(m_x, m_y, t_max_hp, m_atk+5, m_def+5, rand()%4, 'a', 1);
+                Monster mostro(m_x, m_y, t_max_hp, m_atk+5, m_def+5, 'a', 1);
                 this->lista_mostri = new_monster(this->lista_mostri, mostro);
             }
         }
@@ -309,7 +309,7 @@ int Game::run(Player &p) {
             //controllo intorno a player
             around = p.check_around(map);
 
-            // fight 
+            // fight
             pmon x = this->lista_mostri;
 
             for (int i = 0; i < 4; i++)
@@ -343,7 +343,7 @@ int Game::run(Player &p) {
 			update(map, p, prev_y, prev_x);
         monsterUpdate(map, this->lista_mostri); bulletUpdate(map, lista_proiettili);
 
-        // Draw 
+        // Draw
         drawPlayer(game_win, map, p, prev_x, prev_y);wrefresh(game_win);
 
         if(c == mon_speed) {
@@ -557,6 +557,7 @@ void Game::drawCommands(WINDOW *win) {
     mvwprintw(win, 10, 3, "Sparo a sinistra: a");
     mvwprintw(win, 12, 3, "Exit: q");
     mvwprintw(win, 14, 3, "Shop: 1");
+    mvwprintw(win, 16, 3, "Se si perde: r per restart");
 
     wrefresh(win);
 }
