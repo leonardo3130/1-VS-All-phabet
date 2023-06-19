@@ -12,7 +12,7 @@ class Character{
   public:
     Character();          //costruttore di default
     Character(char look); //costruttore
-    Character(int x, int y, double hp, int atk, int def, int mode, char look); //costruttore
+    Character(int x, int y, double hp, int atk, int def, char look); //costruttore
     void setX_Y(int x0, int y0);                                    //setta il valore delle due coordinate
     void moveright(Map mappa);                                      //muove a dx
     void moveleft(Map mappa);                                       //muove a sx

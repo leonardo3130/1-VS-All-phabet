@@ -215,6 +215,7 @@ bool Player::signIn(char *user, char *psw){
         strcpy(this->psw, psw);
         this->current_level = 1;
         this->money = 20;
+        this->score = 0;
         //scrivo nel file delle credenziali le informazioni degli utenti
         ofstream credenziali;
         credenziali.open(filename);
