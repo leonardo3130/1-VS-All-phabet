@@ -64,22 +64,25 @@ void Monster::move(Map& mappa, int x_p, int y_p){
     if(mode == 0){
         if(mappa.isEmpty(this->x + 1, this->y) && !mappa.isMoney(this->x + 1, this->y))
             this->moveright(mappa);
-        else
+        else if(mappa.isEmpty(this->x, this->y - 1) && !mappa.isMoney(this->x, this->y - 1))
             this->moveup(mappa);
-    }else if(mode == 1){
+    }
+    else if(mode == 1){
         if(mappa.isEmpty(this->x, this->y + 1)  && !mappa.isMoney(this->x, this->y + 1))
             this->movedown(mappa);
-        else
+        else if(mappa.isEmpty(this->x + 1, this->y) && !mappa.isMoney(this->x + 1, this->y))
             this->moveright(mappa);
-    }else if(mode == 2){
+    }
+    else if(mode == 2){
         if(mappa.isEmpty(this->x - 1, this->y)  && !mappa.isMoney(this->x - 1, this->y))
             this->moveleft(mappa);
-        else
+        else if(mappa.isEmpty(this->x, this->y + 1) && !mappa.isMoney(this->x, this->y + 1))
             this->movedown(mappa);
-    }else if(mode == 3){
+    }
+    else if(mode == 3){
         if(mappa.isEmpty(this->x, this->y - 1)  && !mappa.isMoney(this->x, this->y - 1))
             this->moveup(mappa);
-        else
+        else if(mappa.isEmpty(this->x - 1, this->y) && !mappa.isMoney(this->x - 1, this->y))
             this->moveleft(mappa);
     }
 }
