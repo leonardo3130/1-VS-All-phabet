@@ -500,7 +500,8 @@ void Game::drawPlayer(WINDOW* win, Map& map, Player& protagonist, int prev_x, in
 void Game::drawMonster(WINDOW* win, Map& map, pmon monster_list) {
     pmon tmp = monster_list;
     while (tmp != NULL){
-        mvwprintw(win, tmp->prev_y, tmp->prev_x, " ");
+        if(map.isInside(tmp->prev_x, tmp->prev_y) && map.getMapChar(tmp->prev_y, tmp->prev_x) != '/' && map.getMapChar(tmp->prev_y, tmp->prev_x) != '@')
+            mvwprintw(win, tmp->prev_y, tmp->prev_x, " ");
         wrefresh(win);
         mvwprintw(win, tmp->mon.getY(), tmp->mon.getX(), "%c", tmp->mon.getLook());
         wrefresh(win);
@@ -511,7 +512,8 @@ void Game::drawMonster(WINDOW* win, Map& map, pmon monster_list) {
 void Game::drawBullet(WINDOW* win, Map& map, pbul bul_list) {
     pbul tmp3 = bul_list;
     while(tmp3 != NULL){
-        mvwprintw(win, tmp3->prev_y, tmp3->prev_x, " ");
+        if(map.isInside(tmp3->prev_x, tmp3->prev_y) && map.getMapChar(tmp3->prev_y, tmp3->prev_x) != '/' && map.getMapChar(tmp3->prev_y, tmp3->prev_x) != '@')
+            mvwprintw(win, tmp3->prev_y, tmp3->prev_x, " ");
 	    wrefresh(win);
 	    mvwprintw(win, tmp3->bul.getY(), tmp3->bul.getX(), "%c", '*');
         wrefresh(win);

@@ -167,7 +167,7 @@ bool Map::isInside(int x, int y){
 }
 
 void Map::setMapChar(int y, int x, char c){
-    if(isInside(x, y))
+    if(isInside(x, y) && (this->matrix[y][x] != '/'))
         this->matrix[y][x] = c;
 }
 
