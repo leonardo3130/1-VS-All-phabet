@@ -179,8 +179,15 @@ int Game::run(Player &p) {
                 if(tmp_m->mon.getHp() <= 0){    //controllo hp
                     p.takeMoney(3); // quando si uccide un mostro si prendono 3 monete
                     p.incScore(50); // quando si uccide un mostro si prendono 50 punti aggiuntivi
+<<<<<<< HEAD
 
                     this -> n_mostri--;
+=======
+                    if(!tmp_m->mon.getTur())
+                        this -> n_mostri--;
+                    else
+                        this->n_torri--;
+>>>>>>> d6ce0875e30a972b1401f8b3efabf9718e995d18
                     map.setMapChar(tmp_m->prev_y, tmp_m->prev_x, ' ');
                     mvwprintw(game_win, tmp_m->prev_y, tmp_m->prev_x, " ");
                     wrefresh(game_win);
